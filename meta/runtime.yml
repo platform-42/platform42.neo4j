@@ -1,9 +1,0 @@
----
-requires_ansible: ">=2.15.0"
-
-plugin_routing:
-  modules:
-    vertex: platform42.neo4j.vertex
-    edge: platform42.neo4j.edge
-    query_read: platform42.neo4j.query_read
-    cleanup: platform42.neo4j.cleanup
