@@ -1,0 +1,31 @@
+#SPDX-License-Identifier: MIT-0
+### REQUIRED
+# The namespace of the collection. This can be a company/brand/organization or product namespace under which all
+# content lives. May only contain alphanumeric lowercase characters and underscores. Namespaces cannot start with
+# underscores or numbers and cannot contain consecutive underscores
+namespace: platform42
+name: neo4j
+version: 1.0.0
+readme: README.md
+authors:
+- Diederick de Buck <diederick.de.buck@platform-42.com>
+description: >
+  Ansible collection for managing Neo4j graph databases (vertices, edges, and queries).
+license:
+- MIT
+license_file: LICENSE
+tags:
+  - neo4j
+  - graph
+  - database
+  - vertex
+  - edge
+  - cypher
+dependencies: {}
+repository: https://github.com/platform42/ansible-neo4j
+documentation: README.md
+homepage: http://example.com
+issues: http://example.com/issue/tracker
+build_ignore: []
+
+
