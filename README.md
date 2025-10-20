@@ -37,3 +37,59 @@ ansible-galaxy collection install platform42.neo4j
 The last step is not mandatory. 
 It is to provide ansible-doc access to the document pages.
 The playbooks that utilise this collection, always install it before usage.
+
+
+## Usage
+```yaml
+
+# settings.yml
+---
+AURA_INSTANCEID: 123456789ABC
+NEO4J_URI: neo4j+s://123456789ABC.databases.neo4j.io
+NEO4J_USERNAME: neo4j
+NEO4J_PASSWORD: ************
+NEO4J_DATABASE: neo4j
+
+
+# cleanup graph
+- name: "cleanup Graph database"
+  platform42.neo4j.cleanup:
+    instance_id: "{{ AURA_INSTANCEID }}"
+    database: "{{ NEO4J_DATABASE }}"
+    username: "{{ NEO4J_USERNAME }}"
+    password: "{{ NEO4J_PASSWORD }}"
+  register: database
+
+# create node
+- name: "create station Station:{{ item.name }}"
+  platform42.neo4j.vertex:
+    instance_id: "{{ AURA_INSTANCEID }}"
+    database: "{{ NEO4J_DATABASE }}"
+    username: "{{ NEO4J_USERNAME }}"
+    password: "{{ NEO4J_PASSWORD }}"
+    label: Station
+    entity_name: "{{ item.name }}"
+    state: PRESENT
+  register: station
+
+# create relationship
+- name: "create track {{ item.line }} TRACK:{{ item.from }} - {{ item.to }}"
+  platform42.neo4j.edge:
+    instance_id: "{{ AURA_INSTANCEID }}"
+    database: "{{ NEO4J_DATABASE }}"
+    username: "{{ NEO4J_USERNAME }}"
+    password: "{{ NEO4J_PASSWORD }}"
+    type: TRACK
+    from:
+      label: Station
+      entity_name: "{{ item.from }}"
+    to:
+      label: Station
+      entity_name: "{{ item.to }}"
+    properties:
+      distance: "{{ item.distance }}"
+      line: "{{ item.line }}"
+    bi_directional: True
+    state: PRESENT
+  register: track
+```

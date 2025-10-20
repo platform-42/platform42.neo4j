@@ -22,9 +22,9 @@ tags:
   - edge
   - cypher
 dependencies: {}
-repository: https://github.com/platform42/ansible-neo4j
+repository: https://github.com/platform-42/platform42.neo4j.git
 documentation: README.md
-homepage: http://example.com
+homepage: https://platform-42.com
 issues: http://example.com/issue/tracker
 build_ignore: []
 
