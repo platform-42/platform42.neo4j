@@ -141,7 +141,7 @@ def main():
         module.fail_json(**u_skel.ansible_fail(diagnostics=f"{e}"))
     finally:
         driver.close()
-    data: List[Dict[str, Any]] = response.data()
+    data: List[Dict[str, Any]] = [record.data() for record in response]
     summary: ResultSummary = response.consume()
     payload: Dict[str, Any] = {
         u_skel.JsonTKN.CYPHER_QUERY.value: cypher_query,
