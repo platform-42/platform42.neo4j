@@ -21,7 +21,7 @@ def get_neo4j_driver(
         db_password: str
         ) -> Driver:
     return GraphDatabase.driver(
-        url=db_uri,
+        uri=db_uri,
         auth=basic_auth(db_username, db_password)
     )
 
