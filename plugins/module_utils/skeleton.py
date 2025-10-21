@@ -28,6 +28,7 @@ class JsonTKN(StrEnum):
     CYPHER_QUERY = "cypher_query"
     CYPHER_QUERY_INLINE = "cypher_query_inline"
     CYPHER_RESPONSE = "cypher_response"
+    CYPHER_RESPONSE = "cypher_response"
     DATA = "data"
     DATABASE = "database"
     DIAGNOSTICS = "diagnostics"

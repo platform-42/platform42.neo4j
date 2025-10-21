@@ -124,7 +124,7 @@ def main():
         u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
         u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: cypher_query_inline,
         u_skel.JsonTKN.STATS.value: u_cypher.cypher_stats(summary),
-        u_skel.JsonTKN.DATA.value: data
+        u_skel.JsonTKN.CYPHER_RESPONSE.value: data
     }
     module.exit_json(**u_skel.ansible_exit(
         changed=False,

@@ -138,19 +138,18 @@ def main():
         with driver.session(database=db_database) as session:
             response: Result = session.run(cypher_query, cypher_params)
             records = list(response)
-            data: List[Dict[str, Any]] = [record.data() for record in records]
+            cypher_response: List[Dict[str, Any]] = [record.data() for record in records]
             summary: ResultSummary = response.consume()
     except Exception as e:
         module.fail_json(**u_skel.ansible_fail(diagnostics=f"{e}"))
     finally:
         driver.close()
-    summary: ResultSummary = response.consume()
     payload: Dict[str, Any] = {
         u_skel.JsonTKN.CYPHER_QUERY.value: cypher_query,
         u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
         u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: cypher_query_inline,
         u_skel.JsonTKN.STATS.value: u_cypher.cypher_stats(summary),
-        u_skel.JsonTKN.DATA.value: data
+        u_skel.JsonTKN.CYPHER_RESPONSE.value: cypher_response
         }
     state: str = module.params[u_skel.JsonTKN.STATE.value]
     nodes_changed: int = summary.counters.nodes_created if u_skel.state_present(state) else summary.counters.nodes_deleted
