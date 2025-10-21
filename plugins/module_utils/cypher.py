@@ -20,12 +20,16 @@ def get_neo4j_url(
         ) -> str:
     return f"neo4j+s://{db_instance_id}.databases.neo4j.io"
 
+def get_neo4j_url_local() -> str:
+    return f"neo4j://127.0.0.1:7687"
+
 def get_neo4j_driver(
         db_instance_id: str,
         db_username: str, 
         db_password: str
         ) -> Driver:
-    url: str = get_neo4j_url(db_instance_id)
+    url: str = get_neo4j_url_local()
+#   url: str = get_neo4j_url(db_instance_id)
     return GraphDatabase.driver(
         url,
         auth=basic_auth(db_username, db_password)
