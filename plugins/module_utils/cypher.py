@@ -96,7 +96,7 @@ def vertex_add(
     if properties is None:
         properties = {}
 
-    # normalise
+    # normalise/sanitize
     normalised_label: str = label.capitalize()
     normalised_properties: Dict[str, Any] = {key.lower(): value for key, value in properties.items()}
 
@@ -134,7 +134,7 @@ def edge_del(
         bi_directional: bool = False
 ) -> Tuple[str, Dict[str, Any], str]:
     
-    # normalise
+    # normalise/sanitize
     normalised_relation_type: str = relation_type.upper()
     normalised_from_label: str = from_label.capitalize()
     normalised_to_label: str = to_label.capitalize()
@@ -184,7 +184,7 @@ def edge_add(
     if properties is None:
         properties = {}
 
-    # normalise
+    # normalise/sanitize
     normalised_relation_type: str = relation_type.upper()
     normalised_from_label: str = from_label.capitalize()
     normalised_to_label: str = to_label.capitalize()
@@ -233,7 +233,7 @@ def query_read(
     if parameters is None:
         parameters = {}
     
-    # normalise
+    # normalise/sanitize
     normalised_parameters: Dict[str, Any] = {key.lower(): value for key, value in parameters.items()}
 
     # cypher construction
