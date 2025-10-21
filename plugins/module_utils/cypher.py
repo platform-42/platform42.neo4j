@@ -31,9 +31,31 @@ def get_neo4j_driver(
         auth=basic_auth(db_username, db_password)
     )
 
+#
+#   graph_reset:
+#       removes vertex
+#       returns a 3-tuple to be symmetric with other Ansible primitves
+#
+#   returns:
+#       cypher_query -> cypher query with bindings
+#       cypher_params -> values for bindings
+#       cypher_query_inline -> cypher query with value substitution
+#
 def graph_reset():
-    return u_cyph_q.cypher_query()
+    query: str = u_cyph_q.cypher_graph_reset()
+    query_params: Dict[str, Any] = {}
+    query_inline: str = query
+    return query, query_params, query_inline, 
 
+#
+#   vertex_del:
+#       removes vertex
+#
+#   returns:
+#       cypher_query -> cypher query with bindings
+#       cypher_params -> values for bindings
+#       cypher_query_inline -> cypher query with value substitution
+#
 def vertex_del(
         label: str, 
         entity_name: str
@@ -55,6 +77,15 @@ def vertex_del(
         cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
     return cypher_query, cypher_params, cypher_query_inline
 
+#
+#   vertex_add:
+#       creates vertex via MERGE operation (idempotence)
+#
+#   returns:
+#       cypher_query -> cypher query with bindings
+#       cypher_params -> values for bindings
+#       cypher_query_inline -> cypher query with value substitution
+#
 def vertex_add(
         label: str, 
         entity_name: str, 
@@ -85,6 +116,15 @@ def vertex_add(
         cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
     return cypher_query, cypher_params, cypher_query_inline
 
+#
+#   edge_del:
+#       removes (bi-directional) relationship if it exists
+#
+#   returns:
+#       cypher_query -> cypher query with bindings
+#       cypher_params -> values for bindings
+#       cypher_query_inline -> cypher query with value substitution
+#
 def edge_del(
         relation_type: str,
         from_label: str,
@@ -121,6 +161,15 @@ def edge_del(
         cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
     return cypher_query, cypher_params, cypher_query_inline
 
+#
+#   edge_add:
+#       creates (bi-directional) relationship via MERGE operation (idempotence)
+#
+#   returns:
+#       cypher_query -> cypher query with bindings
+#       cypher_params -> values for bindings
+#       cypher_query_inline -> cypher query with value substitution
+#
 def edge_add(
         relation_type: str,
         from_label: str,
@@ -166,6 +215,15 @@ def edge_add(
         cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
     return cypher_query, cypher_params, cypher_query_inline
 
+#
+#   query_read:
+#       non destructive query. protected by session.execute_read()
+#
+#   returns:
+#       cypher_query -> cypher query with bindings
+#       cypher_params -> values for bindings
+#       cypher_query_inline -> cypher query with value substitution
+#
 def query_read(
         query: str,
         parameters: Optional[Dict[str, Any]] = None
@@ -188,6 +246,14 @@ def query_read(
         cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
     return cypher_query, cypher_params, cypher_query_inline 
 
+#
+#   query_read_tx:
+#       transactional wrapper to support session.execute_read()
+#
+#   returns:
+#       data -> cypher response
+#       summary -> cypher stats summary
+#
 def query_read_tx(tx: Transaction, cypher_query, cypher_params) -> Tuple[List[Dict[str, Any]], ResultSummary]:
     response: Result = tx.run(cypher_query, cypher_params)
     data: List[Dict[str, Any]] = response.data()

@@ -57,7 +57,10 @@ def main():
          db_username=db_username,
          db_password=db_password
     )
-    cypher_query:str = u_cypher.graph_reset()
+    cypher_query: str
+    cypher_params: Dict[str, Any]
+    cypher_query_inline: str
+    cypher_query, cypher_params, cypher_query_inline = u_cypher.graph_reset()
     try:
         with driver.session(database=db_database) as session:
             response: Result = session.run(cypher_query)
@@ -68,6 +71,8 @@ def main():
     summary: ResultSummary = response.consume()
     payload: Dict[str, Any] = {
         u_skel.JsonTKN.CYPHER_QUERY.value: cypher_query,
+        u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
+        u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: cypher_query_inline,
         u_skel.JsonTKN.STATS.value: u_cypher.cypher_stats(summary)
     }
     module.exit_json(**u_skel.ansible_exit(
