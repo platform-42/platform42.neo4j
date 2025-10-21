@@ -154,7 +154,6 @@ def validate_cypher_inputs(
             return False, diagnostics
     return True, {}
 
-
 def main():
     module_name = u_skel.file_splitext(__file__)
     module = AnsibleModule(
@@ -198,7 +197,6 @@ def main():
         payload_key=module_name,
         payload=payload)
     )
-
 
 if __name__ == '__main__':
     main()
