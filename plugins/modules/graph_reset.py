@@ -36,7 +36,7 @@ EXAMPLES = r'''
 # Reset database
 - name: cleans up all vertices and edges in Neo4J graph database
   platform42.neo4j.graph_reset:
-    instance_id: "abcdef12"
+    neo4j_uri: "abcdef12"
     database: "neo4j"
     username: "neo4j"
     password: "*****"
@@ -48,12 +48,12 @@ def main():
         argument_spec=u_args.argument_spec_graph_reset(),
         supports_check_mode=False
     )
-    db_instance_id: str = module.params[u_skel.JsonTKN.INSTANCE_ID.value]
+    db_uri: str = module.params[u_skel.JsonTKN.NEO4J_URI.value]
     db_database: str = module.params[u_skel.JsonTKN.DATABASE.value]
     db_username: str = module.params[u_skel.JsonTKN.USERNAME.value]
     db_password: str = module.params[u_skel.JsonTKN.PASSWORD.value]
     driver: Driver = u_cypher.get_neo4j_driver(
-         db_instance_id=db_instance_id,
+         db_uri=db_uri,
          db_username=db_username,
          db_password=db_password
     )

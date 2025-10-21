@@ -65,6 +65,7 @@ class JsonTKN(StrEnum):
     TO_ENTITY_NAME = "to_entity_name"
     TYPE = "type"
     USERNAME = "username"
+    NEO4J_URI = "neo4j_uri"
 
 def state_present(state: str) -> bool:
     return state.lower() == YamlState.PRESENT.value

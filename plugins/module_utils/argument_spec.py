@@ -3,7 +3,7 @@ from . import skeleton as u_skel
 
 def argument_spec_graph_reset() -> Dict[str, Any]:
     return {
-        u_skel.JsonTKN.INSTANCE_ID.value: {
+        u_skel.JsonTKN.NEO4J_URI.value: {
             u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
             u_skel.YamlATTR.REQUIRED.value: True
         },
@@ -23,7 +23,7 @@ def argument_spec_graph_reset() -> Dict[str, Any]:
 
 def argument_spec_query_read() -> Dict[str, Any]:
     return {
-        u_skel.JsonTKN.INSTANCE_ID.value: {
+        u_skel.JsonTKN.NEO4J_URI.value: {
             u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
             u_skel.YamlATTR.REQUIRED.value: True
         },
@@ -52,7 +52,7 @@ def argument_spec_query_read() -> Dict[str, Any]:
 
 def argument_spec_vertice() -> Dict[str, Any]:
     return {
-        u_skel.JsonTKN.INSTANCE_ID.value: {
+        u_skel.JsonTKN.NEO4J_URI.value: {
             u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
             u_skel.YamlATTR.REQUIRED.value: True
         },
@@ -90,7 +90,7 @@ def argument_spec_vertice() -> Dict[str, Any]:
 
 def argument_spec_edge() -> Dict[str, Any]:
     return {
-        u_skel.JsonTKN.INSTANCE_ID.value: {
+        u_skel.JsonTKN.NEO4J_URI.value: {
             u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
             u_skel.YamlATTR.REQUIRED.value: True
         },
