@@ -137,11 +137,13 @@ def main():
     try:
         with driver.session(database=db_database) as session:
             response: Result = session.run(cypher_query, cypher_params)
+            records = list(response)
+            data: List[Dict[str, Any]] = [record.data() for record in records]
+            summary: ResultSummary = response.consume()
     except Exception as e:
         module.fail_json(**u_skel.ansible_fail(diagnostics=f"{e}"))
     finally:
         driver.close()
-    data: List[Dict[str, Any]] = [record.data() for record in response]
     summary: ResultSummary = response.consume()
     payload: Dict[str, Any] = {
         u_skel.JsonTKN.CYPHER_QUERY.value: cypher_query,
