@@ -1,7 +1,7 @@
 from typing import Dict, Any
 from . import skeleton as u_skel
 
-def argument_spec_cleanup() -> Dict[str, Any]:
+def argument_spec_graph_reset() -> Dict[str, Any]:
     return {
         u_skel.JsonTKN.INSTANCE_ID.value: {
             u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,

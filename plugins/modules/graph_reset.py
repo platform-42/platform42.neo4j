@@ -1,12 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-    Filename: cleanup.py
+    Filename: graph_reset.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-05
     Version: 1.0
     Description: 
-        Ansible module to cleanup graph database
+        Ansible module to reset graph database
 """
 # pylint: disable=import-error
 from typing import Dict, Any
@@ -20,8 +20,8 @@ from neo4j import Driver, ResultSummary, Result
 
 DOCUMENTATION = r'''
 ---
-module: cleanup
-short_description: Cleanup vertices and edges in Neo4j database
+module: graph_reset
+short_description: reset vertices and edges in Neo4j database
 version_added: "1.0.0"
 author:
   - Diederick de Buck (diederick.de.buck@gmail.com)
@@ -33,9 +33,9 @@ description:
 
 EXAMPLES = r'''
 
-# Cleanup database
+# Reset database
 - name: cleans up all vertices and edges in Neo4J graph database
-  platform42.neo4j.cleanup:
+  platform42.neo4j.graph_reset:
     instance_id: "abcdef12"
     database: "neo4j"
     username: "neo4j"
@@ -45,7 +45,7 @@ EXAMPLES = r'''
 def main():
     module_name = u_skel.file_splitext(__file__)
     module = AnsibleModule(
-        argument_spec=u_args.argument_spec_cleanup(),
+        argument_spec=u_args.argument_spec_graph_reset(),
         supports_check_mode=False
     )
     db_instance_id: str = module.params[u_skel.JsonTKN.INSTANCE_ID.value]
@@ -57,7 +57,7 @@ def main():
          db_username=db_username,
          db_password=db_password
     )
-    cypher_query:str = u_cypher.database_clean()
+    cypher_query:str = u_cypher.graph_reset()
     try:
         with driver.session(database=db_database) as session:
             response: Result = session.run(cypher_query)

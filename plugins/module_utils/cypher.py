@@ -31,9 +31,8 @@ def get_neo4j_driver(
         auth=basic_auth(db_username, db_password)
     )
 
-def database_clean():
-    cypher_query: str = f"MATCH (n) DETACH DELETE n"
-    return cypher_query
+def graph_reset():
+    return u_cyph_q.cypher_query()
 
 def vertex_del(
         label: str, 

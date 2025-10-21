@@ -16,6 +16,10 @@ from . import skeleton as u_skel
 #       (a)-[:TRACK]-(b)
 #
 
+def cypher_graph_reset() -> str:
+    return (
+        f"MATCH (n) DETACH DELETE n"
+    )
 
 def cypher_vertex_del(
         label: str
