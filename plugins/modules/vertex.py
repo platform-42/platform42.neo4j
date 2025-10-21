@@ -146,7 +146,8 @@ def main():
         u_skel.JsonTKN.CYPHER_QUERY.value: cypher_query,
         u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
         u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: cypher_query_inline,
-        u_skel.JsonTKN.STATS.value: u_cypher.cypher_stats(summary)
+        u_skel.JsonTKN.STATS.value: u_cypher.cypher_stats(summary),
+        u_skel.JsonTKN.DATA.value: response.data()
         }
     state: str = module.params[u_skel.JsonTKN.STATE.value]
     nodes_changed: int = summary.counters.nodes_created if u_skel.state_present(state) else summary.counters.nodes_deleted
