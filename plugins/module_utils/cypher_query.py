@@ -35,7 +35,7 @@ class CypherQuery(StrEnum):
         RETURN 
         id(n) AS node_id, 
         labels(n) AS labels, 
-        entity_name AS entity_name
+        n.entity_name AS entity_name
     """
 
 def cypher_graph_reset(
