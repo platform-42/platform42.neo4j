@@ -35,7 +35,19 @@ class CypherQuery(StrEnum):
         RETURN 
         id(n) AS node_id, 
         labels(n) AS labels, 
-        n.entity_name AS entity_name
+        n.entity_name AS entity_name;
+    """
+    EDGE_DEL = """ 
+        MATCH (a:`{from_label}` {{ entity_name: $from_entity_name}})
+        MATCH (b:`{to_label}` {{ entity_name: $to_entity_name}})
+        MERGE (a)-[r:`{relation_type}`]->(b)
+        DELETE r;
+    """
+    EDGE_DEL_BI = """ 
+        MATCH (a:`{from_label}` {{ entity_name: $from_entity_name}})
+        MATCH (b:`{to_label}` {{ entity_name: $to_entity_name}})
+        MERGE (a)-[r:`{relation_type}`]-(b)
+        DELETE r;
     """
 
 def cypher_graph_reset(
@@ -46,11 +58,9 @@ def cypher_graph_reset(
 def cypher_vertex_del(
         label: str
 ) -> str:
-    return CypherQuery.VERTEX_DEL.value.format(label=label)
-#    return (
-#        f"MERGE (n:`{label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.ENTITY_NAME.value} }}) "
-#        f"DETACH DELETE n;"
-#    )
+    return CypherQuery.VERTEX_DEL.value.format(
+        label=label
+        )
 
 def cypher_vertex_add(
     label: str,
@@ -59,35 +69,32 @@ def cypher_vertex_add(
     set_clause = (
         f"SET n += {{{', '.join(f'{k}: ${k}' for k in properties)}}}" if properties else ""
     )        
-    return CypherQuery.VERTEX_ADD.value.format(label=label, set_clause=set_clause)
- #   return (
- #       f"MERGE (n:`{label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.ENTITY_NAME.value} }}) "
- #       f"{set_clause} "
- #       f"RETURN "
- #       f"{u_skel.JsonTKN.ID.value}(n) AS {u_skel.JsonTKN.NODE_ID.value}, "
- #       f"{u_skel.JsonTKN.LABELS.value}(n) AS {u_skel.JsonTKN.LABELS.value}, "
- #       f"n.{u_skel.JsonTKN.ENTITY_NAME.value} AS {u_skel.JsonTKN.ENTITY_NAME.value}"
- #   )
+    return CypherQuery.VERTEX_ADD.value.format(
+        label=label, 
+        set_clause=set_clause
+        )
 
 def cypher_edge_del(
         from_label: str,
         to_label: str,
         relation_type: str
 ) -> str:
-    return (
-        f"MATCH (a:`{from_label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.FROM_ENTITY_NAME.value}}})-[r:`{relation_type}`]->(b:`{to_label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.TO_ENTITY_NAME.value} }})"
-        f"DELETE r"
-    )
+    return CypherQuery.EDGE_DEL.value(
+        from_label=from_label, 
+        to_label=to_label, 
+        relation_type=relation_type
+        )
 
 def cypher_edge_del_bi(
         from_label: str,
         to_label: str,
         relation_type: str
 ) -> str:
-    return (
-        f"MATCH (a:`{from_label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.FROM_ENTITY_NAME.value}}})-[r:`{relation_type}`]-(b:`{to_label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.TO_ENTITY_NAME.value} }})"
-        f"DELETE r"
-    )
+    return CypherQuery.EDGE_DEL_BI.value(
+        from_label=from_label, 
+        to_label=to_label, 
+        relation_type=relation_type
+        )
 
 def cypher_edge_add(
         from_label: str,
