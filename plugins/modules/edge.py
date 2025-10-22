@@ -128,7 +128,7 @@ def validate_cypher_inputs(
         module_params[u_skel.JsonTKN.FROM][u_skel.JsonTKN.ENTITY_NAME.value]
         )
     if not result:
-        return False, diagnostics  
+        return False, diagnostics
     # validate edge to-label against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.LABEL.value,

@@ -96,7 +96,7 @@ def main():
     diagnostics: Dict[str, Any]
     result, diagnostics = validate_cypher_inputs(module.params)
     if not result:
-        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))   
+        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     db_uri: str = module.params[u_skel.JsonTKN.NEO4J_URI.value]
     db_database: str = module.params[u_skel.JsonTKN.DATABASE.value]
     db_username: str = module.params[u_skel.JsonTKN.USERNAME.value]
