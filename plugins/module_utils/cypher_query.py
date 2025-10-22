@@ -26,8 +26,16 @@ class CypherQuery(StrEnum):
         DETACH DELETE n;
     """
     VERTEX_DEL = """
-        MERGE (n:`{label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.ENTITY_NAME.value} }})
+        MERGE (n:`{label}` {{entity_name: $entity_name}})
         DETACH DELETE n;
+    """
+    VERTEX_ADD = """
+        MERGE (n:`{label}` {{entity_name: $entity_name}})
+        {set_clause} 
+        RETURN 
+        id(n) AS node_id, 
+        labels(n) AS labels, 
+        entity_name AS entity_name
     """
 
 def cypher_graph_reset(
@@ -38,10 +46,11 @@ def cypher_graph_reset(
 def cypher_vertex_del(
         label: str
 ) -> str:
-    return (
-        f"MERGE (n:`{label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.ENTITY_NAME.value} }}) "
-        f"DETACH DELETE n;"
-    )
+    return CypherQuery.VERTEX_DEL.value.format(label=label)
+#    return (
+#        f"MERGE (n:`{label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.ENTITY_NAME.value} }}) "
+#        f"DETACH DELETE n;"
+#    )
 
 def cypher_vertex_add(
     label: str,
@@ -50,14 +59,15 @@ def cypher_vertex_add(
     set_clause = (
         f"SET n += {{{', '.join(f'{k}: ${k}' for k in properties)}}}" if properties else ""
     )        
-    return (
-        f"MERGE (n:`{label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.ENTITY_NAME.value} }}) "
-        f"{set_clause} "
-        f"RETURN "
-        f"{u_skel.JsonTKN.ID.value}(n) AS {u_skel.JsonTKN.NODE_ID.value}, "
-        f"{u_skel.JsonTKN.LABELS.value}(n) AS {u_skel.JsonTKN.LABELS.value}, "
-        f"n.{u_skel.JsonTKN.ENTITY_NAME.value} AS {u_skel.JsonTKN.ENTITY_NAME.value}"
-    )
+    return CypherQuery.VERTEX_ADD.value.format(label=label, set_clause=set_clause)
+ #   return (
+ #       f"MERGE (n:`{label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.ENTITY_NAME.value} }}) "
+ #       f"{set_clause} "
+ #       f"RETURN "
+ #       f"{u_skel.JsonTKN.ID.value}(n) AS {u_skel.JsonTKN.NODE_ID.value}, "
+ #       f"{u_skel.JsonTKN.LABELS.value}(n) AS {u_skel.JsonTKN.LABELS.value}, "
+ #       f"n.{u_skel.JsonTKN.ENTITY_NAME.value} AS {u_skel.JsonTKN.ENTITY_NAME.value}"
+ #   )
 
 def cypher_edge_del(
         from_label: str,
