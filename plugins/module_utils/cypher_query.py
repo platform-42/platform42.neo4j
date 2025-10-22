@@ -38,11 +38,10 @@ def cypher_graph_reset(
 def cypher_vertex_del(
         label: str
 ) -> str:
-    return CypherQuery.VERTEX_DEL.value.format(label=label)
-#    return (
-#        f"MERGE (n:`{label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.ENTITY_NAME.value} }}) "
-#        f"DETACH DELETE n;"
-#    )
+    return (
+        f"MERGE (n:`{label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.ENTITY_NAME.value} }}) "
+        f"DETACH DELETE n;"
+    )
 
 def cypher_vertex_add(
     label: str,
