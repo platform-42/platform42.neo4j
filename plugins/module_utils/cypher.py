@@ -8,7 +8,7 @@ from . import cypher_query as u_cyph_q
 #   Notes:
 #   - vertex label must be capitalised - enforced (NEO4J advise)
 #   - edge type must be uppercased - enforced (NEO4J advise)
-#   - vertex name is set explicitly to entity_name - enforced (Ansible clarity) 
+#   - vertex name is set explicitly to entity_name - enforced (Ansible clarity)
 #   - property keys are explicitly converted to lowercase JSON-keys to avoid duplicate properties - enforced
 #   - implemented Ansible primitives return 3-tuple
 #              cypher_query: str -> NEO4J query with only bindings
@@ -91,7 +91,7 @@ def vertex_add(
     entity_name: str,
     properties: Optional[Dict[str, Any]] = None,
 ) -> Tuple[str, Dict[str, Any], str]:
-    
+
     # optionals
     if properties is None:
         properties = {}
@@ -102,8 +102,8 @@ def vertex_add(
 
     # Params -> values without binding
     cypher_params: Dict[str, Any] = {
-        u_skel.JsonTKN.ENTITY_NAME.value: entity_name, 
-        **normalised_properties 
+        u_skel.JsonTKN.ENTITY_NAME.value: entity_name,
+        **normalised_properties
     }
 
     # Parameterized query (safe for API)
@@ -235,11 +235,11 @@ def query_read(
     query: str,
     parameters: Optional[Dict[str, Any]] = None
 ) -> Tuple[str, Dict[str, Any]]:
-    
+
     # optionals
     if parameters is None:
         parameters = {}
-    
+
     # normalise/sanitize
     normalised_parameters: Dict[str, Any] = {key.lower(): value for key, value in parameters.items()}
 
