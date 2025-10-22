@@ -33,9 +33,9 @@ class CypherQuery(StrEnum):
         MERGE (n:`{label}` {{entity_name: $entity_name}})
         {set_clause} 
         RETURN 
-        id(n) AS node_id, 
-        labels(n) AS labels, 
-        n.entity_name AS entity_name;
+            id(n) AS node_id, 
+            labels(n) AS labels, 
+            n.entity_name AS entity_name;
     """
     EDGE_DEL = """ 
         MATCH (a:`{from_label}` {{ entity_name: $from_entity_name}})
