@@ -45,7 +45,7 @@ EXAMPLES = r'''
 def main():
     module_name = u_skel.file_splitext(__file__)
     module = AnsibleModule(
-        argument_spec=u_args.argument_spec_graph_reset(module.check_mode),
+        argument_spec=u_args.argument_spec_graph_reset(),
         supports_check_mode=False
     )
     db_uri: str = module.params[u_skel.JsonTKN.NEO4J_URI.value]
@@ -60,7 +60,9 @@ def main():
     cypher_query: str
     cypher_params: Dict[str, Any]
     cypher_query_inline: str
-    cypher_query, cypher_params, cypher_query_inline = u_cypher.graph_reset()
+    cypher_query, cypher_params, cypher_query_inline = u_cypher.graph_reset(
+        module.check_mode
+        )
     try:
         with driver.session(database=db_database) as session:
             response: Result = session.run(cypher_query)
