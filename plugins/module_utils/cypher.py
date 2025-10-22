@@ -35,7 +35,8 @@ def get_neo4j_driver(
 #       cypher_params -> values for bindings
 #       cypher_query_inline -> cypher query with value substitution
 #
-def graph_reset():
+def graph_reset(
+)-> Tuple[str, Dict[str, Any], str]:
     query: str = u_cyph_q.cypher_graph_reset()
     query_params: Dict[str, Any] = {}
     query_inline: str = query
