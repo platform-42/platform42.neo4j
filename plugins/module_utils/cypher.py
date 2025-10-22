@@ -17,10 +17,10 @@ from . import cypher_query as u_cyph_q
 #
 
 def get_neo4j_driver(
-        db_uri: str,
-        db_username: str, 
-        db_password: str
-        ) -> Driver:
+    db_uri: str,
+    db_username: str, 
+    db_password: str
+) -> Driver:
     return GraphDatabase.driver(
         uri=db_uri,
         auth=basic_auth(db_username, db_password)
@@ -37,7 +37,7 @@ def get_neo4j_driver(
 #       cypher_query_inline -> cypher query with value substitution
 #
 def graph_reset(
-        check_mode: bool
+    check_mode: bool
 )-> Tuple[str, Dict[str, Any], str]:
     query: str = u_cyph_q.cypher_graph_reset(check_mode)
     query_params: Dict[str, Any] = {}
@@ -54,8 +54,9 @@ def graph_reset(
 #       cypher_query_inline -> cypher query with value substitution
 #
 def vertex_del(
-        label: str, 
-        entity_name: str
+    check_mode: bool,
+    label: str, 
+    entity_name: str
 ) -> Tuple[str, Dict[str, Any], str]:
     # normalise
     normalised_label: str = label.capitalize()
@@ -67,6 +68,7 @@ def vertex_del(
 
     # Parameterized query (safe for API)
     cypher_query: str = u_cyph_q.cypher_vertex_del(
+        check_mode=check_mode,
         label=normalised_label
     )
     cypher_query_inline: str = cypher_query
@@ -84,10 +86,11 @@ def vertex_del(
 #       cypher_query_inline -> cypher query with value substitution
 #
 def vertex_add(
-        label: str, 
-        entity_name: str, 
-        properties: Optional[Dict[str, Any]] = None,
-        ) -> Tuple[str, Dict[str, Any], str]:
+    check_mode: bool,
+    label: str, 
+    entity_name: str, 
+    properties: Optional[Dict[str, Any]] = None,
+) -> Tuple[str, Dict[str, Any], str]:
     
     # optionals
     if properties is None:
@@ -105,6 +108,7 @@ def vertex_add(
 
     # Parameterized query (safe for API)
     cypher_query: str = u_cyph_q.cypher_vertex_add(
+        check_mode=check_mode,
         label=normalised_label,
         properties=normalised_properties
     )
@@ -123,12 +127,12 @@ def vertex_add(
 #       cypher_query_inline -> cypher query with value substitution
 #
 def edge_del(
-        relation_type: str,
-        from_label: str,
-        from_entity_name: str,
-        to_label: str,
-        to_entity_name: str,
-        bi_directional: bool = False
+    relation_type: str,
+    from_label: str,
+    from_entity_name: str,
+    to_label: str,
+    to_entity_name: str,
+    bi_directional: bool = False
 ) -> Tuple[str, Dict[str, Any], str]:
     
     # normalise/sanitize
@@ -168,14 +172,14 @@ def edge_del(
 #       cypher_query_inline -> cypher query with value substitution
 #
 def edge_add(
-        relation_type: str,
-        from_label: str,
-        from_entity_name: str,
-        to_label: str,
-        to_entity_name: str,
-        properties: Optional[Dict[str, Any]] = None,
-        bi_directional: bool = False,
-    ) -> Tuple[str, Dict[str, Any], str]:
+    relation_type: str,
+    from_label: str,
+    from_entity_name: str,
+    to_label: str,
+    to_entity_name: str,
+    properties: Optional[Dict[str, Any]] = None,
+    bi_directional: bool = False,
+) -> Tuple[str, Dict[str, Any], str]:
 
     # optionals
     if properties is None:
@@ -222,9 +226,9 @@ def edge_add(
 #       cypher_query_inline -> cypher query with value substitution
 #
 def query_read(
-        query: str,
-        parameters: Optional[Dict[str, Any]] = None
-    ) -> Tuple[str, Dict[str, Any]]:
+    query: str,
+    parameters: Optional[Dict[str, Any]] = None
+) -> Tuple[str, Dict[str, Any]]:
     
     # optionals
     if parameters is None:
@@ -251,13 +255,19 @@ def query_read(
 #       data -> cypher response
 #       summary -> cypher stats summary
 #
-def query_read_tx(tx: Transaction, cypher_query, cypher_params) -> Tuple[List[Dict[str, Any]], ResultSummary]:
+def query_read_tx(
+    tx: Transaction, 
+    cypher_query: str, 
+    cypher_params: Dict[str, Any]
+) -> Tuple[List[Dict[str, Any]], ResultSummary]:
     response: Result = tx.run(cypher_query, cypher_params)
     data: List[Dict[str, Any]] = response.data()
     summary: ResultSummary = response.consume()
     return data, summary
 
-def cypher_stats(summary: ResultSummary) -> Dict[str, Any]:
+def cypher_stats(
+    summary: ResultSummary
+) -> Dict[str, Any]:
     return {
         u_skel.JsonTKN.NODES_CREATED.value: summary.counters.nodes_created,
         u_skel.JsonTKN.NODES_DELETED.value: summary.counters.nodes_deleted,

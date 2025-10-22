@@ -63,7 +63,8 @@ EXAMPLES = r'''
 '''
 
 def vertex(
-        module_params: Dict[str, Any]
+    check_mode: bool,
+    module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
     label: str = module_params[u_skel.JsonTKN.LABEL.value]
     entity_name: str =module_params[u_skel.JsonTKN.ENTITY_NAME.value]
@@ -71,14 +72,16 @@ def vertex(
     if u_skel.state_present(state):
         properties: Dict[str, Any] = module_params[u_skel.JsonTKN.PROPERTIES.value]
         return u_cypher.vertex_add(
+            check_mode,
             label,
             entity_name,
             properties,
             )
     return u_cypher.vertex_del(
+        check_mode,
         label,
         entity_name
-    )
+        )
 
 def validate_cypher_inputs(
         module_params: Dict[str, Any]
@@ -114,7 +117,7 @@ def main():
     module_name: str = u_skel.file_splitext(__file__)
     module:AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_vertice(),
-        supports_check_mode=False
+        supports_check_mode=T
     )
     result: bool
     diagnostics: Dict[str, Any]
@@ -133,7 +136,10 @@ def main():
     cypher_query: str
     cypher_params: Dict[str, Any]
     cypher_query_inline: str
-    cypher_query, cypher_params, cypher_query_inline = vertex(module.params)
+    cypher_query, cypher_params, cypher_query_inline = vertex(
+        module.check_mode,
+        module.params
+        )
     try:
         with driver.session(database=db_database) as session:
             response: Result = session.run(cypher_query, cypher_params)

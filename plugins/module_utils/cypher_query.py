@@ -18,7 +18,7 @@ from . import skeleton as u_skel
 #       (a)-[:TRACK]-(b)
 #
 class CypherQuery(StrEnum):
-    SYM = """
+    SIMULATION = """
         CALL dbms.components() YIELD name, versions RETURN versions[0] AS version
     """
     GRAPH_RESET = """
@@ -73,24 +73,32 @@ class CypherQuery(StrEnum):
     """
 
 def cypher_graph_reset(
-        check_mode: bool
+    check_mode: bool
 ) -> str:
-    return CypherQuery.SYM.value if check_mode else CypherQuery.GRAPH_RESET.value
+    if check_mode:
+        return CypherQuery.SIMULATION.value 
+    return CypherQuery.GRAPH_RESET.value
 
 def cypher_vertex_del(
-        label: str
+    check_mode: bool,
+    label: str
 ) -> str:
+    if check_mode: 
+        return CypherQuery.SIMULATION.value 
     return CypherQuery.VERTEX_DEL.value.format(
         label=label
         )
 
 def cypher_vertex_add(
+    check_mode: bool,
     label: str,
     properties: Optional[Dict[str, Any]] = None
 ) -> str:
     set_clause = (
         f"SET n += {{{', '.join(f'{k}: ${k}' for k in properties)}}}" if properties else ""
-    )        
+    )
+    if check_mode:
+        return CypherQuery.SIMULATION.value 
     return CypherQuery.VERTEX_ADD.value.format(
         label=label, 
         set_clause=set_clause
