@@ -52,7 +52,7 @@ EXAMPLES = r'''
 # Read all Person nodes
 - name: Get all persons
   platform42.neo4j.query_read:
-    neo4j_uri: "abcdef12"
+    neo4j_uri: "neo4j://127.0.0.1:7687"
     database: "neo4j"
     username: "neo4j"
     password: "*****"
@@ -61,7 +61,7 @@ EXAMPLES = r'''
 # Read filtered data with parameters
 - name: Find a specific person by name
   platform42.neo4j.query_read:
-    neo4j_uri: "abcdef12"
+    neo4j_uri: "neo4j://127.0.0.1:7687"
     database: "neo4j"
     username: "neo4j"
     password: "*****"

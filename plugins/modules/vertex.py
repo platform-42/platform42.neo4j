@@ -39,7 +39,7 @@ EXAMPLES = r'''
 # Create a Person vertex (label) with entity_name "Ada" 
 - name: create user, labelled as a "Person" Node
   platform42.neo4j.vertex:
-    neo4j_uri: "abcdef12"
+    neo4j_uri: "neo4j://127.0.0.1:7687"
     database: "neo4j"
     username: "neo4j"
     password: "*****"
@@ -51,7 +51,7 @@ EXAMPLES = r'''
 # Create a Product vertex (label) with entity_name "Widget-123"
 - name: Create a product vertex
   platform42.neo4j.vertex:
-    neo4j_uri: "abcdef12"
+    neo4j_uri: "neo4j://127.0.0.1:7687"
     database: "neo4j"
     username: "neo4j"
     password: "*****"

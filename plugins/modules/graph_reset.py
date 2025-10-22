@@ -36,7 +36,7 @@ EXAMPLES = r'''
 # Reset database
 - name: cleans up all vertices and edges in Neo4J graph database
   platform42.neo4j.graph_reset:
-    neo4j_uri: "abcdef12"
+    neo4j_uri: "neo4j://127.0.0.1:7687"
     database: "neo4j"
     username: "neo4j"
     password: "*****"
