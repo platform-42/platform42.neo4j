@@ -72,14 +72,14 @@ def file_splitext(filename: str) -> str:
     return os.path.splitext(os.path.basename(filename))[0]
 
 def ansible_fail(diagnostics) -> Dict[str, Any]:
-    return { 
-        JsonTKN.RESULT.value: False, 
-        JsonTKN.CHANGED.value: False, 
+    return {
+        JsonTKN.RESULT.value: False,
+        JsonTKN.CHANGED.value: False,
         JsonTKN.MSG.value: diagnostics
         }
 
 def ansible_exit(changed, payload_key, payload) -> Dict[str, Any]:
-    return { 
+    return {
         JsonTKN.RESULT.value: True,
         JsonTKN.CHANGED.value: changed,
         payload_key: payload
