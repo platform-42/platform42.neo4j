@@ -67,9 +67,9 @@ class CypherQuery(StrEnum):
         MERGE (b)-[r2:`{relation_type}`]->(a)
         {set_clause_r2}
         RETURN  
-            r1.type as type
-            a.entity_name as from_entity_name, 
-            b.entity_name as to_entity_name;
+            type(r1) AS relation_type,
+            a.entity_name AS from_entity_name,
+            b.entity_name AS to_entity_name;
     """
 
 def cypher_graph_reset(
