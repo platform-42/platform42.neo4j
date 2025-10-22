@@ -57,7 +57,13 @@ class CypherQuery(StrEnum):
         RETURN r;
     """
     EDGE_ADD_BI = """
-
+        MATCH (a:`{from_label}` {{ entity_name: $from_entity_name}})
+        MATCH (b:`{to_label}` {{ entity_name: $to_entity_name}})
+        MERGE (a)-[r1:`{relation_type}`]->(b)
+        {set_clause_r1}
+        MERGE (b)-[r2:`{relation_type}`]->(a)
+        {set_clause_r2}
+        RETURN r1, r2;
     """
 
 def cypher_graph_reset(
@@ -145,18 +151,25 @@ def cypher_edge_add_bi(
     set_clause_r2 = (
         f"SET r2 += {{{', '.join(f'{k}: ${k}' for k in properties)}}}" if properties else ""
     )
-    return (
-        f"MATCH "
-        f"(a:`{from_label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.FROM_ENTITY_NAME.value} }}), "
-        f"(b:`{to_label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.TO_ENTITY_NAME.value} }}) "
-        f"MERGE (a)-[r1:`{relation_type}`]->(b) "
-        f"{set_clause_r1} "
-        f"MERGE (b)-[r2:`{relation_type}`]->(a) "
-        f"{set_clause_r2} "
-        f"RETURN "
-        f"{u_skel.JsonTKN.ID.value}(r1) AS {u_skel.JsonTKN.REL1_ID.value}, "
-        f"{u_skel.JsonTKN.ID.value}(r2) AS {u_skel.JsonTKN.REL2_ID.value}, "
-        f"{u_skel.JsonTKN.TYPE.value}(r1) AS {u_skel.JsonTKN.RELATION_TYPE.value}, "
-        f"a.{u_skel.JsonTKN.ENTITY_NAME.value} AS {u_skel.JsonTKN.FROM_ENTITY_NAME.value}, " 
-        f"b.{u_skel.JsonTKN.ENTITY_NAME.value} AS {u_skel.JsonTKN.TO_ENTITY_NAME.value}"
+    return CypherQuery.EDGE_ADD_BI.value.format(
+        from_label=from_label,
+        to_label=to_label,
+        relation_type=relation_type,
+        set_clause_r1=set_clause_r1,
+        set_clause_r2=set_clause_r2
     )
+#    return (
+#        f"MATCH "
+#        f"(a:`{from_label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.FROM_ENTITY_NAME.value} }}), "
+#        f"(b:`{to_label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.TO_ENTITY_NAME.value} }}) "
+#        f"MERGE (a)-[r1:`{relation_type}`]->(b) "
+#        f"{set_clause_r1} "
+#        f"MERGE (b)-[r2:`{relation_type}`]->(a) "
+#        f"{set_clause_r2} "
+#        f"RETURN "
+#        f"{u_skel.JsonTKN.ID.value}(r1) AS {u_skel.JsonTKN.REL1_ID.value}, "
+#        f"{u_skel.JsonTKN.ID.value}(r2) AS {u_skel.JsonTKN.REL2_ID.value}, "
+#        f"{u_skel.JsonTKN.TYPE.value}(r1) AS {u_skel.JsonTKN.RELATION_TYPE.value}, "
+#        f"a.{u_skel.JsonTKN.ENTITY_NAME.value} AS {u_skel.JsonTKN.FROM_ENTITY_NAME.value}, " 
+#        f"b.{u_skel.JsonTKN.ENTITY_NAME.value} AS {u_skel.JsonTKN.TO_ENTITY_NAME.value}"
+#    )
