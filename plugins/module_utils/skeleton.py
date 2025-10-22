@@ -1,4 +1,5 @@
 import os
+import re
 
 from typing import Dict, Any
 from strenum import StrEnum
@@ -60,6 +61,9 @@ class JsonTKN(StrEnum):
     TO_ENTITY_NAME = "to_entity_name"
     TYPE = "type"
     USERNAME = "username"
+
+def flatten_query(query: str) -> str:
+    return re.sub(r'\s+', ' ', query).strip()
 
 def state_present(state: str) -> bool:
     return state.lower() == YamlState.PRESENT.value
