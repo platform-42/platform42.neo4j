@@ -3,7 +3,7 @@
     Filename: vertex.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-05
-    Version: 1.0
+    Version: 1.1.0
     Description: 
         Ansible module to create graph node (vertex)
 """
@@ -23,7 +23,7 @@ DOCUMENTATION = r'''
 ---
 module: vertex
 short_description: Create or update a vertex (node) in Neo4j
-version_added: "1.0.0"
+version_added: "1.1.0"
 author:
   - Diederick de Buck (diederick.de.buck@gmail.com)
 description:
