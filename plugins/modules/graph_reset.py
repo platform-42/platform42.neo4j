@@ -44,8 +44,8 @@ EXAMPLES = r'''
 '''
 
 def main():
-    module_name = u_skel.file_splitext(__file__)
-    module = AnsibleModule(
+    module_name: str = u_skel.file_splitext(__file__)
+    module:AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_graph_reset(),
         supports_check_mode=True
     )

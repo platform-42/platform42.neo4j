@@ -87,8 +87,8 @@ def validate_cypher_inputs(
     return True, {}
 
 def main():
-    module_name = u_skel.file_splitext(__file__)
-    module = AnsibleModule(
+    module_name: str = u_skel.file_splitext(__file__)
+    module:AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_query_read(),
         supports_check_mode=False
     )
