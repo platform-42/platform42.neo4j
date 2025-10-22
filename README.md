@@ -40,56 +40,86 @@ The playbooks that utilise this collection, always install it before usage.
 
 
 ## Usage
+
+Ansible Neo4j collection can be used for both Cloud and localhost setups.
+Only NEO4J_URI connection string is different.
+
 ```yaml
 
-# settings.yml
+# vars/settings/cloud/settings.yml
+#   use if Neo4j is used in cloud setup (AURA)
 ---
 AURA_INSTANCEID: 123456789ABC
-NEO4J_URI: neo4j+s://123456789ABC.databases.neo4j.io
+NEO4J_URI: "neo4j+s://{{ AURA_INSTANCEID }}.databases.neo4j.io"
 NEO4J_USERNAME: neo4j
 NEO4J_PASSWORD: ************
 NEO4J_DATABASE: neo4j
 
+# vars/settings/local/settings.yml
+#   use if Neo4j is used in localhost setup 
+---
+NEO4J_URI: neo4j://127.0.0.1:7687
+NEO4J_USERNAME: neo4j
+NEO4J_PASSWORD: ************
+NEO4J_DATABASE: ubahn # I gave its own name in localhost setup
 
 # cleanup graph
 - name: "cleanup Graph database"
-  platform42.neo4j.cleanup:
-    instance_id: "{{ AURA_INSTANCEID }}"
+  platform42.neo4j.graph_reset:
+    neo4j_uri: "{{ NEO4J_URI }}"
     database: "{{ NEO4J_DATABASE }}"
     username: "{{ NEO4J_USERNAME }}"
     password: "{{ NEO4J_PASSWORD }}"
-  register: database
+  register: graph
+#
+# interesting variables to inspect
+#   <graph>.<graph_reset>.<item>
+#   graph.graph_reset.cypher_response
+#   graph.graph_reset.cypher_query_inline
+#
 
 # create node
-- name: "create station Station:{{ item.name }}"
+- name: "create station Station:Pankow"
   platform42.neo4j.vertex:
-    instance_id: "{{ AURA_INSTANCEID }}"
+    neo4j_uri: "{{ NEO4J_URI }}"
     database: "{{ NEO4J_DATABASE }}"
     username: "{{ NEO4J_USERNAME }}"
     password: "{{ NEO4J_PASSWORD }}"
     label: Station
-    entity_name: "{{ item.name }}"
+    entity_name: "Pankow"
     state: PRESENT
   register: station
+#
+# interesting variables to inspect
+#   <station>.<vertex>.<item>
+#   station.vertex.cypher_response
+#   station.vertex.cypher_query_inline
+#
 
 # create relationship
-- name: "create track {{ item.line }} TRACK:{{ item.from }} - {{ item.to }}"
+- name: "create U2 TRACK:Pankow - Vinetastraße"
   platform42.neo4j.edge:
-    instance_id: "{{ AURA_INSTANCEID }}"
+    neo4j_uri: "{{ NEO4J_URI }}"
     database: "{{ NEO4J_DATABASE }}"
     username: "{{ NEO4J_USERNAME }}"
     password: "{{ NEO4J_PASSWORD }}"
     type: TRACK
     from:
       label: Station
-      entity_name: "{{ item.from }}"
+      entity_name: "Pankow"
     to:
       label: Station
-      entity_name: "{{ item.to }}"
+      entity_name: "Vinetastraße"
     properties:
-      distance: "{{ item.distance }}"
-      line: "{{ item.line }}"
+      distance: 1.2
+      line: "U2"
     bi_directional: True
     state: PRESENT
   register: track
+#
+# interesting variables to inspect
+#   <track>.<edge>.<item>
+#   track.edge.cypher_response
+#   track.edge.cypher_query_inline
+#
 ```
