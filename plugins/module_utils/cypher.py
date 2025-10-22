@@ -1,5 +1,5 @@
-from neo4j import Transaction, GraphDatabase, Driver, basic_auth, ResultSummary, Result
 from typing import Dict, Any, Optional, Tuple, List
+from neo4j import Transaction, GraphDatabase, Driver, basic_auth, ResultSummary, Result
 
 from . import skeleton as u_skel
 from . import cypher_query as u_cyph_q
@@ -42,7 +42,7 @@ def graph_reset(
     query: str = u_cyph_q.cypher_graph_reset(check_mode)
     query_params: Dict[str, Any] = {}
     query_inline: str = query
-    return query, query_params, query_inline, 
+    return query, query_params, query_inline
 
 #
 #   vertex_del:
@@ -55,14 +55,14 @@ def graph_reset(
 #
 def vertex_del(
     check_mode: bool,
-    label: str, 
+    label: str,
     entity_name: str
 ) -> Tuple[str, Dict[str, Any], str]:
     # normalise
     normalised_label: str = label.capitalize()
 
     # Params -> values without binding
-    cypher_params: Dict[str, Any] = { 
+    cypher_params: Dict[str, Any] = {
         u_skel.JsonTKN.ENTITY_NAME.value: entity_name
     }
 
@@ -87,8 +87,8 @@ def vertex_del(
 #
 def vertex_add(
     check_mode: bool,
-    label: str, 
-    entity_name: str, 
+    label: str,
+    entity_name: str,
     properties: Optional[Dict[str, Any]] = None,
 ) -> Tuple[str, Dict[str, Any], str]:
     
@@ -101,7 +101,7 @@ def vertex_add(
     normalised_properties: Dict[str, Any] = {key.lower(): value for key, value in properties.items()}
 
     # Params -> values without binding
-    cypher_params: Dict[str, Any] = { 
+    cypher_params: Dict[str, Any] = {
         u_skel.JsonTKN.ENTITY_NAME.value: entity_name, 
         **normalised_properties 
     }
@@ -144,8 +144,8 @@ def edge_del(
     # cypher construction
     cypher_params: Dict[str, Any] = {
         u_skel.JsonTKN.FROM_ENTITY_NAME.value: from_entity_name,
-        u_skel.JsonTKN.TO_ENTITY_NAME.value: to_entity_name,
-    }    
+        u_skel.JsonTKN.TO_ENTITY_NAME.value: to_entity_name
+    }
     if bi_directional:
         cypher_query = u_cyph_q.cypher_edge_del_bi(
             check_mode=check_mode,
@@ -262,8 +262,8 @@ def query_read(
 #       summary -> cypher stats summary
 #
 def query_read_tx(
-    tx: Transaction, 
-    cypher_query: str, 
+    tx: Transaction,
+    cypher_query: str,
     cypher_params: Dict[str, Any]
 ) -> Tuple[List[Dict[str, Any]], ResultSummary]:
     response: Result = tx.run(cypher_query, cypher_params)
