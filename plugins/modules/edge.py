@@ -195,8 +195,11 @@ def main():
         u_skel.JsonTKN.STATS.value: u_cypher.cypher_stats(summary),
         u_skel.JsonTKN.CYPHER_RESPONSE.value: cypher_response
         }
+    state: str = module.params[u_skel.JsonTKN.STATE.value]
+    relationships_changed: int = summary.counters.relationships_created if u_skel.state_present(state) else summary.counters.relationships_deleted
+    changed: bool = relationships_changed > 0
     module.exit_json(**u_skel.ansible_exit(
-        changed=True,
+        changed=changed,
         payload_key=module_name,
         payload=payload)
     )
