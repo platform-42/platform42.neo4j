@@ -8,6 +8,7 @@
     Description: 
         Ansible module to reset graph database
 """
+
 # pylint: disable=import-error
 from typing import Dict, Any, List
 from ansible.module_utils.basic import AnsibleModule
@@ -68,7 +69,7 @@ def main():
             response: Result = session.run(cypher_query)
             records = list(response)
             cypher_response: List[Dict[str, Any]] = [record.data() for record in records]
-            summary: ResultSummary = response.consume()            
+            summary: ResultSummary = response.consume()
     except Exception as e:
         module.fail_json(**u_skel.ansible_fail(diagnostics=f"{e}"))
     finally:
