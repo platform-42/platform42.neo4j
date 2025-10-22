@@ -110,7 +110,7 @@ def cypher_edge_del(
 ) -> str:
     if check_mode:
         return CypherQuery.SIMULATION.value
-    return CypherQuery.EDGE_DEL.value(
+    return CypherQuery.EDGE_DEL.value.format(
         from_label=from_label,
         to_label=to_label,
         relation_type=relation_type
@@ -124,7 +124,7 @@ def cypher_edge_del_bi(
 ) -> str:
     if check_mode:
         return CypherQuery.SIMULATION.value
-    return CypherQuery.EDGE_DEL_BI.value(
+    return CypherQuery.EDGE_DEL_BI.value.format(
         from_label=from_label,
         to_label=to_label,
         relation_type=relation_type
