@@ -5,6 +5,7 @@ pylint plugins/modules/vertex.py
 pylint plugins/modules/edge.py
 
 PYTHONPATH=./plugins/module_utils 
+cd $PYTHONPATH
 pylint argument_spec.py
 pylint cypher_query.py
 pylint schema.py
