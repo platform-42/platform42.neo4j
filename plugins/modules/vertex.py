@@ -117,7 +117,7 @@ def main():
     module_name: str = u_skel.file_splitext(__file__)
     module:AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_vertice(),
-        supports_check_mode=T
+        supports_check_mode=True
     )
     result: bool
     diagnostics: Dict[str, Any]
