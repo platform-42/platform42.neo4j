@@ -1,8 +1,8 @@
-import regex
-
 from enum import Enum
 from strenum import StrEnum
 from typing import Dict, Any, Tuple
+
+import regex
 
 from . import skeleton as u_skel
 
@@ -12,25 +12,25 @@ class IdentifierPattern(StrEnum):
 
 class SchemaProperties(Enum):
     LABEL = { 
-        u_skel.JsonTKN.TYPE.value: "string", 
+        u_skel.JsonTKN.TYPE.value: "string",
         u_skel.JsonTKN.PATTERN.value: IdentifierPattern.NEO4J_IDENTIFIER.value
         }
     TYPE = { 
-        u_skel.JsonTKN.TYPE.value: "string", 
+        u_skel.JsonTKN.TYPE.value: "string",
         u_skel.JsonTKN.PATTERN.value: IdentifierPattern.NEO4J_IDENTIFIER.value
         }
     ENTITY_NAME = { 
-        u_skel.JsonTKN.TYPE.value: "string", 
+        u_skel.JsonTKN.TYPE.value: "string",
         u_skel.JsonTKN.PATTERN.value: IdentifierPattern.UNICODE_NAME.value
         }
     PROPERTY_KEYS = { 
-        u_skel.JsonTKN.TYPE.value: "string", 
+        u_skel.JsonTKN.TYPE.value: "string",
         u_skel.JsonTKN.PATTERN.value: IdentifierPattern.NEO4J_IDENTIFIER.value
         }
 
 def validate_pattern(
-        schema_properties: SchemaProperties,
-        value: str
+    schema_properties: SchemaProperties,
+    value: str
 ) -> Tuple[bool, Dict[str, Any]]:
     pattern = schema_properties[u_skel.JsonTKN.PATTERN.value]
     if not regex.match(pattern, value):
