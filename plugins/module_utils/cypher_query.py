@@ -18,12 +18,17 @@ from . import skeleton as u_skel
 #       (a)-[:TRACK]-(b)
 #
 class CypherQuery(StrEnum):
-    SYM = (
-        f"CALL dbms.components() YIELD name, versions RETURN versions[0] AS version"
-    )
-    GRAPH_RESET = (
-        f"MATCH (n) DETACH DELETE n"
-    )
+    SYM = """
+        CALL dbms.components() YIELD name, versions RETURN versions[0] AS version
+    """
+    GRAPH_RESET = """
+        MATCH (n) 
+        DETACH DELETE n;
+    """
+    VERTEX_DEL = """
+        MERGE (n:`{label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.ENTITY_NAME.value} }})
+        DETACH DELETE n;
+    """
 
 def cypher_graph_reset(
         check_mode: bool
@@ -33,10 +38,11 @@ def cypher_graph_reset(
 def cypher_vertex_del(
         label: str
 ) -> str:
-    return (
-        f"MERGE (n:`{label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.ENTITY_NAME.value} }}) "
-        f"DETACH DELETE n;"
-    )
+    return CypherQuery.VERTEX_DEL.value.format(label=label)
+#    return (
+#        f"MERGE (n:`{label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.ENTITY_NAME.value} }}) "
+#        f"DETACH DELETE n;"
+#    )
 
 def cypher_vertex_add(
     label: str,
