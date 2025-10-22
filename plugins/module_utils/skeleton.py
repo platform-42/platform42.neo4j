@@ -48,6 +48,7 @@ class JsonTKN(StrEnum):
     PASSWORD = "password"
     PATTERN = "pattern"
     PROPERTIES = "properties"
+    PROPERTIES_SET = "properties_set"
     QUERY = "query"
     QUERY_TYPE = "query_type"
     RELATIONSHIPS_CREATED = "relationships_created"
