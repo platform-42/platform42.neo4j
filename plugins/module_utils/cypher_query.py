@@ -59,10 +59,10 @@ class CypherQuery(StrEnum):
     EDGE_ADD_BI = """
         MATCH (a:`{from_label}` {{ entity_name: $from_entity_name}})
         MATCH (b:`{to_label}` {{ entity_name: $to_entity_name}})
-        MERGE (a)-[r1:`{relation_type}`]->(b)
         {set_clause_r1}
-        MERGE (b)-[r2:`{relation_type}`]->(a)
+        MERGE (a)-[r1:`{relation_type}`]->(b)
         {set_clause_r2}
+        MERGE (b)-[r2:`{relation_type}`]->(a)
         RETURN r1, r2;
     """
 
