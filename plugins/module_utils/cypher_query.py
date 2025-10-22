@@ -16,10 +16,16 @@ from . import skeleton as u_skel
 #       (a)-[:TRACK]-(b)
 #
 
-def cypher_graph_reset() -> str:
-    return (
+def cypher_graph_reset(
+        check_mode: bool
+) -> str:
+    q_sim = (
+        f"CALL dbms.components() YIELD name, versions RETURN versions[0] AS version"
+    )
+    q_real = (
         f"MATCH (n) DETACH DELETE n"
     )
+    return q_sim if check_mode else q_real
 
 def cypher_vertex_del(
         label: str
