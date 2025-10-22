@@ -127,6 +127,7 @@ def vertex_add(
 #       cypher_query_inline -> cypher query with value substitution
 #
 def edge_del(
+    check_mode: bool,
     relation_type: str,
     from_label: str,
     from_entity_name: str,
@@ -147,12 +148,14 @@ def edge_del(
     }    
     if bi_directional:
         cypher_query = u_cyph_q.cypher_edge_del_bi(
+            check_mode=check_mode,
             from_label=normalised_from_label,
             to_label=normalised_to_label,
             relation_type=normalised_relation_type
         )
     else:
         cypher_query = u_cyph_q.cypher_edge_del(
+            check_mode=check_mode,
             from_label=normalised_from_label,
             to_label=normalised_to_label,
             relation_type=normalised_relation_type
@@ -172,6 +175,7 @@ def edge_del(
 #       cypher_query_inline -> cypher query with value substitution
 #
 def edge_add(
+    check_mode: bool,
     relation_type: str,
     from_label: str,
     from_entity_name: str,
@@ -199,6 +203,7 @@ def edge_add(
     }
     if bi_directional:
         cypher_query = u_cyph_q.cypher_edge_add_bi(
+            check_mode=check_mode,
             from_label=normalised_from_label,
             to_label=normalised_to_label,
             relation_type=normalised_relation_type,
@@ -206,6 +211,7 @@ def edge_add(
         )
     else:
         cypher_query = u_cyph_q.cypher_edge_add(
+            check_mode=check_mode,
             from_label=normalised_from_label,
             to_label=normalised_to_label,
             relation_type=normalised_relation_type,

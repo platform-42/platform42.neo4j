@@ -74,7 +74,8 @@ EXAMPLES = r'''
 '''
 
 def edge(
-        module_params: Dict[str, Any]
+    check_mode: bool,
+    module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
     relation_type: str = module_params[u_skel.JsonTKN.TYPE.value]
     from_label: str = module_params[u_skel.JsonTKN.FROM.value][u_skel.JsonTKN.LABEL.value]
@@ -86,6 +87,7 @@ def edge(
     if u_skel.state_present(state):
         properties: Dict[str, Any] = module_params[u_skel.JsonTKN.PROPERTIES.value]
         return u_cypher.edge_add(
+            check_mode,
             relation_type,
             from_label,
             from_entity_name,
@@ -95,6 +97,7 @@ def edge(
             bi_directional
         )
     return u_cypher.edge_del(
+        check_mode,
         relation_type,
         from_label,
         from_entity_name,
@@ -104,7 +107,7 @@ def edge(
     )
 
 def validate_cypher_inputs(
-        module_params: Dict[str, Any]
+    module_params: Dict[str, Any]
 ) -> Tuple[bool, Dict[str, Any]]:
     result: bool
     diagnostics: Dict[str, Any]
@@ -158,7 +161,7 @@ def main():
     module_name: str = u_skel.file_splitext(__file__)
     module:AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_edge(),
-        supports_check_mode=False
+        supports_check_mode=True
     )
     result: bool
     diagnostics: Dict[str, Any]
@@ -177,7 +180,10 @@ def main():
     cypher_query: str
     cypher_params: Dict[str, Any]
     cypher_query_inline: str
-    cypher_query, cypher_params, cypher_query_inline = edge(module.params)
+    cypher_query, cypher_params, cypher_query_inline = edge(
+        module.check_mode,
+        module.params
+        )
     try:
         with driver.session(database=db_database) as session:
             response: Result = session.run(cypher_query, cypher_params)

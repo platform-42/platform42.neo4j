@@ -105,10 +105,13 @@ def cypher_vertex_add(
         )
 
 def cypher_edge_del(
-        from_label: str,
-        to_label: str,
-        relation_type: str
+    check_mode: bool,
+    from_label: str,
+    to_label: str,
+    relation_type: str
 ) -> str:
+    if check_mode:
+        return CypherQuery.SIMULATION.value
     return CypherQuery.EDGE_DEL.value(
         from_label=from_label, 
         to_label=to_label, 
@@ -116,10 +119,13 @@ def cypher_edge_del(
         )
 
 def cypher_edge_del_bi(
-        from_label: str,
-        to_label: str,
-        relation_type: str
+    check_mode: bool,
+    from_label: str,
+    to_label: str,
+    relation_type: str
 ) -> str:
+    if check_mode:
+        return CypherQuery.SIMULATION.value
     return CypherQuery.EDGE_DEL_BI.value(
         from_label=from_label, 
         to_label=to_label, 
@@ -127,14 +133,17 @@ def cypher_edge_del_bi(
         )
 
 def cypher_edge_add(
-        from_label: str,
-        to_label: str,
-        relation_type: str,
-        properties: Optional[Dict[str, Any]] = None
+    check_mode: bool,
+    from_label: str,
+    to_label: str,
+    relation_type: str,
+    properties: Optional[Dict[str, Any]] = None
 ) -> str:
     set_clause = (
         f"SET r += {{{', '.join(f'{k}: ${k}' for k in properties)}}}" if properties else ""
     )
+    if check_mode:
+        return CypherQuery.SIMULATION.value
     return CypherQuery.EDGE_ADD.value.format(
         from_label=from_label,
         to_label=to_label,
@@ -143,10 +152,11 @@ def cypher_edge_add(
     )
 
 def cypher_edge_add_bi(
-        from_label: str,
-        to_label: str,
-        relation_type: str,
-        properties: Optional[Dict[str, Any]] = None
+    check_mode: bool,
+    from_label: str,
+    to_label: str,
+    relation_type: str,
+    properties: Optional[Dict[str, Any]] = None
     ) -> str:
     set_clause_r1 = (
         f"SET r1 += {{{', '.join(f'{k}: ${k}' for k in properties)}}}" if properties else ""
@@ -154,6 +164,8 @@ def cypher_edge_add_bi(
     set_clause_r2 = (
         f"SET r2 += {{{', '.join(f'{k}: ${k}' for k in properties)}}}" if properties else ""
     )
+    if check_mode:
+        return CypherQuery.SIMULATION.value
     return CypherQuery.EDGE_ADD_BI.value.format(
         from_label=from_label,
         to_label=to_label,

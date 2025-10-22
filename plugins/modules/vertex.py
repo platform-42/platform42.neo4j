@@ -84,7 +84,7 @@ def vertex(
         )
 
 def validate_cypher_inputs(
-        module_params: Dict[str, Any]
+    module_params: Dict[str, Any]
 ) -> Tuple[bool, Dict[str, Any]]:
     result: bool
     diagnostics: Dict[str, Any]
