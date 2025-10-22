@@ -19,7 +19,7 @@ from . import skeleton as u_skel
 #
 class CypherQuery(StrEnum):
     SYM = (
-        "CALL dbms.components() YIELD name, versions RETURN versions[0] AS version"
+        f"CALL dbms.components() YIELD name, versions RETURN versions[0] AS version"
     )
     GRAPH_RESET = (
         f"MATCH (n) DETACH DELETE n"
