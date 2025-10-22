@@ -45,7 +45,7 @@ EXAMPLES = r'''
 def main():
     module_name = u_skel.file_splitext(__file__)
     module = AnsibleModule(
-        argument_spec=u_args.argument_spec_graph_reset(),
+        argument_spec=u_args.argument_spec_graph_reset(module.check_mode),
         supports_check_mode=False
     )
     db_uri: str = module.params[u_skel.JsonTKN.NEO4J_URI.value]
