@@ -5,7 +5,7 @@ from strenum import StrEnum
 #   Notes:
 #   - cypher queries don't need values, they only require bindings
 #   - bindings are derived from mandatory Json-tokens like entity_name whereas
-#     optional bindings are derived from the keys from properties  
+#     optional bindings are derived from the keys from properties
 #   - added backticks for identifiers label, type and entity_name to prevent collision with reserved words in cypher
 #   - cypher parameters passed on via YAML are checked in module-main to prevent injection
 #   - usage of multiple f-strings to prevent annoying \n in triple quoted string
