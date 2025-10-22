@@ -1,4 +1,6 @@
+from strenum import StrEnum
 from typing import Dict, Any, Optional
+
 from . import skeleton as u_skel
 
 #
@@ -15,17 +17,18 @@ from . import skeleton as u_skel
 #     is equivaluent to: 
 #       (a)-[:TRACK]-(b)
 #
+class CypherQuery(StrEnum):
+    SYM = (
+        "CALL dbms.components() YIELD name, versions RETURN versions[0] AS version"
+    )
+    GRAPH_RESET = (
+        f"MATCH (n) DETACH DELETE n"
+    )
 
 def cypher_graph_reset(
         check_mode: bool
 ) -> str:
-    q_sim = (
-        f"CALL dbms.components() YIELD name, versions RETURN versions[0] AS version"
-    )
-    q_real = (
-        f"MATCH (n) DETACH DELETE n"
-    )
-    return q_sim if check_mode else q_real
+    return CypherQuery.SYM.value if check_mode else CypherQuery.GRAPH_RESET.value
 
 def cypher_vertex_del(
         label: str
