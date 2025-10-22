@@ -17,7 +17,8 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.skeleton as u_s
 import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cypher
 import ansible_collections.platform42.neo4j.plugins.module_utils.schema as u_schema
 
-from neo4j import Driver, ResultSummary, Result 
+from neo4j import Driver, ResultSummary, Result
+import textwrap
 
 DOCUMENTATION = r'''
 ---
@@ -145,9 +146,9 @@ def main():
     finally:
         driver.close()
     payload: Dict[str, Any] = {
-        u_skel.JsonTKN.CYPHER_QUERY.value: cypher_query,
+        u_skel.JsonTKN.CYPHER_QUERY.value: textwrap.dedent(cypher_query).strip(),
         u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
-        u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: cypher_query_inline,
+        u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: textwrap.dedent(cypher_query_inline).strip(),
         u_skel.JsonTKN.STATS.value: u_cypher.cypher_stats(summary),
         u_skel.JsonTKN.CYPHER_RESPONSE.value: cypher_response
         }
