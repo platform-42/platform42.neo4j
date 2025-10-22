@@ -122,7 +122,7 @@ def argument_spec_edge() -> Dict[str, Any]:
                 u_skel.JsonTKN.ENTITY_NAME.value: {
                     u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
                     u_skel.YamlATTR.REQUIRED.value: True
-                },                
+                },
             },
         },
         u_skel.JsonTKN.TO.value: {
