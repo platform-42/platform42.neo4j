@@ -46,7 +46,7 @@ def main():
     module_name = u_skel.file_splitext(__file__)
     module = AnsibleModule(
         argument_spec=u_args.argument_spec_graph_reset(),
-        supports_check_mode=False
+        supports_check_mode=True
     )
     db_uri: str = module.params[u_skel.JsonTKN.NEO4J_URI.value]
     db_database: str = module.params[u_skel.JsonTKN.DATABASE.value]
