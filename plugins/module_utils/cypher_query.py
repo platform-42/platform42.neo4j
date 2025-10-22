@@ -9,10 +9,10 @@ from typing import Dict, Any, Optional
 #   - added backticks for identifiers label, type and entity_name to prevent collision with reserved words in cypher
 #   - cypher parameters passed on via YAML are checked in module-main to prevent injection
 #   - usage of multiple f-strings to prevent annoying \n in triple quoted string
-#   - delete of bi-directional relationship is subtle: 
-#       (a)-[:TRACK]->(b) 
-#       (b)-[:TRACK]->(a) 
-#     is equivaluent to: 
+#   - delete of bi-directional relationship is subtle:
+#       (a)-[:TRACK]->(b)
+#       (b)-[:TRACK]->(a)
+#     is equivaluent to:
 #       (a)-[:TRACK]-(b)
 #
 class CypherQuery(StrEnum):
@@ -35,13 +35,13 @@ class CypherQuery(StrEnum):
             labels(n) AS labels, 
             n.entity_name AS entity_name;
     """
-    EDGE_DEL = """ 
+    EDGE_DEL = """
         MATCH (a:`{from_label}` {{ entity_name: $from_entity_name}})
         MATCH (b:`{to_label}` {{ entity_name: $to_entity_name}})
         MERGE (a)-[r:`{relation_type}`]->(b)
         DELETE r;
     """
-    EDGE_DEL_BI = """ 
+    EDGE_DEL_BI = """
         MATCH (a:`{from_label}` {{ entity_name: $from_entity_name}})
         MATCH (b:`{to_label}` {{ entity_name: $to_entity_name}})
         MERGE (a)-[r:`{relation_type}`]-(b)
@@ -74,7 +74,7 @@ def cypher_graph_reset(
     check_mode: bool
 ) -> str:
     if check_mode:
-        return CypherQuery.SIMULATION.value 
+        return CypherQuery.SIMULATION.value
     return CypherQuery.GRAPH_RESET.value
 
 def cypher_vertex_del(
@@ -82,7 +82,7 @@ def cypher_vertex_del(
     label: str
 ) -> str:
     if check_mode: 
-        return CypherQuery.SIMULATION.value 
+        return CypherQuery.SIMULATION.value
     return CypherQuery.VERTEX_DEL.value.format(
         label=label
         )
@@ -96,7 +96,7 @@ def cypher_vertex_add(
         f"SET n += {{{', '.join(f'{k}: ${k}' for k in properties)}}}" if properties else ""
     )
     if check_mode:
-        return CypherQuery.SIMULATION.value 
+        return CypherQuery.SIMULATION.value
     return CypherQuery.VERTEX_ADD.value.format(
         label=label, 
         set_clause=set_clause
