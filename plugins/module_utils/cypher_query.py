@@ -54,16 +54,22 @@ class CypherQuery(StrEnum):
         MATCH (b:`{to_label}` {{ entity_name: $to_entity_name}})
         {set_clause}
         MERGE (a)-[r:`{relation_type}`]->(b)
-        RETURN r;
+        RETURN 
+            r.type as type,
+            a.entity_name as from_entity_name, 
+            b.entity_name as to_entity_name;
     """
     EDGE_ADD_BI = """
         MATCH (a:`{from_label}` {{ entity_name: $from_entity_name}})
         MATCH (b:`{to_label}` {{ entity_name: $to_entity_name}})
-        {set_clause_r1}
         MERGE (a)-[r1:`{relation_type}`]->(b)
-        {set_clause_r2}
+        {set_clause_r1}
         MERGE (b)-[r2:`{relation_type}`]->(a)
-        RETURN r1, r2;
+        {set_clause_r2}
+        RETURN  
+            r1.type as type
+            a.entity_name as from_entity_name, 
+            b.entity_name as to_entity_name;
     """
 
 def cypher_graph_reset(
