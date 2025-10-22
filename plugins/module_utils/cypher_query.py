@@ -133,17 +133,6 @@ def cypher_edge_add(
         set_clause=set_clause,
         relation_type=relation_type
     )
-#    return (
-#        f"MATCH (a:`{from_label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.FROM_ENTITY_NAME.value} }}), "
-#        f"(b:`{to_label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.TO_ENTITY_NAME.value}  }}) "
-#        f"MERGE (a)-[r:`{relation_type}`]->(b) "
-#        f"{set_clause} "
-#        f"RETURN "
-#        f"{u_skel.JsonTKN.ID.value}(r) AS {u_skel.JsonTKN.REL_ID.value}, "
-#        f"type(r) AS {u_skel.JsonTKN.RELATION_TYPE.value}, "
-#        f"a.{u_skel.JsonTKN.ENTITY_NAME.value} AS {u_skel.JsonTKN.FROM_ENTITY_NAME.value}, "
-#        f"b.{u_skel.JsonTKN.ENTITY_NAME.value} AS {u_skel.JsonTKN.TO_ENTITY_NAME.value}"
-#    )
 
 def cypher_edge_add_bi(
         from_label: str,
@@ -164,18 +153,3 @@ def cypher_edge_add_bi(
         set_clause_r1=set_clause_r1,
         set_clause_r2=set_clause_r2
     )
-#    return (
-#        f"MATCH "
-#        f"(a:`{from_label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.FROM_ENTITY_NAME.value} }}), "
-#        f"(b:`{to_label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.TO_ENTITY_NAME.value} }}) "
-#        f"MERGE (a)-[r1:`{relation_type}`]->(b) "
-#        f"{set_clause_r1} "
-#        f"MERGE (b)-[r2:`{relation_type}`]->(a) "
-#        f"{set_clause_r2} "
-#        f"RETURN "
-#        f"{u_skel.JsonTKN.ID.value}(r1) AS {u_skel.JsonTKN.REL1_ID.value}, "
-#        f"{u_skel.JsonTKN.ID.value}(r2) AS {u_skel.JsonTKN.REL2_ID.value}, "
-#        f"{u_skel.JsonTKN.TYPE.value}(r1) AS {u_skel.JsonTKN.RELATION_TYPE.value}, "
-#        f"a.{u_skel.JsonTKN.ENTITY_NAME.value} AS {u_skel.JsonTKN.FROM_ENTITY_NAME.value}, " 
-#        f"b.{u_skel.JsonTKN.ENTITY_NAME.value} AS {u_skel.JsonTKN.TO_ENTITY_NAME.value}"
-#    )

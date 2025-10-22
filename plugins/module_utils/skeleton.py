@@ -53,8 +53,6 @@ class JsonTKN(StrEnum):
     QUERY = "query"
     QUERY_TYPE = "query_type"
     REL_ID = "rel_id"
-    REL1_ID = "rel1_id"
-    REL2_ID = "rel2_id"
     RELATION_TYPE = "relation_type"
     RELATIONSHIPS_CREATED = "relationships_created"
     RELATIONSHIPS_DELETED = "relationships_deleted"
