@@ -49,6 +49,16 @@ class CypherQuery(StrEnum):
         MERGE (a)-[r:`{relation_type}`]-(b)
         DELETE r;
     """
+    EDGE_ADD = """
+        MATCH (a:`{from_label}` {{ entity_name: $from_entity_name}})
+        MATCH (b:`{to_label}` {{ entity_name: $to_entity_name}})
+        {set_clause}
+        MERGE (a)-[r:`{relation_type}`]->(b)
+        RETURN r;
+    """
+    EDGE_ADD_BI = """
+
+    """
 
 def cypher_graph_reset(
         check_mode: bool
@@ -105,17 +115,23 @@ def cypher_edge_add(
     set_clause = (
         f"SET r += {{{', '.join(f'{k}: ${k}' for k in properties)}}}" if properties else ""
     )
-    return (
-        f"MATCH (a:`{from_label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.FROM_ENTITY_NAME.value} }}), "
-        f"(b:`{to_label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.TO_ENTITY_NAME.value}  }}) "
-        f"MERGE (a)-[r:`{relation_type}`]->(b) "
-        f"{set_clause} "
-        f"RETURN "
-        f"{u_skel.JsonTKN.ID.value}(r) AS {u_skel.JsonTKN.REL_ID.value}, "
-        f"type(r) AS {u_skel.JsonTKN.RELATION_TYPE.value}, "
-        f"a.{u_skel.JsonTKN.ENTITY_NAME.value} AS {u_skel.JsonTKN.FROM_ENTITY_NAME.value}, "
-        f"b.{u_skel.JsonTKN.ENTITY_NAME.value} AS {u_skel.JsonTKN.TO_ENTITY_NAME.value}"
+    return CypherQuery.EDGE_ADD.value.format(
+        from_label=from_label,
+        to_label=to_label,
+        set_clause=set_clause,
+        relation_type=relation_type
     )
+#    return (
+#        f"MATCH (a:`{from_label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.FROM_ENTITY_NAME.value} }}), "
+#        f"(b:`{to_label}` {{ {u_skel.JsonTKN.ENTITY_NAME.value}: ${u_skel.JsonTKN.TO_ENTITY_NAME.value}  }}) "
+#        f"MERGE (a)-[r:`{relation_type}`]->(b) "
+#        f"{set_clause} "
+#        f"RETURN "
+#        f"{u_skel.JsonTKN.ID.value}(r) AS {u_skel.JsonTKN.REL_ID.value}, "
+#        f"type(r) AS {u_skel.JsonTKN.RELATION_TYPE.value}, "
+#        f"a.{u_skel.JsonTKN.ENTITY_NAME.value} AS {u_skel.JsonTKN.FROM_ENTITY_NAME.value}, "
+#        f"b.{u_skel.JsonTKN.ENTITY_NAME.value} AS {u_skel.JsonTKN.TO_ENTITY_NAME.value}"
+#    )
 
 def cypher_edge_add_bi(
         from_label: str,
