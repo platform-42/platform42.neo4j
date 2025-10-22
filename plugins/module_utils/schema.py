@@ -11,19 +11,19 @@ class IdentifierPattern(StrEnum):
     NEO4J_IDENTIFIER = r"^[A-Za-z_][A-Za-z0-9_]*$"
 
 class SchemaProperties(Enum):
-    LABEL = { 
+    LABEL = {
         u_skel.JsonTKN.TYPE.value: "string",
         u_skel.JsonTKN.PATTERN.value: IdentifierPattern.NEO4J_IDENTIFIER.value
         }
-    TYPE = { 
+    TYPE = {
         u_skel.JsonTKN.TYPE.value: "string",
         u_skel.JsonTKN.PATTERN.value: IdentifierPattern.NEO4J_IDENTIFIER.value
         }
-    ENTITY_NAME = { 
+    ENTITY_NAME = {
         u_skel.JsonTKN.TYPE.value: "string",
         u_skel.JsonTKN.PATTERN.value: IdentifierPattern.UNICODE_NAME.value
         }
-    PROPERTY_KEYS = { 
+    PROPERTY_KEYS = {
         u_skel.JsonTKN.TYPE.value: "string",
         u_skel.JsonTKN.PATTERN.value: IdentifierPattern.NEO4J_IDENTIFIER.value
         }
