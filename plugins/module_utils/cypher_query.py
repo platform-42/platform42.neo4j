@@ -1,5 +1,5 @@
-from strenum import StrEnum
 from typing import Dict, Any, Optional
+from strenum import StrEnum
 
 #
 #   Notes:
@@ -81,7 +81,7 @@ def cypher_vertex_del(
     check_mode: bool,
     label: str
 ) -> str:
-    if check_mode: 
+    if check_mode:
         return CypherQuery.SIMULATION.value
     return CypherQuery.VERTEX_DEL.value.format(
         label=label
@@ -98,7 +98,7 @@ def cypher_vertex_add(
     if check_mode:
         return CypherQuery.SIMULATION.value
     return CypherQuery.VERTEX_ADD.value.format(
-        label=label, 
+        label=label,
         set_clause=set_clause
         )
 
@@ -111,8 +111,8 @@ def cypher_edge_del(
     if check_mode:
         return CypherQuery.SIMULATION.value
     return CypherQuery.EDGE_DEL.value(
-        from_label=from_label, 
-        to_label=to_label, 
+        from_label=from_label,
+        to_label=to_label,
         relation_type=relation_type
         )
 
@@ -125,8 +125,8 @@ def cypher_edge_del_bi(
     if check_mode:
         return CypherQuery.SIMULATION.value
     return CypherQuery.EDGE_DEL_BI.value(
-        from_label=from_label, 
-        to_label=to_label, 
+        from_label=from_label,
+        to_label=to_label,
         relation_type=relation_type
         )
 
