@@ -18,7 +18,7 @@ from . import cypher_query as u_cyph_q
 
 def get_neo4j_driver(
     db_uri: str,
-    db_username: str, 
+    db_username: str,
     db_password: str
 ) -> Driver:
     return GraphDatabase.driver(
@@ -135,7 +135,7 @@ def edge_del(
     to_entity_name: str,
     bi_directional: bool = False
 ) -> Tuple[str, Dict[str, Any], str]:
-    
+
     # normalise/sanitize
     normalised_relation_type: str = relation_type.upper()
     normalised_from_label: str = from_label.capitalize()
@@ -251,7 +251,7 @@ def query_read(
     cypher_query_inline: str = cypher_query
     for key, value in cypher_params.items():
         cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
-    return cypher_query, cypher_params, cypher_query_inline 
+    return cypher_query, cypher_params, cypher_query_inline
 
 #
 #   query_read_tx:
