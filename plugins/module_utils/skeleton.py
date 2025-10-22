@@ -49,6 +49,7 @@ class JsonTKN(StrEnum):
     PATTERN = "pattern"
     PROPERTIES = "properties"
     QUERY = "query"
+    QUERY_TYPE = "query_type"
     RELATIONSHIPS_CREATED = "relationships_created"
     RELATIONSHIPS_DELETED = "relationships_deleted"
     RESULT = "result"
@@ -58,7 +59,6 @@ class JsonTKN(StrEnum):
     TO_ENTITY_NAME = "to_entity_name"
     TYPE = "type"
     USERNAME = "username"
-    QUERY_TYPE = "query_type"
 
 def state_present(state: str) -> bool:
     return state.lower() == YamlState.PRESENT.value
