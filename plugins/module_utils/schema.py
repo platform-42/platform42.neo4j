@@ -1,6 +1,6 @@
+from typing import Dict, Any, Tuple
 from enum import Enum
 from strenum import StrEnum
-from typing import Dict, Any, Tuple
 
 import regex
 
@@ -36,4 +36,3 @@ def validate_pattern(
     if not regex.match(pattern, value):
         return False, {"error": f"value {value} must match pattern {pattern}"}
     return True, {}
-
