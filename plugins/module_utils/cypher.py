@@ -234,7 +234,7 @@ def edge_add(
 def query_read(
     query: str,
     parameters: Optional[Dict[str, Any]] = None
-) -> Tuple[str, Dict[str, Any]]:
+) -> Tuple[str, Dict[str, Any], str]:
 
     # optionals
     if parameters is None:
