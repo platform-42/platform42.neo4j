@@ -35,10 +35,18 @@ description:
 
 EXAMPLES = r'''
 
-# Reset database
+# Reset database Neo4j localhost
 - name: cleans up all vertices and edges in Neo4J graph database
   platform42.neo4j.graph_reset:
     neo4j_uri: "neo4j://127.0.0.1:7687"
+    database: "neo4j"
+    username: "neo4j"
+    password: "*****"
+
+# Reset database Neo4j Aura (cloud)
+- name: cleans up all vertices and edges in Neo4J graph database
+  platform42.neo4j.graph_reset:
+    neo4j_uri: "neo4j+s://<AURA_INSTANCEID>.databases.neo4j.io"
     database: "neo4j"
     username: "neo4j"
     password: "*****"
