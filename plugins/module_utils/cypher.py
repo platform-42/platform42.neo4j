@@ -130,17 +130,17 @@ def vertex_add(
 def edge_del(
     check_mode: bool,
     relation_type: str,
-    from_label: str,
+    label_from: str,
     entity_name_from: str,
-    to_label: str,
+    label_to: str,
     entity_name_to: str,
     bi_directional: bool = False
 ) -> Tuple[str, Dict[str, Any], str]:
 
     # normalise/sanitize
     normalised_relation_type: str = relation_type.upper()
-    normalised_from_label: str = from_label.capitalize()
-    normalised_to_label: str = to_label.capitalize()
+    normalised_label_from: str = label_from.capitalize()
+    normalised_label_to: str = label_to.capitalize()
 
     # cypher construction
     cypher_params: Dict[str, Any] = {
@@ -150,15 +150,15 @@ def edge_del(
     if bi_directional:
         cypher_query = u_cyph_q.cypher_edge_del_bi(
             check_mode=check_mode,
-            from_label=normalised_from_label,
-            to_label=normalised_to_label,
+            label_from=normalised_label_from,
+            label_to=normalised_label_to,
             relation_type=normalised_relation_type
         )
     else:
         cypher_query = u_cyph_q.cypher_edge_del(
             check_mode=check_mode,
-            from_label=normalised_from_label,
-            to_label=normalised_to_label,
+            label_from=normalised_label_from,
+            label_to=normalised_label_to,
             relation_type=normalised_relation_type
         )
     cypher_query_inline: str = cypher_query
@@ -178,9 +178,9 @@ def edge_del(
 def edge_add(
     check_mode: bool,
     relation_type: str,
-    from_label: str,
+    label_from: str,
     entity_name_from: str,
-    to_label: str,
+    label_to: str,
     entity_name_to: str,
     properties: Optional[Dict[str, Any]] = None,
     bi_directional: bool = False
@@ -192,8 +192,8 @@ def edge_add(
 
     # normalise/sanitize
     normalised_relation_type: str = relation_type.upper()
-    normalised_from_label: str = from_label.capitalize()
-    normalised_to_label: str = to_label.capitalize()
+    normalised_label_from: str = label_from.capitalize()
+    normalised_label_to: str = label_to.capitalize()
     normalised_properties: Dict[str, Any] = {key.lower(): value for key, value in properties.items()}
 
     # cypher construction
@@ -205,16 +205,16 @@ def edge_add(
     if bi_directional:
         cypher_query = u_cyph_q.cypher_edge_add_bi(
             check_mode=check_mode,
-            from_label=normalised_from_label,
-            to_label=normalised_to_label,
+            label_from=normalised_label_from,
+            label_to=normalised_label_to,
             relation_type=normalised_relation_type,
             properties=normalised_properties
         )
     else:
         cypher_query = u_cyph_q.cypher_edge_add(
             check_mode=check_mode,
-            from_label=normalised_from_label,
-            to_label=normalised_to_label,
+            label_from=normalised_label_from,
+            label_to=normalised_label_to,
             relation_type=normalised_relation_type,
             properties=normalised_properties
         )

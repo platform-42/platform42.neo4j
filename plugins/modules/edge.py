@@ -79,9 +79,9 @@ def edge(
     module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
     relation_type: str = module_params[u_skel.JsonTKN.TYPE.value]
-    from_label: str = module_params[u_skel.JsonTKN.FROM.value][u_skel.JsonTKN.LABEL.value]
+    label_from: str = module_params[u_skel.JsonTKN.FROM.value][u_skel.JsonTKN.LABEL.value]
     entity_name_from: str = module_params[u_skel.JsonTKN.FROM.value][u_skel.JsonTKN.ENTITY_NAME.value]
-    to_label: str = module_params[u_skel.JsonTKN.TO.value][u_skel.JsonTKN.LABEL.value]
+    label_to: str = module_params[u_skel.JsonTKN.TO.value][u_skel.JsonTKN.LABEL.value]
     entity_name_to: str = module_params[u_skel.JsonTKN.TO.value][u_skel.JsonTKN.ENTITY_NAME.value]
     bi_directional: bool = module_params[u_skel.JsonTKN.BI_DIRECTIONAL.value]
     state: str = module_params[u_skel.JsonTKN.STATE.value]
@@ -90,9 +90,9 @@ def edge(
         return u_cypher.edge_add(
             check_mode,
             relation_type,
-            from_label,
+            label_from,
             entity_name_from,
-            to_label,
+            label_to,
             entity_name_to,
             properties,
             bi_directional
@@ -100,9 +100,9 @@ def edge(
     return u_cypher.edge_del(
         check_mode,
         relation_type,
-        from_label,
+        label_from,
         entity_name_from,
-        to_label,
+        label_to,
         entity_name_to,
         bi_directional
     )
