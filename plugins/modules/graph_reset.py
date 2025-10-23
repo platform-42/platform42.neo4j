@@ -44,7 +44,7 @@ EXAMPLES = r'''
     password: "*****"
 '''
 
-def main():
+def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
     module:AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_graph_reset(),
@@ -75,7 +75,6 @@ def main():
         module.fail_json(**u_skel.ansible_fail(diagnostics=f"{e}"))
     finally:
         driver.close()
-    summary: ResultSummary = response.consume()
     payload: Dict[str, Any] = {
         u_skel.JsonTKN.CYPHER_QUERY.value: u_skel.flatten_query(cypher_query),
         u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
