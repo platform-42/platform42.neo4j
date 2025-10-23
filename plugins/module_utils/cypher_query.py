@@ -4,7 +4,6 @@ from strenum import StrEnum
 #
 #   Notes:
 #   - cypher queries don't need values, they only require bindings
-#   - bindings are derived from mandatory Json-tokens like entity_name whereas
 #     optional bindings are derived from the keys from properties
 #   - added backticks for identifiers label, type and entity_name to prevent collision with reserved words in cypher
 #   - cypher parameters passed on via YAML are checked in module-main to prevent injection
@@ -17,7 +16,9 @@ from strenum import StrEnum
 #
 class CypherQuery(StrEnum):
     SIMULATION = """
-        CALL dbms.components() YIELD name, versions RETURN versions[0] AS version
+        CALL dbms.components() YIELD name, versions 
+        RETURN 
+            versions[0] AS version;
     """
     GRAPH_RESET = """
         MATCH (n) 
@@ -74,18 +75,19 @@ def cypher_graph_reset(
     check_mode: bool
 ) -> str:
     if check_mode:
-        return CypherQuery.SIMULATION.value
-    return CypherQuery.GRAPH_RESET.value
+        return str(CypherQuery.SIMULATION.value)
+    return str(CypherQuery.GRAPH_RESET.value)
 
 def cypher_vertex_del(
     check_mode: bool,
     label: str
 ) -> str:
     if check_mode:
-        return CypherQuery.SIMULATION.value
-    return CypherQuery.VERTEX_DEL.value.format(
+        return str(CypherQuery.SIMULATION.value)
+    return str(CypherQuery.VERTEX_DEL.value.format(
         label=label
         )
+    )
 
 def cypher_vertex_add(
     check_mode: bool,
@@ -96,11 +98,12 @@ def cypher_vertex_add(
         f"SET n += {{{', '.join(f'{k}: ${k}' for k in properties)}}}" if properties else ""
     )
     if check_mode:
-        return CypherQuery.SIMULATION.value
-    return CypherQuery.VERTEX_ADD.value.format(
+        return str(CypherQuery.SIMULATION.value)
+    return str(CypherQuery.VERTEX_ADD.value.format(
         label=label,
         set_clause=set_clause
         )
+    )
 
 def cypher_edge_del(
     check_mode: bool,
@@ -109,12 +112,13 @@ def cypher_edge_del(
     relation_type: str
 ) -> str:
     if check_mode:
-        return CypherQuery.SIMULATION.value
-    return CypherQuery.EDGE_DEL.value.format(
+        return str(CypherQuery.SIMULATION.value)
+    return str(CypherQuery.EDGE_DEL.value.format(
         from_label=from_label,
         to_label=to_label,
         relation_type=relation_type
         )
+    )
 
 def cypher_edge_del_bi(
     check_mode: bool,
@@ -123,12 +127,13 @@ def cypher_edge_del_bi(
     relation_type: str
 ) -> str:
     if check_mode:
-        return CypherQuery.SIMULATION.value
-    return CypherQuery.EDGE_DEL_BI.value.format(
+        return str(CypherQuery.SIMULATION.value)
+    return str(CypherQuery.EDGE_DEL_BI.value.format(
         from_label=from_label,
         to_label=to_label,
         relation_type=relation_type
         )
+    )
 
 def cypher_edge_add(
     check_mode: bool,
@@ -141,12 +146,13 @@ def cypher_edge_add(
         f"SET r += {{{', '.join(f'{k}: ${k}' for k in properties)}}}" if properties else ""
     )
     if check_mode:
-        return CypherQuery.SIMULATION.value
-    return CypherQuery.EDGE_ADD.value.format(
+        return str(CypherQuery.SIMULATION.value)
+    return str(CypherQuery.EDGE_ADD.value.format(
         from_label=from_label,
         to_label=to_label,
         set_clause=set_clause,
         relation_type=relation_type
+        )
     )
 
 def cypher_edge_add_bi(
@@ -163,11 +169,12 @@ def cypher_edge_add_bi(
         f"SET r2 += {{{', '.join(f'{k}: ${k}' for k in properties)}}}" if properties else ""
     )
     if check_mode:
-        return CypherQuery.SIMULATION.value
-    return CypherQuery.EDGE_ADD_BI.value.format(
+        return str(CypherQuery.SIMULATION.value)
+    return str(CypherQuery.EDGE_ADD_BI.value.format(
         from_label=from_label,
         to_label=to_label,
         relation_type=relation_type,
         set_clause_r1=set_clause_r1,
         set_clause_r2=set_clause_r2
+        )
     )
