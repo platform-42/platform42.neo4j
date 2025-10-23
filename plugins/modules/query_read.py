@@ -57,7 +57,9 @@ EXAMPLES = r'''
     database: "neo4j"
     username: "neo4j"
     password: "*****"
-    cypher_query: "MATCH (p:Person) RETURN p"
+    cypher_query: >
+      MATCH (p:Person) 
+      RETURN p;
 
 # Read filtered data with parameters from Neo4j Aura
 - name: Find a specific person by name
@@ -66,7 +68,12 @@ EXAMPLES = r'''
     database: "neo4j"
     username: "neo4j"
     password: "*****"
-    cypher_query: "MATCH (p:Person {name: $name}) RETURN p"
+    cypher_query: > 
+      MATCH (p:Person {name: $name}) 
+      RETURN 
+        p.name AS name
+        p.age AS age
+        p.gender AS gender;
     parameters:
       name: "Alice"
 '''
