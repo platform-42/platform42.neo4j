@@ -4,7 +4,7 @@
     Filename: edge.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-05
-    Version: 1.2.0
+    Version: 1.3.0
     Description: 
         Ansible module to create graph relationship (edge)
 """
@@ -24,7 +24,7 @@ DOCUMENTATION = r'''
 ---
 module: edge
 short_description: Create or update a relationship (edge) between two vertices in Neo4j
-version_added: "1.2.0"
+version_added: "1.3.0"
 author:
   - Diederick de Buck (diederick.de.buck@gmail.com)
 description:
@@ -36,7 +36,8 @@ notes:
   - The module uses a Cypher MERGE statement to ensure the relationship is created once between existing vertices.
   - For idempotent behavior, ensure source and target vertices are uniquely identifiable.
   - Relationship creation will fail if source or target nodes are missing.
-  - edge-type follows uppercase naming style
+  - edge-type follows uppercase naming style.
+  - check_mode will validate all input parameters and returns version of Neo4j as proof that connection is established.
   '''
 
 EXAMPLES = r'''

@@ -3,7 +3,7 @@
     Filename: query_read.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-05
-    Version: 1.2.0
+    Version: 1.3.0
     Description: 
         Ansible module to query a graph
 """
@@ -23,7 +23,7 @@ DOCUMENTATION = r'''
 ---
 module: query_read
 short_description: Execute a read-only Cypher query in Neo4j and return results
-version_added: "1.2.0"
+version_added: "1.3.0"
 author:
   - Diederick de Buck (diederick.de.buck@gmail.com)
 description:
@@ -46,6 +46,7 @@ notes:
   - This module automatically serializes result data to JSON-safe format.
   - If the query returns Neo4j nodes or relationships, only their properties are returned.
   - The module will fail if a write operation is attempted (e.g., CREATE or MERGE).
+  - check_mode it turned off, since this module is not able to modify any vertex, edge or attribute.
 '''
 
 EXAMPLES = r'''
@@ -111,7 +112,10 @@ def main():
     cypher_query: str
     cypher_params: Dict[str, Any]
     cypher_query_inline: str
-    cypher_query, cypher_params, cypher_query_inline = u_cypher.query_read(query, parameters)
+    cypher_query, cypher_params, cypher_query_inline = u_cypher.query_read(
+        query, 
+        parameters
+        )
     try:
         with driver.session(database=db_database) as session:
             data, summary = session.execute_read(u_cypher.query_read_tx, cypher_query, cypher_params)

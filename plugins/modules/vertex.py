@@ -3,7 +3,7 @@
     Filename: vertex.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-05
-    Version: 1.2.0
+    Version: 1.3.0
     Description: 
         Ansible module to create graph node (vertex)
 """
@@ -23,7 +23,7 @@ DOCUMENTATION = r'''
 ---
 module: vertex
 short_description: Create or update a vertex (node) in Neo4j
-version_added: "1.2.0"
+version_added: "1.3.0"
 author:
   - Diederick de Buck (diederick.de.buck@gmail.com)
 description:
@@ -31,7 +31,8 @@ description:
   - It uses the official Neo4j Python driver and supports Aura (neo4j+s://) and self-hosted databases.
   - The module expects parameters defined in the collection’s common argument specification utilities.
 notes:
-  - vertex-label follows capitalized naming style
+  - vertex-label follows capitalized naming style.
+  - check_mode will validate all input parameters and returns version of Neo4j as proof that connection is established.
 '''
 
 EXAMPLES = r'''

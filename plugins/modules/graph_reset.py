@@ -4,7 +4,7 @@
     Filename: graph_reset.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-05
-    Version: 1.2.0
+    Version: 1.3.0
     Description: 
         Ansible module to reset graph database
 """
@@ -23,13 +23,14 @@ DOCUMENTATION = r'''
 ---
 module: graph_reset
 short_description: reset vertices and edges in Neo4j database
-version_added: "1.2.0"
+version_added: "1.3.0"
 author:
   - Diederick de Buck (diederick.de.buck@gmail.com)
 description:
   - This module removes nodes (vertex) and relations (edges) in a Neo4j graph database.
   - It uses the official Neo4j Python driver and supports Aura (neo4j+s://) and self-hosted databases.
   - The module expects parameters defined in the collection’s common argument specification utilities.
+  - check_mode will validate all input parameters and returns version of Neo4j as proof that connection is established.
 '''
 
 EXAMPLES = r'''

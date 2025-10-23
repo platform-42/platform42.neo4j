@@ -1,0 +1,2 @@
+[tool.mypy]
+mypy_path = ["ansible_collections/platform42/neo4j/plugins"]
