@@ -10,6 +10,7 @@ from . import cypher_query as u_cyph_q
 #   - edge type must be uppercased - enforced (NEO4J advise)
 #   - vertex name is set explicitly to entity_name - enforced (Ansible clarity)
 #   - property keys are explicitly converted to lowercase JSON-keys to avoid duplicate properties - enforced
+#   - property keys must be valid JSON and must comply to Neo4j rules - stronger enforcement than regular JSON keys
 #   - implemented Ansible primitives return 3-tuple
 #              cypher_query: str -> NEO4J query with only bindings
 #             cypher_params: Dict[str, Any] -> NEO4J values for bindings
