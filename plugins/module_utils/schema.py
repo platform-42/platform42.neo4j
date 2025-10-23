@@ -32,7 +32,7 @@ def validate_pattern(
     schema_property: SchemaProperties,
     value: str
 ) -> Tuple[bool, Dict[str, Any]]:
-    pattern = schema_property[u_skel.JsonTKN.PATTERN.value]
+    pattern = schema_property.value[u_skel.JsonTKN.PATTERN.value]
     if not regex.match(pattern, value):
         return False, {"error": f"value {value} must match pattern {pattern}"}
     return True, {}

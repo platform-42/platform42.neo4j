@@ -91,14 +91,14 @@ def validate_cypher_inputs(
     diagnostics: Dict[str, Any]
     # validate vertex Label against injection
     result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.LABEL.value,
+        u_schema.SchemaProperties.LABEL,
         module_params[u_skel.JsonTKN.LABEL.value]
         )
     if not result:
         return False, diagnostics
     # validate vertex name against injection
     result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.ENTITY_NAME.value,
+        u_schema.SchemaProperties.ENTITY_NAME,
         module_params[u_skel.JsonTKN.ENTITY_NAME.value]
         )
     if not result:
@@ -107,7 +107,7 @@ def validate_cypher_inputs(
     # validate vertex properties against injection via JSON-key
     for key in module_params[u_skel.JsonTKN.PROPERTIES.value].keys():
         result, diagnostics = u_schema.validate_pattern(
-            u_schema.SchemaProperties.PROPERTY_KEYS.value,
+            u_schema.SchemaProperties.PROPERTY_KEYS,
             key
         )
         if not result:
