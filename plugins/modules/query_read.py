@@ -69,9 +69,9 @@ EXAMPLES = r'''
     username: "neo4j"
     password: "*****"
     cypher_query: > 
-      MATCH (p:Person {name: $name}) 
+      MATCH (p:Person {entity_name: $name}) 
       RETURN 
-        p.name AS name
+        p.entity_name AS name
         p.age AS age
         p.gender AS gender;
     parameters:
