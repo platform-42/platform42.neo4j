@@ -151,7 +151,7 @@ def validate_cypher_inputs(
     # validate edge properties against injection via JSON-key
     for key in module_params[u_skel.JsonTKN.PROPERTIES].keys():
         result, diagnostics = u_schema.validate_pattern(
-            u_schema.SchemaProperties.PROPERTY_KEYS.value,
+            u_schema.SchemaProperties.PROPERTY_KEYS,
             key
         )
         if not result:
