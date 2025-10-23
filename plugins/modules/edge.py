@@ -114,42 +114,42 @@ def validate_cypher_inputs(
     diagnostics: Dict[str, Any]
     # validate edge-type against injection
     result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.TYPE.value,
+        u_schema.SchemaProperties.TYPE,
         module_params[u_skel.JsonTKN.TYPE.value]
         )
     if not result:
         return False, diagnostics
     # validate edge from-label against injection
     result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.LABEL.value,
+        u_schema.SchemaProperties.LABEL,
         module_params[u_skel.JsonTKN.FROM][u_skel.JsonTKN.LABEL.value]
         )
     if not result:
         return False, diagnostics
     # validate edge from-entity_name against injection
     result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.ENTITY_NAME.value,
+        u_schema.SchemaProperties.ENTITY_NAME,
         module_params[u_skel.JsonTKN.FROM][u_skel.JsonTKN.ENTITY_NAME.value]
         )
     if not result:
         return False, diagnostics
     # validate edge to-label against injection
     result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.LABEL.value,
+        u_schema.SchemaProperties.LABEL,
         module_params[u_skel.JsonTKN.TO][u_skel.JsonTKN.LABEL.value]
         )
     if not result:
         return False, diagnostics
     # validate edge to-entity_name against injection
     result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.ENTITY_NAME.value,
+        u_schema.SchemaProperties.ENTITY_NAME,
         module_params[u_skel.JsonTKN.TO][u_skel.JsonTKN.ENTITY_NAME.value]
         )
     if not result:
         return False, diagnostics
     key: str
     # validate edge properties against injection via JSON-key
-    for key in module_params[u_skel.JsonTKN.PROPERTIES.value].keys():
+    for key in module_params[u_skel.JsonTKN.PROPERTIES].keys():
         result, diagnostics = u_schema.validate_pattern(
             u_schema.SchemaProperties.PROPERTY_KEYS.value,
             key
