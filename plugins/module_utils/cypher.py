@@ -182,7 +182,7 @@ def edge_add(
     to_label: str,
     to_entity_name: str,
     properties: Optional[Dict[str, Any]] = None,
-    bi_directional: bool = False,
+    bi_directional: bool = False
 ) -> Tuple[str, Dict[str, Any], str]:
 
     # optionals
