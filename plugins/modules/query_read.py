@@ -50,7 +50,7 @@ notes:
 '''
 
 EXAMPLES = r'''
-# Read all Person nodes
+# Read all Person nodes from Neo4j localhost
 - name: Get all persons
   platform42.neo4j.query_read:
     neo4j_uri: "neo4j://127.0.0.1:7687"
@@ -59,10 +59,10 @@ EXAMPLES = r'''
     password: "*****"
     cypher_query: "MATCH (p:Person) RETURN p"
 
-# Read filtered data with parameters
+# Read filtered data with parameters from Neo4j Aura
 - name: Find a specific person by name
   platform42.neo4j.query_read:
-    neo4j_uri: "neo4j://127.0.0.1:7687"
+    neo4j_uri: "neo4j+s://<AURA_INSTANCEID>.databases.neo4j.io"
     database: "neo4j"
     username: "neo4j"
     password: "*****"
