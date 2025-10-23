@@ -37,38 +37,38 @@ class CypherQuery(StrEnum):
             n.entity_name AS entity_name;
     """
     EDGE_DEL = """
-        MATCH (a:`{from_label}` {{ entity_name: $from_entity_name}})
-        MATCH (b:`{to_label}` {{ entity_name: $to_entity_name}})
+        MATCH (a:`{from_label}` {{ entity_name: $entity_name_from}})
+        MATCH (b:`{to_label}` {{ entity_name: $entity_name_to}})
         MERGE (a)-[r:`{relation_type}`]->(b)
         DELETE r;
     """
     EDGE_DEL_BI = """
-        MATCH (a:`{from_label}` {{ entity_name: $from_entity_name}})
-        MATCH (b:`{to_label}` {{ entity_name: $to_entity_name}})
+        MATCH (a:`{from_label}` {{ entity_name: $entity_name_from}})
+        MATCH (b:`{to_label}` {{ entity_name: $entity_name_to}})
         MERGE (a)-[r:`{relation_type}`]-(b)
         DELETE r;
     """
     EDGE_ADD = """
-        MATCH (a:`{from_label}` {{ entity_name: $from_entity_name}})
-        MATCH (b:`{to_label}` {{ entity_name: $to_entity_name}})
+        MATCH (a:`{from_label}` {{ entity_name: $entity_name_from}})
+        MATCH (b:`{to_label}` {{ entity_name: $entity_name_to}})
         {set_clause}
         MERGE (a)-[r:`{relation_type}`]->(b)
         RETURN 
             type(r) AS relation_type,
-            a.entity_name as from_entity_name, 
-            b.entity_name as to_entity_name;
+            a.entity_name as entity_name_from, 
+            b.entity_name as entity_name_to;
     """
     EDGE_ADD_BI = """
-        MATCH (a:`{from_label}` {{ entity_name: $from_entity_name}})
-        MATCH (b:`{to_label}` {{ entity_name: $to_entity_name}})
+        MATCH (a:`{from_label}` {{ entity_name: $entity_name_from}})
+        MATCH (b:`{to_label}` {{ entity_name: $entity_name_to}})
         MERGE (a)-[r1:`{relation_type}`]->(b)
         {set_clause_r1}
         MERGE (b)-[r2:`{relation_type}`]->(a)
         {set_clause_r2}
         RETURN  
             type(r1) AS relation_type,
-            a.entity_name AS from_entity_name,
-            b.entity_name AS to_entity_name;
+            a.entity_name AS entity_name_from,
+            b.entity_name AS entity_name_to;
     """
 
 def cypher_graph_reset(

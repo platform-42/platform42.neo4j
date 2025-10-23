@@ -131,9 +131,9 @@ def edge_del(
     check_mode: bool,
     relation_type: str,
     from_label: str,
-    from_entity_name: str,
+    entity_name_from: str,
     to_label: str,
-    to_entity_name: str,
+    entity_name_to: str,
     bi_directional: bool = False
 ) -> Tuple[str, Dict[str, Any], str]:
 
@@ -144,8 +144,8 @@ def edge_del(
 
     # cypher construction
     cypher_params: Dict[str, Any] = {
-        u_skel.JsonTKN.FROM_ENTITY_NAME.value: from_entity_name,
-        u_skel.JsonTKN.TO_ENTITY_NAME.value: to_entity_name
+        u_skel.JsonTKN.ENTITY_NAME_FROM.value: entity_name_from,
+        u_skel.JsonTKN.ENTITY_NAME_TO.value: entity_name_to
     }
     if bi_directional:
         cypher_query = u_cyph_q.cypher_edge_del_bi(
@@ -179,9 +179,9 @@ def edge_add(
     check_mode: bool,
     relation_type: str,
     from_label: str,
-    from_entity_name: str,
+    entity_name_from: str,
     to_label: str,
-    to_entity_name: str,
+    entity_name_to: str,
     properties: Optional[Dict[str, Any]] = None,
     bi_directional: bool = False
 ) -> Tuple[str, Dict[str, Any], str]:
@@ -198,8 +198,8 @@ def edge_add(
 
     # cypher construction
     cypher_params: Dict[str, Any] = {
-        u_skel.JsonTKN.FROM_ENTITY_NAME.value: from_entity_name,
-        u_skel.JsonTKN.TO_ENTITY_NAME.value: to_entity_name,
+        u_skel.JsonTKN.ENTITY_NAME_FROM.value: entity_name_from,
+        u_skel.JsonTKN.ENTITY_NAME_TO.value: entity_name_to,
         **normalised_properties
     }
     if bi_directional:

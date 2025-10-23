@@ -33,8 +33,9 @@ class JsonTKN(StrEnum):
     DATABASE = "database"
     DIAGNOSTICS = "diagnostics"
     ENTITY_NAME = "entity_name"
+    ENTITY_NAME_FROM = "entity_name_from"
+    ENTITY_NAME_TO = "entity_name_to"
     FROM = "from"
-    FROM_ENTITY_NAME = "from_entity_name"
     JSON_KEYS = "json_keys"
     LABEL = "label"
     LABELS = "labels"
@@ -58,7 +59,6 @@ class JsonTKN(StrEnum):
     STATE = "state"
     STATS = "stats"
     TO = "to"
-    TO_ENTITY_NAME = "to_entity_name"
     TYPE = "type"
     USERNAME = "username"
 
