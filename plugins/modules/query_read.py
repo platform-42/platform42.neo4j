@@ -5,7 +5,7 @@
     Filename: query_read.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-05
-    Version: 1.5.0
+    Version: 1.6.0
     Description: 
         Ansible module to query a graph
 """
@@ -25,7 +25,7 @@ DOCUMENTATION = r'''
 ---
 module: query_read
 short_description: Execute a read-only Cypher query in Neo4j and return results
-version_added: "1.5.0"
+version_added: "1.6.0"
 author:
   - Diederick de Buck (diederick.de.buck@gmail.com)
 description:
