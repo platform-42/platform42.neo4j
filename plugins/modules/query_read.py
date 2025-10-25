@@ -120,7 +120,7 @@ def main() -> None:
     cypher_params: Dict[str, Any]
     cypher_query_inline: str
     cypher_query, cypher_params, cypher_query_inline = u_cypher.query_read(
-        query, 
+        query,
         parameters
         )
     try:
