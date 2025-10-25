@@ -85,7 +85,7 @@ def main() -> None:
             u_skel.JsonTKN.CYPHER_QUERY.value: u_skel.flatten_query(cypher_query),
             u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
             u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: u_skel.flatten_query(cypher_query_inline),
-            u_skel.JsonTKN.ERROR_MSG.value: f"{e}"
+            u_skel.JsonTKN.ERROR_MSG.value: repr(e)
         }
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     finally:

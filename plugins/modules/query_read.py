@@ -129,7 +129,12 @@ def main() -> None:
         with driver.session(database=db_database) as session:
             data, summary = session.execute_read(u_cypher.query_read_tx, cypher_query, cypher_params)
     except Exception as e:
-        module.fail_json(**u_skel.ansible_fail(diagnostics=f"{e}"))
+        diagnostics = {
+            u_skel.JsonTKN.CYPHER_QUERY.value: u_skel.flatten_query(cypher_query),
+            u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
+            u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: u_skel.flatten_query(cypher_query_inline),
+            u_skel.JsonTKN.ERROR_MSG.value: repr(e)
+        }    
     finally:
         driver.close()
     payload: Dict[str, Any] = {
