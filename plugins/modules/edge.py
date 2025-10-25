@@ -192,7 +192,7 @@ def main() -> None:
             cypher_response: List[Dict[str, Any]] = [record.data() for record in records]
             summary: ResultSummary = response.consume()
     except Exception as e:
-        diagnostics: Dict[str, Any] = {
+        diagnostics = {
             u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: u_skel.flatten_query(cypher_query_inline),
             u_skel.JsonTKN.ERROR_MSG.value: f"{e}"
         }
