@@ -80,7 +80,13 @@ def main() -> None:
             cypher_response: List[Dict[str, Any]] = [record.data() for record in records]
             summary: ResultSummary = response.consume()
     except Exception as e:
-        module.fail_json(**u_skel.ansible_fail(diagnostics=f"{e}"))
+        diagnostics = {
+            u_skel.JsonTKN.CYPHER_QUERY.value: u_skel.flatten_query(cypher_query),
+            u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
+            u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: u_skel.flatten_query(cypher_query_inline),
+            u_skel.JsonTKN.ERROR_MSG.value: f"{e}"
+        }
+        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     finally:
         driver.close()
     payload: Dict[str, Any] = {
