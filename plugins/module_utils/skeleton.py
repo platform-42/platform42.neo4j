@@ -1,9 +1,10 @@
 # pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring
 from typing import Dict, Any
-from strenum import StrEnum
 
 import os
 import re
+
+from strenum import StrEnum
 
 class YamlATTR(StrEnum):
     CHANGED = "changed"
