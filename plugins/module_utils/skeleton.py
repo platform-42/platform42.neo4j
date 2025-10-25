@@ -1,8 +1,8 @@
-import os
-import re
-
 from typing import Dict, Any
 from strenum import StrEnum
+
+import os
+import re
 
 class YamlATTR(StrEnum):
     CHANGED = "changed"

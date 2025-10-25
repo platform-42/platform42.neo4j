@@ -15,7 +15,7 @@ Ansible collection for managing **Neo4j graph databases**: create and update ver
 - **Query execution (`query_read` and `query_write` modules)**  
   Run read-only or write Cypher queries against the graph. Supports parameterized queries and returns JSON-serializable results including summary statistics.
 
-- **Database cleanup (`cleanup` or custom cleanup scripts)**  
+- **Database cleanup (`graph_reset` or custom cleanup scripts)**  
   Easily remove nodes, relationships, or entire datasets by executing Cypher commands in an automated, repeatable manner.
 
 - **Statistics and diagnostics**  
@@ -74,8 +74,8 @@ NEO4J_DATABASE: ubahn # I gave its own name in localhost setup
 #
 # interesting variables to inspect
 #   <graph>.<graph_reset>.<item>
-#   graph.graph_reset.cypher_response
-#   graph.graph_reset.cypher_query_inline
+#     graph.graph_reset.cypher_response
+#     graph.graph_reset.cypher_query_inline
 #
 
 # create node
@@ -92,8 +92,8 @@ NEO4J_DATABASE: ubahn # I gave its own name in localhost setup
 #
 # interesting variables to inspect
 #   <station>.<vertex>.<item>
-#   station.vertex.cypher_response
-#   station.vertex.cypher_query_inline
+#     station.vertex.cypher_response
+#     station.vertex.cypher_query_inline
 #
 
 # create relationship
@@ -119,7 +119,7 @@ NEO4J_DATABASE: ubahn # I gave its own name in localhost setup
 #
 # interesting variables to inspect
 #   <track>.<edge>.<item>
-#   track.edge.cypher_response
-#   track.edge.cypher_query_inline
+#     track.edge.cypher_response
+#     track.edge.cypher_query_inline
 #
 ```
