@@ -61,6 +61,7 @@ class JsonTKN(StrEnum):
     TO = "to"
     TYPE = "type"
     USERNAME = "username"
+    ERROR_MSG = "error_msg"
 
 def flatten_query(
     query: str
