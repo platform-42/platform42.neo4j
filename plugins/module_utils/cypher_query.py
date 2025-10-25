@@ -51,8 +51,8 @@ class CypherQuery(StrEnum):
     EDGE_ADD = """
         MATCH (a:`{label_from}` {{ entity_name: $entity_name_from}})
         MATCH (b:`{to_label}` {{ entity_name: $entity_name_to}})
-        {set_clause}
         MERGE (a)-[r:`{relation_type}`]->(b)
+        {set_clause}
         RETURN 
             type(r) AS relation_type,
             a.entity_name as entity_name_from, 
