@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+# pylint: disable=missing-module-docstring
 """
     Filename: vertex.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)

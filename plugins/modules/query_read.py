@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+# pylint: disable=missing-module-docstring
 """
     Filename: query_read.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
