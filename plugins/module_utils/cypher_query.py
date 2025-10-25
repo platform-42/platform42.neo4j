@@ -1,4 +1,4 @@
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from strenum import StrEnum
 
 from . import skeleton as u_skel
