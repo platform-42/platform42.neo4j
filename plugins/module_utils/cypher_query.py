@@ -96,7 +96,7 @@ def cypher_vertex_add(
     label: str,
     properties: Dict[str, Any]
 ) -> str:
-    set_clause_n: str = f"SET n += {{{u_skel.format_cypher_properties(properties)}}}"
+    set_clause_n = f"SET n += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
     return str(CypherQuery.VERTEX_ADD.value.format(
@@ -142,7 +142,7 @@ def cypher_edge_add(
     relation_type: str,
     properties: Dict[str, Any]
 ) -> str:
-    set_clause_r: str = f"SET r += {{{u_skel.format_cypher_properties(properties)}}}"
+    set_clause_r = f"SET r += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
     return str(CypherQuery.EDGE_ADD.value.format(
@@ -160,8 +160,8 @@ def cypher_edge_add_bi(
     relation_type: str,
     properties: Dict[str, Any]
 ) -> str:
-    set_clause_r1: str = f"SET r1 += {{{u_skel.format_cypher_properties(properties)}}}"
-    set_clause_r2: str = f"SET r2 += {{{u_skel.format_cypher_properties(properties)}}}"
+    set_clause_r1 = f"SET r1 += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
+    set_clause_r2 = f"SET r2 += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
     return str(CypherQuery.EDGE_ADD_BI.value.format(

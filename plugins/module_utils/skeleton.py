@@ -74,7 +74,7 @@ def format_cypher_properties(
     value: Any
     for key, value in properties.items():
         if isinstance(value, (int, float, bool)):
-            fragments.append(f"{key}: {value}")
+            fragments.append(f"{key}: ${key}")
         else:
             fragments.append(f"{key}: {repr(value)}")
     return ", ".join(fragments)
