@@ -1,6 +1,8 @@
 from typing import Dict, Any, Optional
 from strenum import StrEnum
 
+from . import skeleton as u_skel
+
 #
 #   Notes:
 #   - cypher queries don't need values, they only require bindings
@@ -162,12 +164,8 @@ def cypher_edge_add_bi(
     relation_type: str,
     properties: Optional[Dict[str, Any]] = None
     ) -> str:
-    set_clause_r1 = (
-        f"SET r1 += {{{', '.join(f'{key}: ${key}' for key in properties)}}}" if properties else ""
-    )
-    set_clause_r2 = (
-        f"SET r2 += {{{', '.join(f'{key}: ${key}' for key in properties)}}}" if properties else ""
-    )
+    set_clause_r1: str = f"SET r1 += {u_skel.format_cypher_properties(properties)}"
+    set_clause_r1: str = f"SET r2 += {u_skel.format_cypher_properties(properties)}"
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
     return str(CypherQuery.EDGE_ADD_BI.value.format(
