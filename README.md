@@ -4,6 +4,40 @@ Ansible collection for managing **Neo4j graph databases**: create and update ver
 
 ---
 
+## To Do
+
+Properties are provided as an Dict. 
+By default, Ansible translate all properties to string. 
+Therefore we lose type context.
+So amount, distance, timestamp formats will be currently treated as a string which is incorrect if you want to perform calculations.
+
+```yaml
+# 
+#   Consider this input YAML:
+#     Internally, in a Ansible Module, amount is considered as a string
+#     since our module needs to be abstract, we need to provide extra 
+#     type information to cast the value correctly, without hardcoding it
+#
+properties:
+  amount: 1200
+  timestamp: "2025-10-02T09:00:00Z"
+
+#
+#   By splitting the property into a value and type, we can
+#   provide a safe and correct cast inside the edge and vertex modules
+#   for properties
+#
+properties:
+  amount:
+    value: 1200
+    type: int
+  timestamp:
+    value: "2025-10-02T09:00:00Z"
+    type: datetime
+```
+
+---
+
 ## Features
 
 - **Vertex management (`vertex` module)**  
