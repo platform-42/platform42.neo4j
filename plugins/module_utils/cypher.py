@@ -1,4 +1,4 @@
-# pylint: disable=missing-module-docstring
+# pylint: disable=missing-module-docstring,missing-class-docstring
 from typing import Dict, Any, Optional, Tuple, List
 from neo4j import Transaction, GraphDatabase, Driver, basic_auth, ResultSummary, Result
 
