@@ -96,14 +96,12 @@ def cypher_vertex_add(
     label: str,
     properties: Optional[Dict[str, Any]] = None
 ) -> str:
-    set_clause = (
-        f"SET n += {{{', '.join(f'{key}: ${key}' for key in properties)}}}" if properties else ""
-    )
+    set_clause_n: str = f"SET n += {u_skel.format_cypher_properties(properties)}"
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
     return str(CypherQuery.VERTEX_ADD.value.format(
         label=label,
-        set_clause=set_clause
+        set_clause=set_clause_n
         )
     )
 
@@ -144,15 +142,13 @@ def cypher_edge_add(
     relation_type: str,
     properties: Optional[Dict[str, Any]] = None
 ) -> str:
-    set_clause = (
-        f"SET r += {{{', '.join(f'{key}: ${key}' for key in properties)}}}" if properties else ""
-    )
+    set_clause_r: str = f"SET r += {u_skel.format_cypher_properties(properties)}"
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
     return str(CypherQuery.EDGE_ADD.value.format(
         label_from=label_from,
         to_label=to_label,
-        set_clause=set_clause,
+        set_clause=set_clause_r,
         relation_type=relation_type
         )
     )
