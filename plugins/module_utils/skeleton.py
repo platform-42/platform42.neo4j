@@ -63,6 +63,22 @@ class JsonTKN(StrEnum):
     USERNAME = "username"
     ERROR_MSG = "error_msg"
 
+
+from typing import Any, Dict, List
+
+def format_cypher_properties(
+    properties: Dict[str, Any]
+) -> str:
+    fragments: List[str] = []
+    for key, value in properties.items():
+        key: str
+        value: Any
+        if isinstance(value, (int, float, bool)):
+            fragments.append(f"{key} = {value}")
+        else:
+            fragments.append(f"{key} = {repr(value)}")
+    return ", ".join(fragments)
+
 def flatten_query(
     query: str
 ) -> str:
