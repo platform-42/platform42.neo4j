@@ -20,7 +20,7 @@ class CypherQuery(StrEnum):
         CALL dbms.components() YIELD name, versions 
         RETURN 
             versions[0] AS version
-            ;
+        ;
     """
     GRAPH_RESET = """
         MATCH (n) 
@@ -39,7 +39,7 @@ class CypherQuery(StrEnum):
             id(n) AS node_id, 
             labels(n) AS labels, 
             n.entity_name AS entity_name
-            ;
+        ;
     """
     EDGE_DEL = """
         MATCH (a:`{label_from}` {{ entity_name: $entity_name_from}})
@@ -64,7 +64,7 @@ class CypherQuery(StrEnum):
             type(r) AS relation_type,
             a.entity_name AS entity_name_from, 
             b.entity_name AS entity_name_to
-            ;
+        ;
     """
     EDGE_ADD_BI = """
         MATCH (a:`{label_from}` {{ entity_name: $entity_name_from}})
@@ -77,7 +77,7 @@ class CypherQuery(StrEnum):
             type(r1) AS relation_type,
             a.entity_name AS entity_name_from,
             b.entity_name AS entity_name_to
-            ;
+        ;
     """
 
 def cypher_graph_reset(
@@ -103,9 +103,9 @@ def cypher_vertex_add(
     label: str,
     properties: Dict[str, Any]
 ) -> str:
-    set_clause_n = f"SET n += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
+    set_clause_n = f"SET n += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
     return str(CypherQuery.VERTEX_ADD.value.format(
         label=label,
         set_clause=set_clause_n
@@ -149,9 +149,9 @@ def cypher_edge_add(
     relation_type: str,
     properties: Dict[str, Any]
 ) -> str:
-    set_clause_r = f"SET r += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
+    set_clause_r = f"SET r += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
     return str(CypherQuery.EDGE_ADD.value.format(
         label_from=label_from,
         label_to=label_to,
@@ -167,10 +167,10 @@ def cypher_edge_add_bi(
     relation_type: str,
     properties: Dict[str, Any]
 ) -> str:
-    set_clause_r1 = f"SET r1 += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
-    set_clause_r2 = f"SET r2 += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
+    set_clause_r1 = f"SET r1 += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
+    set_clause_r2 = f"SET r2 += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
     return str(CypherQuery.EDGE_ADD_BI.value.format(
         label_from=label_from,
         label_to=label_to,
