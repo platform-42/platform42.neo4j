@@ -1,4 +1,4 @@
-# pylint: disable=missing-module-docstring,missing-class-docstring
+# pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring
 from typing import Dict, Any, Tuple
 from enum import Enum
 from strenum import StrEnum
