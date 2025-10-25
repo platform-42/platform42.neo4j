@@ -132,7 +132,7 @@ def edge_del(
     relation_type: str,
     label_from: str,
     entity_name_from: str,
-    to_label: str,
+    label_to: str,
     entity_name_to: str,
     bi_directional: bool = False
 ) -> Tuple[str, Dict[str, Any], str]:
@@ -140,7 +140,7 @@ def edge_del(
     # normalise/sanitize
     normalised_relation_type: str = relation_type.upper()
     normalised_label_from: str = label_from.capitalize()
-    normalised_to_label: str = to_label.capitalize()
+    normalised_label_to: str = label_to.capitalize()
 
     # cypher construction
     cypher_params: Dict[str, Any] = {
@@ -151,14 +151,14 @@ def edge_del(
         cypher_query = u_cyph_q.cypher_edge_del_bi(
             check_mode=check_mode,
             label_from=normalised_label_from,
-            to_label=normalised_to_label,
+            label_to=normalised_label_to,
             relation_type=normalised_relation_type
         )
     else:
         cypher_query = u_cyph_q.cypher_edge_del(
             check_mode=check_mode,
             label_from=normalised_label_from,
-            to_label=normalised_to_label,
+            label_to=normalised_label_to,
             relation_type=normalised_relation_type
         )
     cypher_query_inline: str = cypher_query
@@ -180,7 +180,7 @@ def edge_add(
     relation_type: str,
     label_from: str,
     entity_name_from: str,
-    to_label: str,
+    label_to: str,
     entity_name_to: str,
     properties: Optional[Dict[str, Any]] = None,
     bi_directional: bool = False
@@ -193,7 +193,7 @@ def edge_add(
     # normalise/sanitize
     normalised_relation_type: str = relation_type.upper()
     normalised_label_from: str = label_from.capitalize()
-    normalised_to_label: str = to_label.capitalize()
+    normalised_label_to: str = label_to.capitalize()
     normalised_properties: Dict[str, Any] = {key.lower(): value for key, value in properties.items()}
 
     # cypher construction
@@ -206,7 +206,7 @@ def edge_add(
         cypher_query = u_cyph_q.cypher_edge_add_bi(
             check_mode=check_mode,
             label_from=normalised_label_from,
-            to_label=normalised_to_label,
+            label_to=normalised_label_to,
             relation_type=normalised_relation_type,
             properties=normalised_properties
         )
@@ -214,7 +214,7 @@ def edge_add(
         cypher_query = u_cyph_q.cypher_edge_add(
             check_mode=check_mode,
             label_from=normalised_label_from,
-            to_label=normalised_to_label,
+            label_to=normalised_label_to,
             relation_type=normalised_relation_type,
             properties=normalised_properties
         )

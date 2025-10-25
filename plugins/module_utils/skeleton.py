@@ -35,6 +35,7 @@ class JsonTKN(StrEnum):
     ENTITY_NAME = "entity_name"
     ENTITY_NAME_FROM = "entity_name_from"
     ENTITY_NAME_TO = "entity_name_to"
+    ERROR_MSG = "error_msg"
     FROM = "from"
     JSON_KEYS = "json_keys"
     LABEL = "label"
@@ -61,7 +62,6 @@ class JsonTKN(StrEnum):
     TO = "to"
     TYPE = "type"
     USERNAME = "username"
-    ERROR_MSG = "error_msg"
 
 
 from typing import Any, Dict, List

@@ -40,19 +40,19 @@ class CypherQuery(StrEnum):
     """
     EDGE_DEL = """
         MATCH (a:`{label_from}` {{ entity_name: $entity_name_from}})
-        MATCH (b:`{to_label}` {{ entity_name: $entity_name_to}})
+        MATCH (b:`{label_to}` {{ entity_name: $entity_name_to}})
         MERGE (a)-[r:`{relation_type}`]->(b)
         DELETE r;
     """
     EDGE_DEL_BI = """
         MATCH (a:`{label_from}` {{ entity_name: $entity_name_from}})
-        MATCH (b:`{to_label}` {{ entity_name: $entity_name_to}})
+        MATCH (b:`{label_to}` {{ entity_name: $entity_name_to}})
         MERGE (a)-[r:`{relation_type}`]-(b)
         DELETE r;
     """
     EDGE_ADD = """
         MATCH (a:`{label_from}` {{ entity_name: $entity_name_from}})
-        MATCH (b:`{to_label}` {{ entity_name: $entity_name_to}})
+        MATCH (b:`{label_to}` {{ entity_name: $entity_name_to}})
         MERGE (a)-[r:`{relation_type}`]->(b)
         {set_clause}
         RETURN 
@@ -62,7 +62,7 @@ class CypherQuery(StrEnum):
     """
     EDGE_ADD_BI = """
         MATCH (a:`{label_from}` {{ entity_name: $entity_name_from}})
-        MATCH (b:`{to_label}` {{ entity_name: $entity_name_to}})
+        MATCH (b:`{label_to}` {{ entity_name: $entity_name_to}})
         MERGE (a)-[r1:`{relation_type}`]->(b)
         {set_clause_r1}
         MERGE (b)-[r2:`{relation_type}`]->(a)
@@ -108,14 +108,14 @@ def cypher_vertex_add(
 def cypher_edge_del(
     check_mode: bool,
     label_from: str,
-    to_label: str,
+    label_to: str,
     relation_type: str
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
     return str(CypherQuery.EDGE_DEL.value.format(
         label_from=label_from,
-        to_label=to_label,
+        label_to=label_to,
         relation_type=relation_type
         )
     )
@@ -123,14 +123,14 @@ def cypher_edge_del(
 def cypher_edge_del_bi(
     check_mode: bool,
     label_from: str,
-    to_label: str,
+    label_to: str,
     relation_type: str
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
     return str(CypherQuery.EDGE_DEL_BI.value.format(
         label_from=label_from,
-        to_label=to_label,
+        label_to=label_to,
         relation_type=relation_type
         )
     )
@@ -138,7 +138,7 @@ def cypher_edge_del_bi(
 def cypher_edge_add(
     check_mode: bool,
     label_from: str,
-    to_label: str,
+    label_to: str,
     relation_type: str,
     properties: Optional[Dict[str, Any]] = None
 ) -> str:
@@ -147,7 +147,7 @@ def cypher_edge_add(
         return str(CypherQuery.SIMULATION.value)
     return str(CypherQuery.EDGE_ADD.value.format(
         label_from=label_from,
-        to_label=to_label,
+        label_to=label_to,
         set_clause=set_clause_r,
         relation_type=relation_type
         )
@@ -156,7 +156,7 @@ def cypher_edge_add(
 def cypher_edge_add_bi(
     check_mode: bool,
     label_from: str,
-    to_label: str,
+    label_to: str,
     relation_type: str,
     properties: Optional[Dict[str, Any]] = None
     ) -> str:
@@ -166,7 +166,7 @@ def cypher_edge_add_bi(
         return str(CypherQuery.SIMULATION.value)
     return str(CypherQuery.EDGE_ADD_BI.value.format(
         label_from=label_from,
-        to_label=to_label,
+        label_to=label_to,
         relation_type=relation_type,
         set_clause_r1=set_clause_r1,
         set_clause_r2=set_clause_r2
