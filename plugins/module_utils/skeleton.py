@@ -70,13 +70,13 @@ def format_cypher_properties(
     properties: Dict[str, Any]
 ) -> str:
     fragments: List[str] = []
+    key: str
+    value: Any
     for key, value in properties.items():
-        key: str
-        value: Any
         if isinstance(value, (int, float, bool)):
-            fragments.append(f"{key} = {value}")
+            fragments.append(f"{key}: {value}")
         else:
-            fragments.append(f"{key} = {repr(value)}")
+            fragments.append(f"{key}: {repr(value)}")
     return ", ".join(fragments)
 
 def flatten_query(
