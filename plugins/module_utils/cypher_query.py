@@ -13,10 +13,19 @@ from strenum import StrEnum
 #       (b)-[:TRACK]->(a)
 #     is equivaluent to:
 #       (a)-[:TRACK]-(b)
+#   - set_clauses translates properties into bindings
+#       thus: 
+#           amount: 5000 is translated into binding {amount: $amount}
+#           its value is stored to cypher_params
+#           Cypher uses bindings to map vales stored in cypher_params
+#   - check_mode implements Ansible check_mode
+#       all module.params are validated by primitives layer (cypher.py)
+#       simulation itself tries to connect to Neo4j and returns version
+#       if connected
 #
 class CypherQuery(StrEnum):
     SIMULATION = """
-        CALL dbms.components() YIELD name, versions 
+        CALL dbms.components() YIELD versions 
         RETURN 
             versions[0] AS version
         ;
