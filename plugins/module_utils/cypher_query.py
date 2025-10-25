@@ -94,7 +94,7 @@ def cypher_vertex_del(
 def cypher_vertex_add(
     check_mode: bool,
     label: str,
-    properties: Optional[Dict[str, Any]] = None
+    properties: Dict[str, Any]
 ) -> str:
     set_clause_n: str = f"SET n += {{{u_skel.format_cypher_properties(properties)}}}"
     if check_mode:
@@ -140,7 +140,7 @@ def cypher_edge_add(
     label_from: str,
     label_to: str,
     relation_type: str,
-    properties: Optional[Dict[str, Any]] = None
+    properties: Dict[str, Any]
 ) -> str:
     set_clause_r: str = f"SET r += {{{u_skel.format_cypher_properties(properties)}}}"
     if check_mode:
@@ -158,8 +158,8 @@ def cypher_edge_add_bi(
     label_from: str,
     label_to: str,
     relation_type: str,
-    properties: Optional[Dict[str, Any]] = None
-    ) -> str:
+    properties: Dict[str, Any]
+) -> str:
     set_clause_r1: str = f"SET r1 += {{{u_skel.format_cypher_properties(properties)}}}"
     set_clause_r2: str = f"SET r2 += {{{u_skel.format_cypher_properties(properties)}}}"
     if check_mode:
