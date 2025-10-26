@@ -8,10 +8,6 @@
         Ansible core skeleton functions
 """
 from typing import Dict, Any
-
-import os
-import re
-
 from strenum import StrEnum
 
 class YamlATTR(StrEnum):
@@ -73,20 +69,10 @@ class JsonTKN(StrEnum):
     TYPE = "type"
     USERNAME = "username"
 
-def flatten_query(
-    query: str
-) -> str:
-    return re.sub(r'\s+', ' ', query).strip()
-
 def state_present(
     state: str
 ) -> bool:
     return state.lower() == str(YamlState.PRESENT.value)
-
-def file_splitext(
-    filename: str
-) -> str:
-    return os.path.splitext(os.path.basename(filename))[0]
 
 def ansible_fail(
     diagnostics: Dict[str, Any]
