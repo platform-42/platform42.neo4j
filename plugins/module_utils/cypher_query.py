@@ -1,4 +1,12 @@
 # pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring
+"""
+    Filename: ./module_utils/cypher_query.py
+    Author: diederick de Buck (diederick.de.buck@gmail.com)
+    Date: 2025-10-26
+    Version: 1.6.0
+    Description: 
+        Cypher queries - returns string with bindings
+"""
 from typing import Dict, Any
 from strenum import StrEnum
 

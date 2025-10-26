@@ -1,4 +1,12 @@
 # pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring
+"""
+    Filename: ./module_utils/cypher.py
+    Author: diederick de Buck (diederick.de.buck@gmail.com)
+    Date: 2025-10-26
+    Version: 1.6.0
+    Description: 
+        Ansible module argument parsing and validation
+"""
 from typing import Dict, Any, Optional, Tuple, List
 from neo4j import Transaction, GraphDatabase, Driver, basic_auth, ResultSummary, Result
 

@@ -1,4 +1,12 @@
 # pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring
+"""
+    Filename: ./module_utils/argument_spec.py
+    Author: diederick de Buck (diederick.de.buck@gmail.com)
+    Date: 2025-10-26
+    Version: 1.6.0
+    Description: 
+        Ansible core skeleton functions
+"""
 from typing import Dict, Any
 
 import os
