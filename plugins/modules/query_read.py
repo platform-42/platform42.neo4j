@@ -134,17 +134,17 @@ def main() -> None:
             data, summary = session.execute_read(u_cypher.query_read_tx, cypher_query, cypher_params)
     except Exception as e:
         diagnostics = {
-            u_skel.JsonTKN.CYPHER_QUERY.value: u_skel.flatten_query(cypher_query),
+            u_skel.JsonTKN.CYPHER_QUERY.value: u_shared.flatten_query(cypher_query),
             u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
-            u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: u_skel.flatten_query(cypher_query_inline),
+            u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: u_shared.flatten_query(cypher_query_inline),
             u_skel.JsonTKN.ERROR_MSG.value: repr(e)
         }    
     finally:
         driver.close()
     payload: Dict[str, Any] = {
-        u_skel.JsonTKN.CYPHER_QUERY.value: u_skel.flatten_query(cypher_query),
+        u_skel.JsonTKN.CYPHER_QUERY.value: u_shared.flatten_query(cypher_query),
         u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
-        u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: u_skel.flatten_query(cypher_query_inline),
+        u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: u_shared.flatten_query(cypher_query_inline),
         u_skel.JsonTKN.STATS.value: u_cypher.cypher_stats(summary),
         u_skel.JsonTKN.CYPHER_RESPONSE.value: data
     }
