@@ -24,7 +24,7 @@ from neo4j import Driver
 
 DOCUMENTATION = r'''
 ---
-module: query_read
+module: ./modules/query_read
 short_description: Execute a read-only Cypher query in Neo4j and return results
 version_added: "1.6.0"
 author:

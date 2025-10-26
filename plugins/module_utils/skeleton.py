@@ -1,6 +1,6 @@
 # pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring
 """
-    Filename: ./module_utils/argument_spec.py
+    Filename: ./module_utils/skeleton.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-26
     Version: 1.6.0
