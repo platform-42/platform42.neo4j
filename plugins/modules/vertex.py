@@ -126,7 +126,7 @@ def validate_cypher_inputs(
 
 def main() -> None:
     module_name: str = u_shared.file_splitext(__file__)
-    module:AnsibleModule = AnsibleModule(
+    module: AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_vertice(),
         supports_check_mode=True
     )

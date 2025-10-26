@@ -81,7 +81,8 @@ EXAMPLES = r'''
 
 def edge(
     check_mode: bool,
-    module_params: Dict[str, Any]
+    module_params: Dict[str, Any],
+    type_casted_properties: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
     relation_type: str = module_params[u_skel.JsonTKN.TYPE.value]
     label_from: str = module_params[u_skel.JsonTKN.FROM.value][u_skel.JsonTKN.LABEL.value]
@@ -91,7 +92,6 @@ def edge(
     bi_directional: bool = module_params[u_skel.JsonTKN.BI_DIRECTIONAL.value]
     state: str = module_params[u_skel.JsonTKN.STATE.value]
     if u_skel.state_present(state):
-        properties: Dict[str, Any] = module_params[u_skel.JsonTKN.PROPERTIES.value]
         return u_cypher.edge_add(
             check_mode,
             relation_type,
@@ -99,7 +99,7 @@ def edge(
             entity_name_from,
             label_to,
             entity_name_to,
-            properties,
+            type_casted_properties,
             bi_directional
         )
     return u_cypher.edge_del(
@@ -165,13 +165,16 @@ def validate_cypher_inputs(
 
 def main() -> None:
     module_name: str = u_shared.file_splitext(__file__)
-    module:AnsibleModule = AnsibleModule(
+    module: AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_edge(),
         supports_check_mode=True
     )
-    result: bool
-    diagnostics: Dict[str, Any]
     result, diagnostics = validate_cypher_inputs(module.params)
+    if not result:
+        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+    result, casted_properties, diagnostics = u_shared.validate_optionals(
+        module.params[u_skel.JsonTKN.PROPERTIES.value]
+        )
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     db_uri: str = module.params[u_skel.JsonTKN.NEO4J_URI.value]
@@ -188,7 +191,8 @@ def main() -> None:
     cypher_query_inline: str
     cypher_query, cypher_params, cypher_query_inline = edge(
         module.check_mode,
-        module.params
+        module.params,
+        casted_properties
         )
     try:
         with driver.session(database=db_database) as session:

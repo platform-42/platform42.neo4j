@@ -110,17 +110,16 @@ def vertex_add(
     # normalise
     normalised_label: str = label.capitalize()
     normalised_properties: Dict[str, Any] = {key.lower(): value for key, value in properties.items()}
-    type_casted_properties: Dict[str, Any] = u_skel.type_casted_properties(normalised_properties)
 
     # cypher construction
     cypher_params: Dict[str, Any] = {
         u_skel.JsonTKN.ENTITY_NAME.value: entity_name,
-        **type_casted_properties
+        **normalised_properties
     }
     cypher_query: str = u_cyph_q.cypher_vertex_add(
         check_mode=check_mode,
         label=normalised_label,
-        properties=type_casted_properties
+        properties=normalised_properties
     )
 
     # return constructed cypher
@@ -208,13 +207,12 @@ def edge_add(
     normalised_label_from: str = label_from.capitalize()
     normalised_label_to: str = label_to.capitalize()
     normalised_properties: Dict[str, Any] = {key.lower(): value for key, value in properties.items()}
-    type_casted_properties: Dict[str, Any] = u_skel.type_casted_properties(normalised_properties)
 
     # cypher construction
     cypher_params: Dict[str, Any] = {
         u_skel.JsonTKN.ENTITY_NAME_FROM.value: entity_name_from,
         u_skel.JsonTKN.ENTITY_NAME_TO.value: entity_name_to,
-        **type_casted_properties
+        **normalised_properties
     }
     if bi_directional:
         cypher_query = u_cyph_q.cypher_edge_add_bi(
@@ -222,7 +220,7 @@ def edge_add(
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
-            properties=type_casted_properties
+            properties=normalised_properties
         )
     else:
         cypher_query = u_cyph_q.cypher_edge_add(
@@ -230,7 +228,7 @@ def edge_add(
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
-            properties=type_casted_properties
+            properties=normalised_properties
         )
 
     # return constructed cypher
@@ -259,11 +257,10 @@ def query_read(
 
     # normalise
     normalised_parameters: Dict[str, Any] = {key.lower(): value for key, value in parameters.items()}
-    type_casted_parameters: Dict[str, Any] = u_skel.type_casted_properties(normalised_parameters)
 
     # cypher construction
     cypher_params: Dict[str, Any] = {
-        **type_casted_parameters
+        **normalised_parameters
     }
 
     # return constructed cypher
