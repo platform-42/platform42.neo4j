@@ -59,48 +59,25 @@ def type_casted_properties(
         if not isinstance(value, dict):
             raise ValueError(
                 f"Property '{key}' must be a dict with 'value' and optional 'type', got {type(value).__name__}"
-            )
+                )
 
         # Ensure 'value' exists
         if u_skel.JsonTKN.VALUE.value not in value:
-            raise KeyError(f"Property '{key}' is missing required '{u_skel.JsonTKN.VALUE.value}' field")
+            raise KeyError(
+                f"Property '{key}' is missing required '{u_skel.JsonTKN.VALUE.value}' field"
+                )
 
-        raw_val = value[u_skel.JsonTKN.VALUE.value]
+        raw_value = value[u_skel.JsonTKN.VALUE.value]
         data_type = value.get(u_skel.JsonTKN.TYPE.value, u_skel.YamlATTR.TYPE_STR.value)
         handler = TYPE_HANDLERS.get(data_type, str)
 
         try:
-            casted_properties[key] = handler(raw_val)
-        except Exception as e:
-            raise ValueError(
-                f"Failed to cast property '{key}' with value '{raw_val}' to type '{data_type}': {e}"
-            )
-
-    return casted_properties
-
-def type_casted_properties_2(
-    properties: Dict[str, Dict[str, Any]]
-) -> Dict[str, Any]:
-    casted_properties: Dict[str, Any] = {}
-    for key, value in properties.items():
-        try:
-            raw_value = value[u_skel.JsonTKN.VALUE.value]
-        except KeyError:
-            raise KeyError(
-                f"Property '{key}' missing '{u_skel.JsonTKN.VALUE.value}' field")
-
-        data_type = value.get(
-            u_skel.JsonTKN.TYPE.value, 
-            u_skel.YamlATTR.TYPE_STR.value
-            )
-        handler = TYPE_HANDLERS.get(data_type, str)
-        try:
             casted_properties[key] = handler(raw_value)
         except Exception as e:
             raise ValueError(
-                f"Failed to cast property '{key}' with value '{raw_value}' to type '{data_type}': {e}"
-            )
-        
+                f"Failed to cast property '{key}' with value '{raw_value}' to type '{data_type}': {repr(e)}"
+                )
+
     return casted_properties
 
 def flatten_query(
