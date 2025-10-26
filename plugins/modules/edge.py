@@ -82,7 +82,7 @@ EXAMPLES = r'''
 def edge(
     check_mode: bool,
     module_params: Dict[str, Any],
-    type_casted_properties: Dict[str, Any]
+    properties: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
     relation_type: str = module_params[u_skel.JsonTKN.TYPE.value]
     label_from: str = module_params[u_skel.JsonTKN.FROM.value][u_skel.JsonTKN.LABEL.value]
@@ -99,7 +99,7 @@ def edge(
             entity_name_from,
             label_to,
             entity_name_to,
-            type_casted_properties,
+            properties,
             bi_directional
         )
     return u_cypher.edge_del(

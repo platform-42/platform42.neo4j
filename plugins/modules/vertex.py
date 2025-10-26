@@ -75,13 +75,13 @@ EXAMPLES = r'''
 
 def vertex(
     check_mode: bool,
-    module_params: Dict[str, Any]
+    module_params: Dict[str, Any],
+    properties: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
     label: str = module_params[u_skel.JsonTKN.LABEL.value]
     entity_name: str =module_params[u_skel.JsonTKN.ENTITY_NAME.value]
     state: str = module_params[u_skel.JsonTKN.STATE.value]
     if u_skel.state_present(state):
-        properties: Dict[str, Any] = module_params[u_skel.JsonTKN.PROPERTIES.value]
         return u_cypher.vertex_add(
             check_mode,
             label,
@@ -135,6 +135,11 @@ def main() -> None:
     result, diagnostics = validate_cypher_inputs(module.params)
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+    result, casted_properties, diagnostics = u_shared.validate_optionals(
+        module.params[u_skel.JsonTKN.PROPERTIES.value]
+        )
+    if not result:
+        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     db_uri: str = module.params[u_skel.JsonTKN.NEO4J_URI.value]
     db_database: str = module.params[u_skel.JsonTKN.DATABASE.value]
     db_username: str = module.params[u_skel.JsonTKN.USERNAME.value]
@@ -149,7 +154,8 @@ def main() -> None:
     cypher_query_inline: str
     cypher_query, cypher_params, cypher_query_inline = vertex(
         module.check_mode,
-        module.params
+        module.params,
+        casted_properties
         )
     try:
         with driver.session(database=db_database) as session:
