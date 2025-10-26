@@ -17,6 +17,7 @@ from ansible.module_utils.basic import AnsibleModule
 import ansible_collections.platform42.neo4j.plugins.module_utils.argument_spec as u_args
 import ansible_collections.platform42.neo4j.plugins.module_utils.skeleton as u_skel
 import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cypher
+import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
 
 from neo4j import Driver, ResultSummary, Result
 
@@ -55,7 +56,7 @@ EXAMPLES = r'''
 '''
 
 def main() -> None:
-    module_name: str = u_skel.file_splitext(__file__)
+    module_name: str = u_shared.file_splitext(__file__)
     module:AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_graph_reset(),
         supports_check_mode=True

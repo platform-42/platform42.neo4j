@@ -18,6 +18,7 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.argument_spec a
 import ansible_collections.platform42.neo4j.plugins.module_utils.skeleton as u_skel
 import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cypher
 import ansible_collections.platform42.neo4j.plugins.module_utils.schema as u_schema
+import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
 
 from neo4j import Driver
 
@@ -100,7 +101,7 @@ def validate_cypher_inputs(
     return True, {}
 
 def main() -> None:
-    module_name: str = u_skel.file_splitext(__file__)
+    module_name: str = u_shared.file_splitext(__file__)
     module:AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_query_read(),
         supports_check_mode=False
