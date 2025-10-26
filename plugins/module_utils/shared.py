@@ -27,9 +27,9 @@ def validate_optionals(
     casted_properties: Dict[str, Any]
     try:
         casted_properties = type_casted_properties(properties)
-    except KeyError as e:
+    except (KeyError, ValueError) as e:
         return False, {}, { u_skel.JsonTKN.ERROR_MSG.value: repr(e) }
-    except ValueError as e:
+    except Exception as e:
         return False, {}, { u_skel.JsonTKN.ERROR_MSG.value: repr(e) }
     return True, casted_properties, {}
 
