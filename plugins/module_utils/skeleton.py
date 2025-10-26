@@ -7,7 +7,7 @@
     Description: 
         Ansible core skeleton functions
 """
-from typing import Dict, Any
+from typing import Dict, Any, Callable, Dict
 from strenum import StrEnum
 
 class YamlATTR(StrEnum):
@@ -73,6 +73,26 @@ def state_present(
     state: str
 ) -> bool:
     return state.lower() == str(YamlState.PRESENT.value)
+
+from typing import Any, Callable, Dict
+
+
+# Mapping of type names to conversion functions
+TYPE_HANDLERS: Dict[str, Callable[[Any], Any]] = {
+    "int": int,
+    "float": float,
+    "bool": lambda v: str(v).lower() in ("true", "1"),
+    "str": str,
+}
+
+def ansible_cast_properties(
+    properties: Dict[str, Dict[str, Any]]
+) -> Dict[str, Any]:
+    return {
+        k: TYPE_HANDLERS.get(v.get("type", "str"), str)(v["value"])
+        for k, v in properties.items()
+    }
+
 
 def ansible_fail(
     diagnostics: Dict[str, Any]
