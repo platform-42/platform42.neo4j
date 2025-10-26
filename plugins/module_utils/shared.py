@@ -8,11 +8,17 @@
         Shared utility functions
 """
 from typing import Dict, Any, Callable, Tuple
+from datetime import datetime
 
 import os
 import re
 
 from . import skeleton as u_skel
+
+def parse_datetime(
+    val: str
+) -> datetime:
+    return datetime.fromisoformat(val.replace("Z", "+00:00"))
 
 def parse_bool(
     val: Any
@@ -38,7 +44,8 @@ TYPE_HANDLERS: Dict[str, Callable[[Any], Any]] = {
     u_skel.YamlATTR.TYPE_INT.value: int,
     u_skel.YamlATTR.TYPE_FLOAT.value: float,
     u_skel.YamlATTR.TYPE_BOOL.value: parse_bool,
-    u_skel.YamlATTR.TYPE_STR.value: str
+    u_skel.YamlATTR.TYPE_STR.value: str,
+    u_skel.YamlATTR.TYPE_DATETIME.value: parse_datetime
 }
 
 #

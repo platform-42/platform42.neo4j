@@ -20,10 +20,11 @@ class YamlATTR(StrEnum):
     RESULT = "result"
     TYPE = "type"
     TYPE_BOOL = "bool"
+    TYPE_DATETIME = "datetime"
     TYPE_DICT = "dict"
+    TYPE_FLOAT = "float"
     TYPE_INT = "int"
     TYPE_STR = "str"
-    TYPE_FLOAT = "float"
 
 class YamlState(StrEnum):
     ABSENT = "absent"
