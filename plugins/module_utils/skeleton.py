@@ -23,6 +23,7 @@ class YamlATTR(StrEnum):
     TYPE_DICT = "dict"
     TYPE_INT = "int"
     TYPE_STR = "str"
+    TYPE_FLOAT = "float"
 
 class YamlState(StrEnum):
     ABSENT = "absent"
@@ -68,29 +69,42 @@ class JsonTKN(StrEnum):
     TO = "to"
     TYPE = "type"
     USERNAME = "username"
+    VALUE = "value"
 
 def state_present(
     state: str
 ) -> bool:
     return state.lower() == str(YamlState.PRESENT.value)
 
-from typing import Any, Callable, Dict
-
+def parse_bool(val: Any) -> bool:
+    if isinstance(val, bool):
+        return val
+    return str(val).lower() in ("true", "1", "yes", "y")
 
 # Mapping of type names to conversion functions
 TYPE_HANDLERS: Dict[str, Callable[[Any], Any]] = {
-    "int": int,
-    "float": float,
-    "bool": lambda v: str(v).lower() in ("true", "1"),
-    "str": str,
+    YamlATTR.TYPE_INT.value: int,
+    YamlATTR.TYPE_FLOAT: float,
+    YamlATTR.TYPE_BOOL: parse_bool,
+    YamlATTR.TYPE_STR: str
 }
 
-def ansible_cast_properties(
+#
+#   ansible_cast_properties
+#       a little bit of voodo
+#       - remember, a property now consists of a value and a type
+#       - if the type is unknown, it is considered as a string
+#       - Cypher will emit an error if that assumption was wrong
+#       - initial support for int, float, bool and str
+#       - we simply return a new properties Dict with a casted value
+#
+def type_casted_properties(
     properties: Dict[str, Dict[str, Any]]
 ) -> Dict[str, Any]:
     return {
-        k: TYPE_HANDLERS.get(v.get("type", "str"), str)(v["value"])
-        for k, v in properties.items()
+        key: TYPE_HANDLERS.get(
+            value.get(JsonTKN.TYPE.value, YamlATTR.TYPE_STR.value), str)(value[JsonTKN.VALUE.value])
+        for key, value in properties.items()
     }
 
 

@@ -68,19 +68,20 @@ def vertex_del(
     label: str,
     entity_name: str
 ) -> Tuple[str, Dict[str, Any], str]:
+    
     # normalise
     normalised_label: str = label.capitalize()
 
-    # Params -> values without binding
+    # cypher construction
     cypher_params: Dict[str, Any] = {
         u_skel.JsonTKN.ENTITY_NAME.value: entity_name
     }
-
-    # Parameterized query (safe for API)
     cypher_query: str = u_cyph_q.cypher_vertex_del(
         check_mode=check_mode,
         label=normalised_label
     )
+
+    # return constructed cypher
     cypher_query_inline: str = cypher_query
     for key, value in cypher_params.items():
         cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
@@ -106,22 +107,23 @@ def vertex_add(
     if properties is None:
         properties = {}
 
-    # normalise/sanitize
+    # normalise
     normalised_label: str = label.capitalize()
     normalised_properties: Dict[str, Any] = {key.lower(): value for key, value in properties.items()}
+    type_casted_properties: Dict[str, Any] = u_skel.type_casted_properties(normalised_properties)
 
-    # Params -> values without binding
+    # cypher construction
     cypher_params: Dict[str, Any] = {
         u_skel.JsonTKN.ENTITY_NAME.value: entity_name,
-        **normalised_properties
+        **type_casted_properties
     }
-
-    # Parameterized query (safe for API)
     cypher_query: str = u_cyph_q.cypher_vertex_add(
         check_mode=check_mode,
         label=normalised_label,
-        properties=normalised_properties
+        properties=type_casted_properties
     )
+
+    # return constructed cypher
     cypher_query_inline: str = cypher_query
     for key, value in cypher_params.items():
         cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
@@ -146,7 +148,7 @@ def edge_del(
     bi_directional: bool = False
 ) -> Tuple[str, Dict[str, Any], str]:
 
-    # normalise/sanitize
+    # normalise
     normalised_relation_type: str = relation_type.upper()
     normalised_label_from: str = label_from.capitalize()
     normalised_label_to: str = label_to.capitalize()
@@ -170,6 +172,8 @@ def edge_del(
             label_to=normalised_label_to,
             relation_type=normalised_relation_type
         )
+
+    # return constructed cypher
     cypher_query_inline: str = cypher_query
     for key, value in cypher_params.items():
         cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
@@ -199,17 +203,18 @@ def edge_add(
     if properties is None:
         properties = {}
 
-    # normalise/sanitize
+    # normalise
     normalised_relation_type: str = relation_type.upper()
     normalised_label_from: str = label_from.capitalize()
     normalised_label_to: str = label_to.capitalize()
     normalised_properties: Dict[str, Any] = {key.lower(): value for key, value in properties.items()}
+    type_casted_properties: Dict[str, Any] = u_skel.type_casted_properties(normalised_properties)
 
     # cypher construction
     cypher_params: Dict[str, Any] = {
         u_skel.JsonTKN.ENTITY_NAME_FROM.value: entity_name_from,
         u_skel.JsonTKN.ENTITY_NAME_TO.value: entity_name_to,
-        **normalised_properties
+        **type_casted_properties
     }
     if bi_directional:
         cypher_query = u_cyph_q.cypher_edge_add_bi(
@@ -217,7 +222,7 @@ def edge_add(
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
-            properties=normalised_properties
+            properties=type_casted_properties
         )
     else:
         cypher_query = u_cyph_q.cypher_edge_add(
@@ -225,8 +230,10 @@ def edge_add(
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
-            properties=normalised_properties
+            properties=type_casted_properties
         )
+
+    # return constructed cypher
     cypher_query_inline: str = cypher_query
     for key, value in cypher_params.items():
         cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
@@ -250,13 +257,16 @@ def query_read(
     if parameters is None:
         parameters = {}
 
-    # normalise/sanitize
+    # normalise
     normalised_parameters: Dict[str, Any] = {key.lower(): value for key, value in parameters.items()}
+    type_casted_parameters: Dict[str, Any] = u_skel.type_casted_properties(normalised_parameters)
 
     # cypher construction
     cypher_params: Dict[str, Any] = {
-        **normalised_parameters
+        **type_casted_parameters
     }
+
+    # return constructed cypher
     cypher_query: str = query
     cypher_query_inline: str = cypher_query
     for key, value in cypher_params.items():
