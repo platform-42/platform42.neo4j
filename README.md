@@ -4,12 +4,10 @@ Ansible collection for managing **Neo4j graph databases**: create and update ver
 
 ---
 
-## To Do
+## Properties
 
-Properties are provided as an Dict. 
-By default, Ansible translate all properties to string. 
-Therefore we lose type context.
-So amount, distance, timestamp formats will be currently treated as a string which is incorrect if you want to perform calculations.
+Properties are additional attributes that can be stored with a vertex or edge 
+By default, Ansible translate all properties to string resulting in loss of data type conext.
 
 ```yaml
 # 
@@ -21,7 +19,13 @@ So amount, distance, timestamp formats will be currently treated as a string whi
 properties:
   amount: 1200
   timestamp: "2025-10-02T09:00:00Z"
+```
 
+Therefore a property must implement `type` and `value`
+`type` can be `str|int|float|bool`
+Timestamp formats are not available yet.
+
+```yaml
 #
 #   By splitting the property into a value and type, we can
 #   provide a safe and correct cast inside the edge and vertex modules
@@ -33,7 +37,7 @@ properties:
     type: int
   timestamp:
     value: "2025-10-02T09:00:00Z"
-    type: datetime
+    type: str
 ```
 
 ---
@@ -80,22 +84,20 @@ Only NEO4J_URI connection string is different.
 
 ```yaml
 
-# vars/settings/cloud/settings.yml
-#   use if Neo4j is used in cloud setup (AURA)
+# vars/settings/cloud/settings.yml (AURA)
 ---
 AURA_INSTANCEID: 123456789ABC
 NEO4J_URI: "neo4j+s://{{ AURA_INSTANCEID }}.databases.neo4j.io"
 NEO4J_USERNAME: neo4j
 NEO4J_PASSWORD: ************
-NEO4J_DATABASE: neo4j
+NEO4J_DATABASE: <project>|defaults to neo4j
 
-# vars/settings/local/settings.yml
-#   use if Neo4j is used in localhost setup 
+# vars/settings/local/settings.yml (localhost)
 ---
 NEO4J_URI: neo4j://127.0.0.1:7687
 NEO4J_USERNAME: neo4j
 NEO4J_PASSWORD: ************
-NEO4J_DATABASE: ubahn # I gave its own name in localhost setup
+NEO4J_DATABASE: <project>|defaults to neo4j
 
 # cleanup graph
 - name: "cleanup Graph database"
@@ -104,12 +106,12 @@ NEO4J_DATABASE: ubahn # I gave its own name in localhost setup
     database: "{{ NEO4J_DATABASE }}"
     username: "{{ NEO4J_USERNAME }}"
     password: "{{ NEO4J_PASSWORD }}"
-  register: graph
+  register: datahase
 #
 # interesting variables to inspect
-#   <graph>.<graph_reset>.<item>
-#     graph.graph_reset.cypher_response
-#     graph.graph_reset.cypher_query_inline
+#   <database>.<graph_reset>.<item>
+#     database.graph_reset.cypher_response
+#     database.graph_reset.cypher_query_inline
 #
 
 # create node
@@ -145,8 +147,12 @@ NEO4J_DATABASE: ubahn # I gave its own name in localhost setup
       label: Station
       entity_name: "Vinetastraße"
     properties:
-      distance: 1.2
-      line: "U2"
+      distance: 
+        value: 1.2
+        type: float
+      line: 
+        value: "U2"
+        type: str
     bi_directional: True
     state: PRESENT
   register: track
