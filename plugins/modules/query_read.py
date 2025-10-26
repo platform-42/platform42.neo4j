@@ -49,6 +49,7 @@ notes:
   - If the query returns Neo4j nodes or relationships, only their properties are returned.
   - The module will fail if a write operation is attempted (e.g., CREATE or MERGE).
   - check_mode it turned off, since this module is not able to modify any vertex, edge or attribute.
+  - properties must be specified as a value/type pair, since Ansible turns everything into a string
 '''
 
 EXAMPLES = r'''
@@ -77,7 +78,9 @@ EXAMPLES = r'''
         p.age AS age
         p.gender AS gender;
     parameters:
-      name: "Alice"
+      name: 
+        value: "Alice"
+        type: str
 '''
 
 def validate_cypher_inputs(

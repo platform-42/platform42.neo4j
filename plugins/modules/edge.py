@@ -39,7 +39,8 @@ notes:
   - Relationship creation will fail if source or target nodes are missing.
   - edge-type follows uppercase naming style.
   - check_mode will validate all input parameters and returns version of Neo4j as proof that connection is established.
-  '''
+  - properties must be specified as a value/type pair, since Ansible turns everything into a string
+'''
 
 EXAMPLES = r'''
 # Create a WORKS_AT relationship between Alice and Acme Corp
@@ -57,7 +58,9 @@ EXAMPLES = r'''
       label: "Company"
       entity_name: "acme"
     properties:
-      since: 2020
+      since: 
+        value: 2020
+        type: int
 
 # Create a PURCHASED relationship without additional properties
 - name: Create PURCHASED edge

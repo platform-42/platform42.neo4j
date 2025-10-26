@@ -32,7 +32,8 @@ description:
   - It uses the official Neo4j Python driver and supports Aura (neo4j+s://) and self-hosted databases.
   - The module expects parameters defined in the collection’s common argument specification utilities.
   - check_mode will validate all input parameters and returns version of Neo4j as proof that connection is established.
-'''
+  - properties must be specified as a value/type pair, since Ansible turns everything into a string
+  '''
 
 EXAMPLES = r'''
 

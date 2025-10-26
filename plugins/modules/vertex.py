@@ -35,6 +35,7 @@ description:
 notes:
   - vertex-label follows capitalized naming style.
   - check_mode will validate all input parameters and returns version of Neo4j as proof that connection is established.
+  - properties must be specified as a value/type pair, since Ansible turns everything into a string
 '''
 
 EXAMPLES = r'''
@@ -49,7 +50,9 @@ EXAMPLES = r'''
     label: "Person"
     entity_name: "Ada"
     properties:
-      age: 30
+      age: 
+        value: 30
+        type: int
 
 # Create a Product vertex (label) with entity_name "Widget-123" from Neo4j Aura
 - name: Create a product vertex
@@ -61,8 +64,12 @@ EXAMPLES = r'''
     label: "Product"
     entity_name: "Widget-123"
     properties:
-      sku: "widget-123"
-      price: 9.99
+      sku: 
+        value: "widget-123"
+        type: str
+      price: 
+        value: 9.99
+        type: float
 '''
 
 def vertex(
