@@ -84,9 +84,9 @@ def parse_bool(val: Any) -> bool:
 # Mapping of type names to conversion functions
 TYPE_HANDLERS: Dict[str, Callable[[Any], Any]] = {
     YamlATTR.TYPE_INT.value: int,
-    YamlATTR.TYPE_FLOAT: float,
-    YamlATTR.TYPE_BOOL: parse_bool,
-    YamlATTR.TYPE_STR: str
+    YamlATTR.TYPE_FLOAT.value: float,
+    YamlATTR.TYPE_BOOL.value: parse_bool,
+    YamlATTR.TYPE_STR.value: str
 }
 
 #
@@ -103,7 +103,8 @@ def type_casted_properties(
 ) -> Dict[str, Any]:
     return {
         key: TYPE_HANDLERS.get(
-            value.get(JsonTKN.TYPE.value, YamlATTR.TYPE_STR.value), str)(value[JsonTKN.VALUE.value])
+            value.get(JsonTKN.TYPE.value, YamlATTR.TYPE_STR.value), str)(value[JsonTKN.VALUE.value]
+            )
         for key, value in properties.items()
     }
 
