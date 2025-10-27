@@ -225,7 +225,7 @@ def cypher_constraint_add(
     if check_mode:
         return str(CypherQuery.SIMULATION.value) 
     return str(CypherQuery.CONSTRAINT_ADD.value.format(
-        label=label,
-        property=property
+        label=label.lower(),
+        property=property.lower()
         )
     )

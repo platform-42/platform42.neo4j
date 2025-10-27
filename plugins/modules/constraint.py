@@ -66,6 +66,8 @@ def constraint(
     module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
     state: str = module_params[u_skel.JsonTKN.STATE.value]
+    label: str = module_params[u_skel.JsonTKN.LABEL.value]
+    property: str = module_params[u_skel.JsonTKN.PROPERTY.value]
     if u_skel.state_present(state):
         return u_cypher.constraint_add(
             check_mode=check_mode,
@@ -92,13 +94,12 @@ def validate_cypher_inputs(
         return False, diagnostics
     # validate edge to-entity_name against injection
     result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.PROPERTY_KEYS,
+        u_schema.SchemaProperties.PROPERTY,
         module_params[u_skel.JsonTKN.PROPERTY.value]
         )
     if not result:
         return False, diagnostics
     return True, {}
-
 
 def main() -> None:
     module_name: str = u_shared.file_splitext(__file__)

@@ -33,6 +33,10 @@ class SchemaProperties(Enum):
         u_skel.JsonTKN.TYPE.value: "string",
         u_skel.JsonTKN.PATTERN.value: IdentifierPattern.UNICODE_NAME.value
         }
+    PROPERTY = {
+        u_skel.JsonTKN.TYPE.value: "string",
+        u_skel.JsonTKN.PATTERN.value: IdentifierPattern.NEO4J_IDENTIFIER.value
+        }
     PROPERTY_KEYS = {
         u_skel.JsonTKN.TYPE.value: "string",
         u_skel.JsonTKN.PATTERN.value: IdentifierPattern.NEO4J_IDENTIFIER.value

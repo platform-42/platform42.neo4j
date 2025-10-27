@@ -62,9 +62,22 @@ def constraint_add(
 
     # normalise
     normalised_label: str = label.capitalize()
+
+    # cypher construction - values for bindings
     cypher_params: Dict[str, Any] = {
-        u_skel.JsonTKN.ENTITY_NAME.value: entity_name
     }
+    cypher_query: str = u_cyph_q.cypher_constraint_add(
+        check_mode=check_mode,
+        label=normalised_label,
+        property=property
+    )
+
+    # return constructed cypher
+    cypher_query_inline: str = cypher_query
+    for key, value in cypher_params.items():
+        cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
+    return cypher_query, cypher_params, cypher_query_inline
+
 
 #
 #   vertex_del:
@@ -84,7 +97,7 @@ def vertex_del(
     # normalise
     normalised_label: str = label.capitalize()
 
-    # cypher construction
+    # cypher construction - values for bindings
     cypher_params: Dict[str, Any] = {
         u_skel.JsonTKN.ENTITY_NAME.value: entity_name
     }
@@ -124,7 +137,7 @@ def vertex_add(
     normalised_label: str = label.capitalize()
     normalised_properties: Dict[str, Any] = {key.lower(): value for key, value in properties.items()}
 
-    # cypher construction
+    # cypher construction - values for bindings
     cypher_params: Dict[str, Any] = {
         u_skel.JsonTKN.ENTITY_NAME.value: entity_name,
         **normalised_properties
@@ -166,7 +179,7 @@ def edge_del(
     normalised_label_from: str = label_from.capitalize()
     normalised_label_to: str = label_to.capitalize()
 
-    # cypher construction
+    # cypher construction - values for bindings
     cypher_params: Dict[str, Any] = {
         u_skel.JsonTKN.ENTITY_NAME_FROM.value: entity_name_from,
         u_skel.JsonTKN.ENTITY_NAME_TO.value: entity_name_to
@@ -222,7 +235,7 @@ def edge_add(
     normalised_label_to: str = label_to.capitalize()
     normalised_properties: Dict[str, Any] = {key.lower(): value for key, value in properties.items()}
 
-    # cypher construction
+    # cypher construction - values for bindings
     cypher_params: Dict[str, Any] = {
         u_skel.JsonTKN.ENTITY_NAME_FROM.value: entity_name_from,
         u_skel.JsonTKN.ENTITY_NAME_TO.value: entity_name_to,
@@ -272,7 +285,7 @@ def query_read(
     # normalise
     normalised_parameters: Dict[str, Any] = {key.lower(): value for key, value in parameters.items()}
 
-    # cypher construction
+    # cypher construction - values for bindings
     cypher_params: Dict[str, Any] = {
         **normalised_parameters
     }
