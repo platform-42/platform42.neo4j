@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# build_and_tag.sh — Build an Ansible module, tag a release, and push to GitHub.
+# build_and_tag.sh — Build an Ansible collection, tag a release, and push to GitHub.
 #
 
 set -euo pipefail
@@ -13,7 +13,7 @@ set -euo pipefail
 DEFAULT_TAG="v$(date +%Y.%m.%d.%H%M)"
 
 # Path to your Ansible collection (adjust as needed)
-COLLECTION_PATH="./"
+COLLECTION_PATH="."
 
 # Whether to build the collection
 BUILD_COLLECTION=true
@@ -30,11 +30,19 @@ clean_old_builds() {
 build_collection() {
     echo "📦 Building Ansible collection..."
     clean_old_builds
-    ansible-galaxy collection build "$COLLECTION_PATH"
+
+    local build_output
+    build_output=$(ansible-galaxy collection build "$COLLECTION_PATH" | tee /dev/stderr | grep -oE '[^ ]+\.tar\.gz' | tail -n1 || true)
+
+    if [[ -n "$build_output" ]]; then
+        echo "✅ Build complete: $build_output"
+    else
+        echo "⚠️  Build completed, but no tarball name detected."
+    fi
 }
 
 create_tag() {
-    local tag=${1:-$DEFAULT_TAG}
+    local tag="$1"
     if git rev-parse "$tag" >/dev/null 2>&1; then
         echo "⚠️  Tag '$tag' already exists. Skipping tag creation."
     else
@@ -44,10 +52,10 @@ create_tag() {
 }
 
 push_git() {
-    local tag=${1:-$DEFAULT_TAG}
+    local tag="$1"
     local branch
     branch=$(git rev-parse --abbrev-ref HEAD)
-    echo "🚀 Pushing commits and tag to origin on branch '$branch'..."
+    echo "🚀 Pushing commits and tag '$tag' to origin on branch '$branch'..."
     git push origin "$branch"
     git push origin "$tag"
 }
@@ -75,6 +83,9 @@ while getopts "t:sp:" opt; do
         *) usage ;;
     esac
 done
+
+# Ensure TAG always has a value
+TAG="${TAG:-$DEFAULT_TAG}"
 
 if $BUILD_COLLECTION; then
     build_collection
