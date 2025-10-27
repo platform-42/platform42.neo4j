@@ -104,7 +104,7 @@ class CypherQuery(StrEnum):
         ;
     """
     CONSTRAINT_ADD = """
-        CREATE CONSTRAINT constraint_{label}_{property}_unique IF NOT EXISTS
+        CREATE CONSTRAINT constraint_{label_id}_{property_id}_unique IF NOT EXISTS
         FOR (n:`{label}`)
         REQUIRE n.`{property}` IS UNIQUE
         ;
@@ -223,9 +223,11 @@ def cypher_constraint_add(
     property: str 
 ) -> str:
     if check_mode:
-        return str(CypherQuery.SIMULATION.value) 
+        return str(CypherQuery.SIMULATION.value)
     return str(CypherQuery.CONSTRAINT_ADD.value.format(
-        label=label.lower(),
-        property=property.lower()
+        label_id=label.lower(),
+        property_id=property.lower(),
+        label=label,
+        property=property
         )
     )
