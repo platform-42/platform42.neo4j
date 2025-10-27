@@ -13,7 +13,7 @@ set -euo pipefail
 DEFAULT_TAG="v$(date +%Y.%m.%d.%H%M)"
 
 # Path to your Ansible collection (adjust as needed)
-COLLECTION_PATH="."
+COLLECTION_PATH="../"
 
 # Whether to build the collection
 BUILD_COLLECTION=true
