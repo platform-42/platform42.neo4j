@@ -54,6 +54,9 @@ properties:
 - **Database cleanup (`graph_reset` or custom cleanup scripts)**  
   Easily remove nodes, relationships, or entire datasets by executing Cypher commands in an automated, repeatable manner.
 
+- **Constraint management (`constraint` module)**
+  Define and enforce schema-level rules in the Neo4j database. Supports creating unique property constraints on nodes using Cypher CREATE CONSTRAINT … IF NOT EXISTS, ensuring data integrity and idempotent schema management.
+
 - **Statistics and diagnostics**  
   Each module returns detailed execution summaries (nodes/relationships created, deleted, properties set, etc.), enabling auditability and observability in automation pipelines.
 
