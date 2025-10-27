@@ -52,6 +52,7 @@ EXAMPLES = r'''
     username: "neo4j"
     password: "*****"
     type: WORKS_AT
+    state: PRESENT
     from:
       label: "Person"
       entity_name: "alice"
@@ -71,6 +72,7 @@ EXAMPLES = r'''
     username: "neo4j"
     password: "*****"
     type: PURCHASED
+    state: PRESENT
     from:
       label: "Customer"
       entity_name: "bob"

@@ -49,6 +49,7 @@ EXAMPLES = r'''
     username: "neo4j"
     password: "*****"
     label: "Person"
+    state: PRESENT
     entity_name: "Ada"
     properties:
       age: 
@@ -63,6 +64,7 @@ EXAMPLES = r'''
     username: "neo4j"
     password: "*****"
     label: "Product"
+    state: PRESENT
     entity_name: "Widget-123"
     properties:
       sku: 
