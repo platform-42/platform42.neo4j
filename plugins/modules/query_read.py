@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring
+# pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring,line-too-long
 """
     Filename: query_read.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
@@ -138,7 +138,8 @@ def main() -> None:
             u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
             u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: u_shared.flatten_query(cypher_query_inline),
             u_skel.JsonTKN.ERROR_MSG.value: repr(e)
-        }    
+        }
+        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     finally:
         driver.close()
     payload: Dict[str, Any] = {

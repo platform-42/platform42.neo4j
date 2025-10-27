@@ -1,4 +1,4 @@
-# pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring
+# pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring,line-too-long
 """
     Filename: ./module_utils/shared.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
