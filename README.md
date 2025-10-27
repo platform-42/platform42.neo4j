@@ -165,4 +165,21 @@ NEO4J_DATABASE: <project>|defaults to neo4j
 #     track.edge.cypher_response
 #     track.edge.cypher_query_inline
 #
+
+- name: "Put unique constraint on entity_name of Account vertex"
+  platform42.neo4j.constraint:
+    neo4j_uri: "{{ NEO4J_URI }}"
+    database: "{{ NEO4J_DATABASE }}"
+    username: "{{ NEO4J_USERNAME }}"
+    password: "{{ NEO4J_PASSWORD }}"
+    label: Account
+    property: entity_name
+    state: PRESENT
+  register: vertex_constraint
+#
+# interesting variables to inspect
+#   <vertex_constraint>.<constraint>.<item>
+#     vertex_constraint.constraint.cypher_response
+#     vertex_constraint.constraint.cypher_query_inline
+#
 ```
