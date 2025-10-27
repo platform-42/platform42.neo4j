@@ -1,4 +1,3 @@
 .mypy_cache/
-.mypy_cache/
 plugins/module_utils/.mypy_cache
 *.tar.gz
