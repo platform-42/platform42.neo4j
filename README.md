@@ -4,15 +4,15 @@ Ansible collection for managing **Neo4j graph databases**: create and update ver
 
 ---
 
-## Properties
+## Neo4j properties
 
-Properties are additional attributes that can be stored with a vertex or edge 
-By default, Ansible translate all properties to string resulting in loss of data type conext.
+Neo4j properties are additional attributes that can be stored with a vertex or edge 
+By default, Ansible translate all properties to string data type resulting in loss of type conext.
 
 ```yaml
 # 
 #   Consider this input YAML:
-#     Internally, in a Ansible Module, amount is considered as a string
+#     Internally, in amount is considered as a string
 #     since our module needs to be abstract, we need to provide extra 
 #     type information to cast the value correctly, without hardcoding it
 #
@@ -21,15 +21,13 @@ properties:
   timestamp: "2025-10-02T09:00:00Z"
 ```
 
-Therefore a property must implement `type` and `value`
-`type` can be `str|int|float|bool`
-Timestamp formats are not available yet.
+As a consequence a property must implement both `type` and `value`
+`type` can be `str|int|float|bool|datetime`
 
 ```yaml
 #
-#   By splitting the property into a value and type, we can
-#   provide a safe and correct cast inside the edge and vertex modules
-#   for properties
+#   By splitting a property into a value and type, we can
+#   provide a safe type cast inside the edge and vertex modules
 #
 properties:
   amount:
@@ -37,7 +35,7 @@ properties:
     type: int
   timestamp:
     value: "2025-10-02T09:00:00Z"
-    type: str
+    type: datetime
 ```
 
 ---
@@ -115,6 +113,7 @@ NEO4J_DATABASE: <project>|defaults to neo4j
 #
 
 # create node
+#   unique determines whether duplicates should be seen as 1 or not
 - name: "create station Station:Pankow"
   platform42.neo4j.vertex:
     neo4j_uri: "{{ NEO4J_URI }}"
@@ -124,6 +123,7 @@ NEO4J_DATABASE: <project>|defaults to neo4j
     label: Station
     entity_name: "Pankow"
     state: PRESENT
+    unique: False | True (Default = True)
   register: station
 #
 # interesting variables to inspect

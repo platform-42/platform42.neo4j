@@ -47,8 +47,17 @@ class CypherQuery(StrEnum):
         DETACH DELETE n
         ;
     """
-    VERTEX_ADD = """
+    VERTEX_ADD_UNIQUE = """
         MERGE (n:`{label}` {{ entity_name: $entity_name }})
+        {set_clause} 
+        RETURN 
+            id(n) AS node_id, 
+            labels(n) AS labels, 
+            n.entity_name AS entity_name
+        ;
+    """
+    VERTEX_ADD = """
+        CREATE (n:`{label}` {{ entity_name: $entity_name }})
         {set_clause} 
         RETURN 
             id(n) AS node_id, 
@@ -115,12 +124,19 @@ def cypher_vertex_del(
 
 def cypher_vertex_add(
     check_mode: bool,
+    unique: bool,
     label: str,
     properties: Dict[str, Any]
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
     set_clause_n = f"SET n += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
+    if unique:
+        return str(CypherQuery.VERTEX_ADD_UNIQUE.value.format(
+            label=label,
+            set_clause=set_clause_n
+            )
+        )
     return str(CypherQuery.VERTEX_ADD.value.format(
         label=label,
         set_clause=set_clause_n

@@ -95,6 +95,11 @@ def argument_spec_vertice() -> Dict[str, Any]:
             u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
             u_skel.YamlATTR.REQUIRED.value: False,
             u_skel.YamlATTR.DEFAULT.value: u_skel.YamlState.PRESENT.value
+        },
+        u_skel.JsonTKN.UNIQUE.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: False,
+            u_skel.YamlATTR.DEFAULT.value: True
         }
     }
 

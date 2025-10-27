@@ -71,6 +71,7 @@ class JsonTKN(StrEnum):
     TYPE = "type"
     USERNAME = "username"
     VALUE = "value"
+    UNIQUE = "unique"
 
 def state_present(
     state: str

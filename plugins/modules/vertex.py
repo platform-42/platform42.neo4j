@@ -81,9 +81,11 @@ def vertex(
     label: str = module_params[u_skel.JsonTKN.LABEL.value]
     entity_name: str =module_params[u_skel.JsonTKN.ENTITY_NAME.value]
     state: str = module_params[u_skel.JsonTKN.STATE.value]
+    unique: bool = module_params[u_skel.JsonTKN.UNIQUE.value]
     if u_skel.state_present(state):
         return u_cypher.vertex_add(
             check_mode,
+            unique,
             label,
             entity_name,
             properties
