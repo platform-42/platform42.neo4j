@@ -43,12 +43,12 @@ class CypherQuery(StrEnum):
         ;
     """
     VERTEX_DEL = """
-        MERGE (n:`{label}` {{entity_name: $entity_name}})
+        MERGE (n:`{label}` {{ entity_name: $entity_name }})
         DETACH DELETE n
         ;
     """
     VERTEX_ADD = """
-        MERGE (n:`{label}` {{entity_name: $entity_name}})
+        MERGE (n:`{label}` {{ entity_name: $entity_name }})
         {set_clause} 
         RETURN 
             id(n) AS node_id, 
@@ -57,22 +57,22 @@ class CypherQuery(StrEnum):
         ;
     """
     EDGE_DEL = """
-        MATCH (a:`{label_from}` {{ entity_name: $entity_name_from}})
-        MATCH (b:`{label_to}` {{ entity_name: $entity_name_to}})
+        MATCH (a:`{label_from}` {{ entity_name: $entity_name_from }})
+        MATCH (b:`{label_to}` {{ entity_name: $entity_name_to }})
         MERGE (a)-[r:`{relation_type}`]->(b)
         DELETE r
         ;
     """
     EDGE_DEL_BI = """
-        MATCH (a:`{label_from}` {{ entity_name: $entity_name_from}})
-        MATCH (b:`{label_to}` {{ entity_name: $entity_name_to}})
+        MATCH (a:`{label_from}` {{ entity_name: $entity_name_from }})
+        MATCH (b:`{label_to}` {{ entity_name: $entity_name_to }})
         MERGE (a)-[r:`{relation_type}`]-(b)
         DELETE r
         ;
     """
     EDGE_ADD = """
-        MATCH (a:`{label_from}` {{ entity_name: $entity_name_from}})
-        MATCH (b:`{label_to}` {{ entity_name: $entity_name_to}})
+        MATCH (a:`{label_from}` {{ entity_name: $entity_name_from }})
+        MATCH (b:`{label_to}` {{ entity_name: $entity_name_to }})
         MERGE (a)-[r:`{relation_type}`]->(b)
         {set_clause}
         RETURN 
@@ -82,8 +82,8 @@ class CypherQuery(StrEnum):
         ;
     """
     EDGE_ADD_BI = """
-        MATCH (a:`{label_from}` {{ entity_name: $entity_name_from}})
-        MATCH (b:`{label_to}` {{ entity_name: $entity_name_to}})
+        MATCH (a:`{label_from}` {{ entity_name: $entity_name_from }})
+        MATCH (b:`{label_to}` {{ entity_name: $entity_name_to }})
         MERGE (a)-[r1:`{relation_type}`]->(b)
         {set_clause_r1}
         MERGE (b)-[r2:`{relation_type}`]->(a)
