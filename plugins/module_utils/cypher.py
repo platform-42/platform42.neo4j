@@ -326,5 +326,7 @@ def cypher_stats(
         u_skel.JsonTKN.LABELS_ADDED.value: summary.counters.labels_added,
         u_skel.JsonTKN.LABELS_REMOVED.value: summary.counters.labels_removed,
         u_skel.JsonTKN.QUERY_TYPE.value: summary.query_type,
-        u_skel.JsonTKN.PROPERTIES_SET.value: summary.counters.properties_set
+        u_skel.JsonTKN.PROPERTIES_SET.value: summary.counters.properties_set,
+        u_skel.JsonTKN.CONSTRAINTS_ADDED.value: summary.counters.constraints_added,
+        u_skel.JsonTKN.CONSTRAINTS_REMOVED.value: summary.counters.constraints_removed,
         }

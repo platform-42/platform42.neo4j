@@ -33,6 +33,8 @@ class YamlState(StrEnum):
 class JsonTKN(StrEnum):
     BI_DIRECTIONAL = "bi_directional"
     CHANGED = "changed"
+    CONSTRAINTS_ADDED = "constraints_added"
+    CONSTRAINTS_REMOVED = "constraints_removed"
     CYPHER_PARAMS = "cypher_params"
     CYPHER_QUERY = "cypher_query"
     CYPHER_QUERY_INLINE = "cypher_query_inline"
