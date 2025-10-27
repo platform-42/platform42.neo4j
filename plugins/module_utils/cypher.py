@@ -54,6 +54,54 @@ def graph_reset(
     query_inline: str = query
     return query, query_params, query_inline
 
+
+def query_build(
+    cypher_query: str,
+    cypher_params: Dict[str, Any]
+)-> Tuple[str, Dict[str, Any], str]:
+    cypher_query_inline: str = cypher_query
+    for key, value in cypher_params.items():
+        cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
+    return cypher_query, cypher_params, cypher_query_inline
+
+
+#
+#   contraint_del:
+#       removes constraint based on name
+#
+#   returns:
+#       cypher_query -> cypher query with bindings
+#       cypher_params -> values for bindings
+#       cypher_query_inline -> cypher query with value substitution
+#
+def constraint_del(
+    check_mode: bool,
+    label: str,
+    property: str,
+) -> Tuple[str, Dict[str, Any], str]:
+
+    # normalise
+    normalised_label: str = label.capitalize()
+
+    # cypher construction - values for bindings
+    cypher_params: Dict[str, Any] = {
+    }
+    cypher_query: str = u_cyph_q.cypher_constraint_del(
+        check_mode=check_mode,
+        label=normalised_label,
+        property=property
+    )
+    return query_build(cypher_query, cypher_params)
+
+#
+#   contraint_add:
+#       adds unique index on given property
+#
+#   returns:
+#       cypher_query -> cypher query with bindings
+#       cypher_params -> values for bindings
+#       cypher_query_inline -> cypher query with value substitution
+#
 def constraint_add(
     check_mode: bool,
     label: str,
@@ -71,13 +119,7 @@ def constraint_add(
         label=normalised_label,
         property=property
     )
-
-    # return constructed cypher
-    cypher_query_inline: str = cypher_query
-    for key, value in cypher_params.items():
-        cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
-    return cypher_query, cypher_params, cypher_query_inline
-
+    return query_build(cypher_query, cypher_params)
 
 #
 #   vertex_del:
@@ -105,12 +147,7 @@ def vertex_del(
         check_mode=check_mode,
         label=normalised_label
     )
-
-    # return constructed cypher
-    cypher_query_inline: str = cypher_query
-    for key, value in cypher_params.items():
-        cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
-    return cypher_query, cypher_params, cypher_query_inline
+    return query_build(cypher_query, cypher_params)
 
 #
 #   vertex_add:
@@ -148,12 +185,7 @@ def vertex_add(
         label=normalised_label,
         properties=normalised_properties
     )
-
-    # return constructed cypher
-    cypher_query_inline: str = cypher_query
-    for key, value in cypher_params.items():
-        cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
-    return cypher_query, cypher_params, cypher_query_inline
+    return query_build(cypher_query, cypher_params)
 
 #
 #   edge_del:
@@ -198,12 +230,8 @@ def edge_del(
             label_to=normalised_label_to,
             relation_type=normalised_relation_type
         )
+    return query_build(cypher_query, cypher_params)
 
-    # return constructed cypher
-    cypher_query_inline: str = cypher_query
-    for key, value in cypher_params.items():
-        cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
-    return cypher_query, cypher_params, cypher_query_inline
 
 #
 #   edge_add:
@@ -257,12 +285,8 @@ def edge_add(
             relation_type=normalised_relation_type,
             properties=normalised_properties
         )
+    return query_build(cypher_query, cypher_params)
 
-    # return constructed cypher
-    cypher_query_inline: str = cypher_query
-    for key, value in cypher_params.items():
-        cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
-    return cypher_query, cypher_params, cypher_query_inline
 
 #
 #   query_read:
@@ -289,13 +313,7 @@ def query_read(
     cypher_params: Dict[str, Any] = {
         **normalised_parameters
     }
-
-    # return constructed cypher
-    cypher_query: str = query
-    cypher_query_inline: str = cypher_query
-    for key, value in cypher_params.items():
-        cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
-    return cypher_query, cypher_params, cypher_query_inline
+    return query_build(query, cypher_params)
 
 #
 #   query_read_tx:

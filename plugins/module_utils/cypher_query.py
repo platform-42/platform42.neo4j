@@ -103,6 +103,10 @@ class CypherQuery(StrEnum):
             b.entity_name AS entity_name_to
         ;
     """
+    CONSTRAINT_DEL = """
+        DROP CONSTRAINT {constraint_name} IF EXISTS
+        ;
+    """
     CONSTRAINT_ADD = """
         CREATE CONSTRAINT constraint_{label_id}_{property_id}_unique IF NOT EXISTS
         FOR (n:`{label}`)
@@ -214,6 +218,22 @@ def cypher_edge_add_bi(
         relation_type=relation_type,
         set_clause_r1=set_clause_r1,
         set_clause_r2=set_clause_r2
+        )
+    )
+
+def cypher_constraint_del(
+    check_mode: bool,
+    label: str,
+    property: str 
+) -> str:
+    if check_mode:
+        return str(CypherQuery.SIMULATION.value)
+    contraint_name: str = "constraint_{label_id}_{property_id}_unique".format(
+        label_id=label.lower(),
+        property_id=property.lower()
+    )
+    return str(CypherQuery.CONSTRAINT_DEL.value.format(
+        constraint_name=contraint_name
         )
     )
 
