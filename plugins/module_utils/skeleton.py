@@ -60,6 +60,7 @@ class JsonTKN(StrEnum):
     PATTERN = "pattern"
     PROPERTIES = "properties"
     PROPERTIES_SET = "properties_set"
+    PROPERTY = "property"
     QUERY = "query"
     QUERY_TYPE = "query_type"
     RELATIONSHIPS_CREATED = "relationships_created"
@@ -69,9 +70,9 @@ class JsonTKN(StrEnum):
     STATS = "stats"
     TO = "to"
     TYPE = "type"
+    UNIQUE = "unique"
     USERNAME = "username"
     VALUE = "value"
-    UNIQUE = "unique"
 
 def state_present(
     state: str

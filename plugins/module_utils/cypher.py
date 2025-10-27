@@ -54,6 +54,18 @@ def graph_reset(
     query_inline: str = query
     return query, query_params, query_inline
 
+def constraint_add(
+    check_mode: bool,
+    label: str,
+    property: str,
+) -> Tuple[str, Dict[str, Any], str]:
+
+    # normalise
+    normalised_label: str = label.capitalize()
+    cypher_params: Dict[str, Any] = {
+        u_skel.JsonTKN.ENTITY_NAME.value: entity_name
+    }
+
 #
 #   vertex_del:
 #       removes vertex

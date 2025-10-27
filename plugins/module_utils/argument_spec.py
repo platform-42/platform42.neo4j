@@ -31,6 +31,34 @@ def argument_spec_graph_reset() -> Dict[str, Any]:
         }
     }
 
+def argument_spec_constraint() -> Dict[str, Any]:
+    return {
+        u_skel.JsonTKN.NEO4J_URI.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: True
+        },
+        u_skel.JsonTKN.DATABASE.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: True
+        },
+        u_skel.JsonTKN.USERNAME.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: True
+        },
+        u_skel.JsonTKN.PASSWORD.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: True
+        },
+        u_skel.JsonTKN.LABEL.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: True
+        },
+        u_skel.JsonTKN.PROPERTY.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: True
+        }
+    }
+
 def argument_spec_query_read() -> Dict[str, Any]:
     return {
         u_skel.JsonTKN.NEO4J_URI.value: {

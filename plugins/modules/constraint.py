@@ -68,21 +68,42 @@ def constraint(
     state: str = module_params[u_skel.JsonTKN.STATE.value]
     if u_skel.state_present(state):
         return u_cypher.constraint_add(
-            check_mode
-        )
+            check_mode=check_mode,
+            label=label,
+            property=property
+            )
     return u_cypher.constraint_del(
-        check_mode
-    )
+        check_mode=check_mode,
+        label=label,
+        property=property
+        )
 
 def validate_cypher_inputs(
     module_params: Dict[str, Any]
 ) -> Tuple[bool, Dict[str, Any]]:
+    result: bool
+    diagnostics: Dict[str, Any]
+    # validate edge from-label against injection
+    result, diagnostics = u_schema.validate_pattern(
+        u_schema.SchemaProperties.LABEL,
+        module_params[u_skel.JsonTKN.LABEL.value]
+        )
+    if not result:
+        return False, diagnostics
+    # validate edge to-entity_name against injection
+    result, diagnostics = u_schema.validate_pattern(
+        u_schema.SchemaProperties.PROPERTY_KEYS,
+        module_params[u_skel.JsonTKN.PROPERTY.value]
+        )
+    if not result:
+        return False, diagnostics
     return True, {}
+
 
 def main() -> None:
     module_name: str = u_shared.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
-        argument_spec=u_args.argument_spec_edge(),
+        argument_spec=u_args.argument_spec_constraint(),
         supports_check_mode=True
     )
     result, diagnostics = validate_cypher_inputs(module.params)
