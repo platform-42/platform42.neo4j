@@ -3,7 +3,7 @@
     Filename: ./module_utils/cypher_query.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-26
-    Version: 2.1.0
+    Version: 2.2.0
     Description: 
         Cypher queries - returns string with bindings
 """

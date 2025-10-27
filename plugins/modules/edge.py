@@ -5,7 +5,7 @@
     Filename: ./modules/edge.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-05
-    Version: 2.1.0
+    Version: 2.2.0
     Description: 
         Ansible module to create graph relationship (edge)
 """
@@ -26,7 +26,7 @@ DOCUMENTATION = r'''
 ---
 module: edge
 short_description: Create or update a relationship (edge) between two vertices in Neo4j
-version_added: "2.1.0"
+version_added: "2.2.0"
 author:
   - Diederick de Buck (diederick.de.buck@gmail.com)
 description:

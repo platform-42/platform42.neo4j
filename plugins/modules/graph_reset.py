@@ -5,7 +5,7 @@
     Filename: ./modules/graph_reset.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-05
-    Version: 2.1.0
+    Version: 2.2.0
     Description: 
         Ansible module to reset graph database
 """
@@ -25,7 +25,7 @@ DOCUMENTATION = r'''
 ---
 module: graph_reset
 short_description: reset vertices and edges in Neo4j database
-version_added: "2.1.0"
+version_added: "2.2.0"
 author:
   - Diederick de Buck (diederick.de.buck@gmail.com)
 description:
