@@ -103,6 +103,12 @@ class CypherQuery(StrEnum):
             b.entity_name AS entity_name_to
         ;
     """
+    CONSTRAINT_ADD = """
+        CREATE CONSTRAINT constraint_{label}_{property}_unique IF NOT EXISTS
+        FOR (n:`{label}`)
+        REQUIRE n.`{property}` IS UNIQUE
+        ;
+    """
 
 def cypher_graph_reset(
     check_mode: bool
@@ -208,5 +214,18 @@ def cypher_edge_add_bi(
         relation_type=relation_type,
         set_clause_r1=set_clause_r1,
         set_clause_r2=set_clause_r2
+        )
+    )
+
+def cypher_constraint_add(
+    check_mode: bool,
+    label: str,
+    property: str 
+) -> str:
+    if check_mode:
+        return str(CypherQuery.SIMULATION.value) 
+    return str(CypherQuery.CONSTRAINT_ADD.value.format(
+        label=label,
+        property=property
         )
     )
