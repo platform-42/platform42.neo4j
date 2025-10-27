@@ -36,6 +36,15 @@ def get_neo4j_driver(
         auth=basic_auth(db_username, db_password)
     )
 
+def query_build(
+    cypher_query: str,
+    cypher_params: Dict[str, Any]
+)-> Tuple[str, Dict[str, Any], str]:
+    cypher_query_inline: str = cypher_query
+    for key, value in cypher_params.items():
+        cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
+    return cypher_query, cypher_params, cypher_query_inline
+
 #
 #   graph_reset:
 #       removes vertex
@@ -49,21 +58,9 @@ def get_neo4j_driver(
 def graph_reset(
     check_mode: bool
 )-> Tuple[str, Dict[str, Any], str]:
-    query: str = u_cyph_q.cypher_graph_reset(check_mode)
-    query_params: Dict[str, Any] = {}
-    query_inline: str = query
-    return query, query_params, query_inline
-
-
-def query_build(
-    cypher_query: str,
-    cypher_params: Dict[str, Any]
-)-> Tuple[str, Dict[str, Any], str]:
-    cypher_query_inline: str = cypher_query
-    for key, value in cypher_params.items():
-        cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
-    return cypher_query, cypher_params, cypher_query_inline
-
+    cypher_query: str = u_cyph_q.cypher_graph_reset(check_mode)
+    cypher_params: Dict[str, Any] = {}
+    return query_build(cypher_query, cypher_params)
 
 #
 #   contraint_del:
@@ -84,8 +81,7 @@ def constraint_del(
     normalised_label: str = label.capitalize()
 
     # cypher construction - values for bindings
-    cypher_params: Dict[str, Any] = {
-    }
+    cypher_params: Dict[str, Any] = {}
     cypher_query: str = u_cyph_q.cypher_constraint_del(
         check_mode=check_mode,
         label=normalised_label,
@@ -112,8 +108,7 @@ def constraint_add(
     normalised_label: str = label.capitalize()
 
     # cypher construction - values for bindings
-    cypher_params: Dict[str, Any] = {
-    }
+    cypher_params: Dict[str, Any] = {}
     cypher_query: str = u_cyph_q.cypher_constraint_add(
         check_mode=check_mode,
         label=normalised_label,
@@ -224,7 +219,7 @@ def edge_del(
             relation_type=normalised_relation_type
         )
     else:
-        cypher_query = u_cyph_q.cypher_edge_del(
+        cypher_query: str = u_cyph_q.cypher_edge_del(
             check_mode=check_mode,
             label_from=normalised_label_from,
             label_to=normalised_label_to,
@@ -270,7 +265,7 @@ def edge_add(
         **normalised_properties
     }
     if bi_directional:
-        cypher_query = u_cyph_q.cypher_edge_add_bi(
+        cypher_query: str = u_cyph_q.cypher_edge_add_bi(
             check_mode=check_mode,
             label_from=normalised_label_from,
             label_to=normalised_label_to,
@@ -278,7 +273,7 @@ def edge_add(
             properties=normalised_properties
         )
     else:
-        cypher_query = u_cyph_q.cypher_edge_add(
+        cypher_query: str = u_cyph_q.cypher_edge_add(
             check_mode=check_mode,
             label_from=normalised_label_from,
             label_to=normalised_label_to,

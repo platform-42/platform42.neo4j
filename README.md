@@ -1,42 +1,6 @@
 # platform42.neo4j
 
-Ansible collection for managing **Neo4j graph databases**: create and update vertices (nodes), edges (relationships), execute queries, and clean up the database. This collection provides a declarative, idempotent interface to Neo4j, allowing automation of graph data management in a consistent and reliable way.
-
----
-
-## Neo4j properties
-
-Neo4j properties are additional attributes that can be stored with a vertex or edge 
-By default, Ansible translate all properties to string data type resulting in loss of type conext.
-
-```yaml
-# 
-#   Consider this input YAML:
-#     Internally, in amount is considered as a string
-#     since our module needs to be abstract, we need to provide extra 
-#     type information to cast the value correctly, without hardcoding it
-#
-properties:
-  amount: 1200
-  timestamp: "2025-10-02T09:00:00Z"
-```
-
-As a consequence a property must implement both `type` and `value`
-`type` can be `str|int|float|bool|datetime`
-
-```yaml
-#
-#   By splitting a property into a value and type, we can
-#   provide a safe type cast inside the edge and vertex modules
-#
-properties:
-  amount:
-    value: 1200
-    type: int
-  timestamp:
-    value: "2025-10-02T09:00:00Z"
-    type: datetime
-```
+Ansible collection for managing **Neo4j graph databases**: create and update vertices (nodes), edges (relationships), constraints, execute queries, and clean up the database. This collection provides a declarative, idempotent interface to Neo4j, allowing automation of graph data management in a consistent and reliable way.
 
 ---
 
@@ -182,4 +146,40 @@ NEO4J_DATABASE: <project>|defaults to neo4j
 #     vertex_constraint.constraint.cypher_response
 #     vertex_constraint.constraint.cypher_query_inline
 #
+```
+
+---
+
+## Neo4j properties
+
+Neo4j properties are additional attributes that can be stored with a vertex or edge 
+By default, Ansible translate all properties to string data type resulting in loss of type conext.
+
+```yaml
+# 
+#   Consider this input YAML:
+#     Internally, in amount is considered as a string
+#     since our module needs to be abstract, we need to provide extra 
+#     type information to cast the value correctly, without hardcoding it
+#
+properties:
+  amount: 1200
+  timestamp: "2025-10-02T09:00:00Z"
+```
+
+As a consequence a property must implement both `type` and `value`
+`type` can be `str|int|float|bool|datetime`
+
+```yaml
+#
+#   By splitting a property into a value and type, we can
+#   provide a safe type cast inside the edge and vertex modules
+#
+properties:
+  amount:
+    value: 1200
+    type: int
+  timestamp:
+    value: "2025-10-02T09:00:00Z"
+    type: datetime
 ```
