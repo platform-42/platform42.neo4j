@@ -173,7 +173,7 @@ def label_add(
     }
     cypher_query: str = u_cyph_q.cypher_label_del(
         check_mode=check_mode,
-        base_label=normalised_base_label,
+        base_label=base_label,
         label_to_create=normalised_label
     )
     return query_build(cypher_query, cypher_params)
