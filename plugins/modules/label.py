@@ -48,7 +48,6 @@ EXAMPLES = r'''
     label: Verified
     state: PRESENT
 
-
 - name: "Remove label Verified to user entity_name=Alice"
   platform42.neo4j.label:
     neo4j_uri: "{{ NEO4J_URI }}"
