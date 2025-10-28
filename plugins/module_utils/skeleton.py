@@ -31,6 +31,7 @@ class YamlState(StrEnum):
     PRESENT = "present"
 
 class JsonTKN(StrEnum):
+    BASE_LABEL = "base_label"
     BI_DIRECTIONAL = "bi_directional"
     CHANGED = "changed"
     CONSTRAINTS_ADDED = "constraints_added"
