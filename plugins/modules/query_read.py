@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring,line-too-long
 """
-    Filename: query_read.py
+    Filename: ./modules/query_read.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-05
     Version: 2.3.0
