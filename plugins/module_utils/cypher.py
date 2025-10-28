@@ -117,7 +117,13 @@ def constraint_add(
     return query_build(cypher_query, cypher_params)
 
 #
+#   label_del:
+#       removes label from existing vertex
 #
+#   returns:
+#       cypher_query -> cypher query with bindings
+#       cypher_params -> values for bindings
+#       cypher_query_inline -> cypher query with value substitution
 #
 def label_del(
     check_mode: bool,
@@ -141,6 +147,36 @@ def label_del(
     )
     return query_build(cypher_query, cypher_params)
 
+#
+#   label_add:
+#       adds label to existing vertex
+#
+#   returns:
+#       cypher_query -> cypher query with bindings
+#       cypher_params -> values for bindings
+#       cypher_query_inline -> cypher query with value substitution
+#
+def label_add(
+    check_mode: bool,
+    base_label: str,
+    label: str,
+    entity_name: str
+) -> Tuple[str, Dict[str, Any], str]:
+
+    # normalise
+    normalised_base_label: str = base_label.capitalize()
+    normalised_label: str = label.capitalize()
+
+    # cypher construction - values for bindings
+    cypher_params: Dict[str, Any] = {
+        u_skel.JsonTKN.ENTITY_NAME.value: entity_name,
+    }
+    cypher_query: str = u_cyph_q.cypher_label_del(
+        check_mode=check_mode,
+        base_label=normalised_base_label,
+        label_to_create=normalised_label
+    )
+    return query_build(cypher_query, cypher_params)
 
 #
 #   vertex_del:
