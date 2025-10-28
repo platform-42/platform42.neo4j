@@ -5,7 +5,7 @@
     Filename: ./modules/label.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-27
-    Version: 2.4.0
+    Version: 2.5.0
     Description: 
         Ansible module to create graph relationship (edge)
 """
@@ -26,7 +26,7 @@ DOCUMENTATION = r'''
 ---
 module: label
 short_description: Manage labels on existing Neo4j nodes
-version_added: "2.4.0"
+version_added: "2.5.0"
 description:
   - Add or remove labels on existing Neo4j nodes.
   - Supports idempotent operations using Cypher C(SET n:`Label`) and C(REMOVE n:`Label`)
