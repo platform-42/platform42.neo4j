@@ -348,6 +348,11 @@ def edge_add(
 #
 #   query_read:
 #       non destructive query. protected by session.execute_read()
+#   notes:
+#       query_read is a difficult beast
+#       cypher is now defined outside the context of Ansible
+#       therefore we cannot apply enforcements like lowercase for keys
+#       In query_ready, query defines the “API contract” itself; no schema or object model exists outside the query.
 #
 #   returns:
 #       cypher_query -> cypher query with bindings
@@ -364,8 +369,11 @@ def query_read(
         parameters = {}
 
     # normalise
-    normalised_parameters: Dict[str, Any] = {key.lower(): value for key, value in parameters.items()}
-
+    normalised_parameters: Dict[str, Any] = {key: value for key, value in parameters.items()}
+#
+#   rejected - violation of the cypher contract
+#   normalised_parameters: Dict[str, Any] = {key.lower(): value for key, value in parameters.items()}
+#
     # cypher construction - values for bindings
     cypher_params: Dict[str, Any] = {
         **normalised_parameters
