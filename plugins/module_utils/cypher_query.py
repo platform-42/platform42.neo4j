@@ -122,7 +122,7 @@ class CypherQuery(StrEnum):
         """
     LABEL_ADD ="""
         MATCH (n:`{base_label}` {entity_name: $entity_name})
-        SET n:`{new_label}`
+        SET n:`{label_to_create}`
         RETURN 
             labels(n) AS labels
         ;    
@@ -269,24 +269,25 @@ def cypher_constraint_add(
 def cypher_label_del(
     check_mode: bool,
     base_label: str,
-    entity_name: str
+    label_to_remove: str
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
     return str(CypherQuery.LABEL_DEL.value.format(
         base_label=base_label,
-        entity_name=entity_name
+        label_to_remove=label_to_remove
         )
     )
 
 def cypher_label_add(
     check_mode: bool,
     base_label: str,
-    entity_name: str,
-    label: str
+    label_to_create: str
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
     return str(CypherQuery.LABEL_ADD.value.format(
+        base_label=base_label,
+        label_to_create=label_to_create
         )
     )

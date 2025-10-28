@@ -74,7 +74,7 @@ def graph_reset(
 def constraint_del(
     check_mode: bool,
     label: str,
-    property: str,
+    property: str
 ) -> Tuple[str, Dict[str, Any], str]:
 
     # normalise
@@ -101,7 +101,7 @@ def constraint_del(
 def constraint_add(
     check_mode: bool,
     label: str,
-    property: str,
+    property: str
 ) -> Tuple[str, Dict[str, Any], str]:
 
     # normalise
@@ -115,6 +115,32 @@ def constraint_add(
         property=property
     )
     return query_build(cypher_query, cypher_params)
+
+#
+#
+#
+def label_del(
+    check_mode: bool,
+    base_label: str,
+    label: str,
+    entity_name: str
+) -> Tuple[str, Dict[str, Any], str]:
+
+    # normalise
+    normalised_base_label: str = base_label.capitalize()
+    normalised_label: str = label.capitalize()
+
+    # cypher construction - values for bindings
+    cypher_params: Dict[str, Any] = {
+        u_skel.JsonTKN.ENTITY_NAME.value: entity_name,
+    }
+    cypher_query: str = u_cyph_q.cypher_label_del(
+        check_mode=check_mode,
+        base_label=normalised_base_label,
+        label_to_remove=normalised_label
+    )
+    return query_build(cypher_query, cypher_params)
+
 
 #
 #   vertex_del:

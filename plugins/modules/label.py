@@ -60,23 +60,26 @@ EXAMPLES = r'''
     state: ABSENT
 '''
 
-def constraint(
+def label(
     check_mode: bool,
     module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
-    state: str = module_params[u_skel.JsonTKN.STATE.value]
+    base_label: str = module_params[u_skel.JsonTKN.BASE_LABEL.value]
     label: str = module_params[u_skel.JsonTKN.LABEL.value]
-    property: str = module_params[u_skel.JsonTKN.PROPERTY.value]
+    entity_name: str = module_params[u_skel.JsonTKN.ENTITY_NAME.value]
+    state: str = module_params[u_skel.JsonTKN.STATE.value]
     if u_skel.state_present(state):
-        return u_cypher.constraint_add(
-            check_mode=check_mode,
+        return u_cypher.label_add(
+            checkmode=check_mode,
+            base_label=base_label,
             label=label,
-            property=property
+            entity_name=entity_name
             )
-    return u_cypher.constraint_del(
-        check_mode=check_mode,
+    return u_cypher.label_del(
+        checkmode=check_mode,
+        base_label=base_label,
         label=label,
-        property=property
+        entity_name=entity_name
         )
 
 def validate_cypher_inputs(
@@ -84,17 +87,24 @@ def validate_cypher_inputs(
 ) -> Tuple[bool, Dict[str, Any]]:
     result: bool
     diagnostics: Dict[str, Any]
-    # validate edge from-label against injection
+    # validate base_label against injection
+    result, diagnostics = u_schema.validate_pattern(
+        u_schema.SchemaProperties.LABEL,
+        module_params[u_skel.JsonTKN.BASE_LABEL.value]
+        )
+    if not result:
+        return False, diagnostics
+    # validate label against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.LABEL,
         module_params[u_skel.JsonTKN.LABEL.value]
         )
     if not result:
         return False, diagnostics
-    # validate edge to-entity_name against injection
+    # validate entity_name against injection
     result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.PROPERTY,
-        module_params[u_skel.JsonTKN.PROPERTY.value]
+        u_schema.SchemaProperties.ENTITY_NAME,
+        module_params[u_skel.JsonTKN.ENTITY_NAME.value]
         )
     if not result:
         return False, diagnostics
@@ -103,7 +113,7 @@ def validate_cypher_inputs(
 def main() -> None:
     module_name: str = u_shared.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
-        argument_spec=u_args.argument_spec_constraint(),
+        argument_spec=u_args.argument_spec_label(),
         supports_check_mode=True
     )
     result, diagnostics = validate_cypher_inputs(module.params)
@@ -121,10 +131,10 @@ def main() -> None:
     cypher_query: str
     cypher_params: Dict[str, Any]
     cypher_query_inline: str
-    cypher_query, cypher_params, cypher_query_inline = constraint(
-        module.check_mode,
+    cypher_query, cypher_params, cypher_query_inline = label(
+        module.checkmode,
         module.params
-        )
+    )
     try:
         with driver.session(database=db_database) as session:
             response: Result = session.run(cypher_query, cypher_params)

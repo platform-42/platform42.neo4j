@@ -85,14 +85,14 @@ def validate_cypher_inputs(
 ) -> Tuple[bool, Dict[str, Any]]:
     result: bool
     diagnostics: Dict[str, Any]
-    # validate edge from-label against injection
+    # validate label against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.LABEL,
         module_params[u_skel.JsonTKN.LABEL.value]
         )
     if not result:
         return False, diagnostics
-    # validate edge to-entity_name against injection
+    # validate property against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.PROPERTY,
         module_params[u_skel.JsonTKN.PROPERTY.value]
