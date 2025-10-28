@@ -1,4 +1,4 @@
-# platform42.neo4j
+# platform42.neo4j - release 2.4.0
 
 Ansible collection for managing **Neo4j graph databases**: create and update vertices (nodes), edges (relationships), constraints, execute queries, and clean up the database. This collection provides a declarative, idempotent interface to Neo4j, allowing automation of graph data management in a consistent and reliable way.
 
@@ -20,6 +20,10 @@ Ansible collection for managing **Neo4j graph databases**: create and update ver
 
 - **Constraint management (`constraint` module)**
   Define and enforce schema-level rules in the Neo4j database. Supports creating unique property constraints on nodes using Cypher CREATE CONSTRAINT … IF NOT EXISTS, ensuring data integrity and idempotent schema management.
+
+- **Label management (`label` module)**
+  Manage labels on existing Neo4j nodes declaratively through Ansible.
+  This module allows you to add or remove labels on nodes, supporting idempotent operations via Cypher SET n:Label and REMOVE n:Label.
 
 - **Statistics and diagnostics**  
   Each module returns detailed execution summaries (nodes/relationships created, deleted, properties set, etc.), enabling auditability and observability in automation pipelines.
@@ -80,7 +84,7 @@ NEO4J_DATABASE: <project>|defaults to neo4j
 #
 
 # create node
-#   unique determines whether duplicates should be seen as 1 or not
+#   - unique determines whether duplicates should be seen as 1 or not
 - name: "create station Station:Pankow"
   platform42.neo4j.vertex:
     neo4j_uri: "{{ NEO4J_URI }}"
@@ -92,14 +96,8 @@ NEO4J_DATABASE: <project>|defaults to neo4j
     state: PRESENT
     unique: False | True (Default = True)
   register: station
-#
-# interesting variables to inspect
-#   <station>.<vertex>.<item>
-#     station.vertex.cypher_response
-#     station.vertex.cypher_query_inline
-#
 
-# create relationship
+# create relationship between 2 nodes
 - name: "create U2 TRACK:Pankow - Vinetastraße"
   platform42.neo4j.edge:
     neo4j_uri: "{{ NEO4J_URI }}"
@@ -123,13 +121,8 @@ NEO4J_DATABASE: <project>|defaults to neo4j
     bi_directional: True
     state: PRESENT
   register: track
-#
-# interesting variables to inspect
-#   <track>.<edge>.<item>
-#     track.edge.cypher_response
-#     track.edge.cypher_query_inline
-#
 
+# put unique constraint on property
 - name: "Put unique constraint on entity_name of Account vertex"
   platform42.neo4j.constraint:
     neo4j_uri: "{{ NEO4J_URI }}"
@@ -139,12 +132,38 @@ NEO4J_DATABASE: <project>|defaults to neo4j
     label: Account
     property: entity_name
     state: PRESENT
-  register: vertex_constraint
+  register: entity_name
+
+# put additional label Suspect on existing node with label Account
+- name: "create Suspect label on Account:A4"
+  platform42.neo4j.label:
+    neo4j_uri: "{{ NEO4J_URI }}"
+    database: "{{ NEO4J_DATABASE }}"
+    username: "{{ NEO4J_USERNAME }}"
+    password: "{{ NEO4J_PASSWORD }}"
+    base_label: Account
+    entity_name: A4
+    label: Suspect
+    state: PRESENT
+  register: suspect
+
 #
-# interesting variables to inspect
-#   <vertex_constraint>.<constraint>.<item>
-#     vertex_constraint.constraint.cypher_response
-#     vertex_constraint.constraint.cypher_query_inline
+# every module has identical response structure
+# registered variable consists of:
+#
+#   var-name.
+#     module-name.
+#       cypher_query        -> cypher query with bindings (no values)
+#       cypher_params       -> cypher values for bindings
+#       cypher_query_inline -> cypher query with values (for debugging)
+#       cypher_response     -> answer from Neo4j
+#       stats               -> impact of the module on Neo4j
+#
+#   e.g.:
+#         station.vertex.cypher_query
+#           track.edge.cypher_query
+#     entity_name.constraint.stats
+#         suspect.label.cypher_response
 #
 ```
 

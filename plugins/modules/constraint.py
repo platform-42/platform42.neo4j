@@ -5,7 +5,7 @@
     Filename: ./modules/constraint.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-27
-    Version: 2.3.0
+    Version: 2.4.0
     Description: 
         Ansible module to create graph relationship (edge)
 """
