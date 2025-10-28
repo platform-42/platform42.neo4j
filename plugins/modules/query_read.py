@@ -61,7 +61,7 @@ EXAMPLES = r'''
     database: "neo4j"
     username: "neo4j"
     password: "*****"
-    cypher_query: >
+    cypher_query: |
       MATCH (p:Person) 
       RETURN p;
 
@@ -72,7 +72,7 @@ EXAMPLES = r'''
     database: "neo4j"
     username: "neo4j"
     password: "*****"
-    cypher_query: > 
+    cypher_query: | 
       MATCH (p:Person {entity_name: $name}) 
       RETURN 
         p.entity_name AS name
