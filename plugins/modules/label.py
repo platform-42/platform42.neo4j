@@ -132,7 +132,7 @@ def main() -> None:
     cypher_params: Dict[str, Any]
     cypher_query_inline: str
     cypher_query, cypher_params, cypher_query_inline = label(
-        module.checkmode,
+        module.check_mode,
         module.params
     )
     try:
