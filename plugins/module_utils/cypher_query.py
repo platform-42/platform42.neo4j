@@ -36,17 +36,17 @@ class CypherQuery(StrEnum):
         RETURN 
             versions[0] AS version
         ;
-    """
+        """
     GRAPH_RESET = """
         MATCH (n) 
         DETACH DELETE n
         ;
-    """
+        """
     VERTEX_DEL = """
         MERGE (n:`{label}` {{ entity_name: $entity_name }})
         DETACH DELETE n
         ;
-    """
+        """
     VERTEX_ADD_UNIQUE = """
         MERGE (n:`{label}` {{ entity_name: $entity_name }})
         {set_clause} 
@@ -55,7 +55,7 @@ class CypherQuery(StrEnum):
             labels(n) AS labels, 
             n.entity_name AS entity_name
         ;
-    """
+        """
     VERTEX_ADD = """
         CREATE (n:`{label}` {{ entity_name: $entity_name }})
         {set_clause} 
@@ -64,21 +64,21 @@ class CypherQuery(StrEnum):
             labels(n) AS labels, 
             n.entity_name AS entity_name
         ;
-    """
+        """
     EDGE_DEL = """
         MATCH (a:`{label_from}` {{ entity_name: $entity_name_from }})
         MATCH (b:`{label_to}` {{ entity_name: $entity_name_to }})
         MERGE (a)-[r:`{relation_type}`]->(b)
         DELETE r
         ;
-    """
+        """
     EDGE_DEL_BI = """
         MATCH (a:`{label_from}` {{ entity_name: $entity_name_from }})
         MATCH (b:`{label_to}` {{ entity_name: $entity_name_to }})
         MERGE (a)-[r:`{relation_type}`]-(b)
         DELETE r
         ;
-    """
+        """
     EDGE_ADD = """
         MATCH (a:`{label_from}` {{ entity_name: $entity_name_from }})
         MATCH (b:`{label_to}` {{ entity_name: $entity_name_to }})
@@ -89,7 +89,7 @@ class CypherQuery(StrEnum):
             a.entity_name AS entity_name_from, 
             b.entity_name AS entity_name_to
         ;
-    """
+        """
     EDGE_ADD_BI = """
         MATCH (a:`{label_from}` {{ entity_name: $entity_name_from }})
         MATCH (b:`{label_to}` {{ entity_name: $entity_name_to }})
@@ -102,17 +102,31 @@ class CypherQuery(StrEnum):
             a.entity_name AS entity_name_from,
             b.entity_name AS entity_name_to
         ;
-    """
+        """
     CONSTRAINT_DEL = """
         DROP CONSTRAINT {constraint_name} IF EXISTS
         ;
-    """
+        """
     CONSTRAINT_ADD = """
         CREATE CONSTRAINT constraint_{label_id}_{property_id}_unique IF NOT EXISTS
         FOR (n:`{label}`)
         REQUIRE n.`{property}` IS UNIQUE
         ;
-    """
+        """
+    LABEL_DEL ="""
+        MATCH (n:`{base_label}` {entity_name: $entity_name})
+        REMOVE n:`{label_to_remove}`
+        RETURN 
+            labels(n) AS labels
+        ;    
+        """
+    LABEL_ADD ="""
+        MATCH (n:`{base_label}` {entity_name: $entity_name})
+        SET n:`{new_label}`
+        RETURN 
+            labels(n) AS labels
+        ;    
+        """
 
 def cypher_graph_reset(
     check_mode: bool
@@ -249,5 +263,30 @@ def cypher_constraint_add(
         property_id=property.lower(),
         label=label,
         property=property
+        )
+    )
+
+def cypher_label_del(
+    check_mode: bool,
+    base_label: str,
+    entity_name: str
+) -> str:
+    if check_mode:
+        return str(CypherQuery.SIMULATION.value)
+    return str(CypherQuery.LABEL_DEL.value.format(
+        base_label=base_label,
+        entity_name=entity_name
+        )
+    )
+
+def cypher_label_add(
+    check_mode: bool,
+    base_label: str,
+    entity_name: str,
+    label: str
+) -> str:
+    if check_mode:
+        return str(CypherQuery.SIMULATION.value)
+    return str(CypherQuery.LABEL_ADD.value.format(
         )
     )

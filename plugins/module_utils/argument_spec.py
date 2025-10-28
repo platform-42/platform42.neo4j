@@ -202,3 +202,40 @@ def argument_spec_edge() -> Dict[str, Any]:
             u_skel.YamlATTR.DEFAULT.value: u_skel.YamlState.PRESENT.value
         }
     }
+
+def argument_spec_label() -> Dict[str, Any]:
+    return {
+        u_skel.JsonTKN.NEO4J_URI.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: True
+        },
+        u_skel.JsonTKN.DATABASE.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: True
+        },
+        u_skel.JsonTKN.USERNAME.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: True
+        },
+        u_skel.JsonTKN.PASSWORD.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: True
+        },
+        u_skel.JsonTKN.BASE_LABEL.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: True
+        },
+        u_skel.JsonTKN.LABEL.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: True
+        },
+        u_skel.JsonTKN.ENTITY_NAME.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: True
+        },
+        u_skel.JsonTKN.STATE.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: False,
+            u_skel.YamlATTR.DEFAULT.value: u_skel.YamlState.PRESENT.value
+        }
+    }

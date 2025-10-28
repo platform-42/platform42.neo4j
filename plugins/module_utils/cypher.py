@@ -212,7 +212,7 @@ def edge_del(
         u_skel.JsonTKN.ENTITY_NAME_TO.value: entity_name_to
     }
     if bi_directional:
-        cypher_query = u_cyph_q.cypher_edge_del_bi(
+        cypher_query: str = u_cyph_q.cypher_edge_del_bi(
             check_mode=check_mode,
             label_from=normalised_label_from,
             label_to=normalised_label_to,
@@ -308,7 +308,8 @@ def query_read(
     cypher_params: Dict[str, Any] = {
         **normalised_parameters
     }
-    return query_build(query, cypher_params)
+    cypher_query: str = query
+    return query_build(cypher_query, cypher_params)
 
 #
 #   query_read_tx:
