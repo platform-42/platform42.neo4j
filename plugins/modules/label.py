@@ -70,13 +70,13 @@ def label(
     state: str = module_params[u_skel.JsonTKN.STATE.value]
     if u_skel.state_present(state):
         return u_cypher.label_add(
-            checkmode=check_mode,
+            check_mode=check_mode,
             base_label=base_label,
             label=label,
             entity_name=entity_name
             )
     return u_cypher.label_del(
-        checkmode=check_mode,
+        check_mode=check_mode,
         base_label=base_label,
         label=label,
         entity_name=entity_name
