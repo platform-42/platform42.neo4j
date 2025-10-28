@@ -75,15 +75,9 @@ NEO4J_DATABASE: <project>|defaults to neo4j
     username: "{{ NEO4J_USERNAME }}"
     password: "{{ NEO4J_PASSWORD }}"
   register: datahase
-#
-# interesting variables to inspect
-#   <database>.<graph_reset>.<item>
-#     database.graph_reset.cypher_response
-#     database.graph_reset.cypher_query_inline
-#
 
 # create node
-#   - unique determines whether duplicates should be seen as 1 or not
+#   - unique determines whether duplicates should be seen as 1 or not, default: TRUE
 - name: "create station Station:Pankow"
   platform42.neo4j.vertex:
     neo4j_uri: "{{ NEO4J_URI }}"
@@ -93,7 +87,7 @@ NEO4J_DATABASE: <project>|defaults to neo4j
     label: Station
     entity_name: "Pankow"
     state: PRESENT
-    unique: False | True (Default = True)
+    unique: True
   register: station
 
 # create relationship between 2 nodes
@@ -159,11 +153,15 @@ NEO4J_DATABASE: <project>|defaults to neo4j
 #       stats               -> impact of the module on Neo4j
 #
 #   e.g.:
-#         station.vertex.cypher_query
-#           track.edge.cypher_query
-#     entity_name.constraint.stats
-#         suspect.label.cypher_response
-#
+#    ----------------------------------------------
+#     <register>  . <module-name> . <field>
+#    ----------------------------------------------
+#     station     . vertex        . cypher_query
+#     track       . edge          . cypher_query
+#     entity_name . constraint    . stats
+#     suspect     . label         . cypher_response
+#    ----------------------------------------------
+
 ```
 
 ---
