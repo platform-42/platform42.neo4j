@@ -171,9 +171,9 @@ def label_add(
     cypher_params: Dict[str, Any] = {
         u_skel.JsonTKN.ENTITY_NAME.value: entity_name,
     }
-    cypher_query: str = u_cyph_q.cypher_label_del(
+    cypher_query: str = u_cyph_q.cypher_label_add(
         check_mode=check_mode,
-        base_label=base_label,
+        base_label=normalised_base_label,
         label_to_create=normalised_label
     )
     return query_build(cypher_query, cypher_params)
