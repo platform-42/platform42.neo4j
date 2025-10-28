@@ -169,7 +169,7 @@ def label_add(
 
     # cypher construction - values for bindings
     cypher_params: Dict[str, Any] = {
-        u_skel.JsonTKN.ENTITY_NAME.value: entity_name,
+        u_skel.JsonTKN.ENTITY_NAME.value: entity_name
     }
     cypher_query: str = u_cyph_q.cypher_label_add(
         check_mode=check_mode,
