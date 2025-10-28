@@ -45,7 +45,7 @@ notes:
 
 EXAMPLES = r'''
 # Create a WORKS_AT relationship between Alice and Acme Corp
-- name: Create edge between Person and Company
+- name: "Create edge between Person and Company"
   platform42.neo4j.edge:
     neo4j_uri: "neo4j://127.0.0.1:7687"
     database: "neo4j"
@@ -65,7 +65,7 @@ EXAMPLES = r'''
         type: int
 
 # Create a PURCHASED relationship without additional properties
-- name: Create PURCHASED edge
+- name: "Create PURCHASED edge"
   platform42.neo4j.edge:
     neo4j_uri: "neo4j://127.0.0.1:7687"
     database: "neo4j"

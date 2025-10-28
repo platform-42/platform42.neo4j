@@ -66,7 +66,7 @@ EXAMPLES = r'''
       RETURN p;
 
 # Read filtered data with parameters from Neo4j Aura
-- name: Find a specific person by name
+- name: "Find a specific person by name"
   platform42.neo4j.query_read:
     neo4j_uri: "neo4j+s://<AURA_INSTANCEID>.databases.neo4j.io"
     database: "neo4j"

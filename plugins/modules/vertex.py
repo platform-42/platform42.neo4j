@@ -42,7 +42,7 @@ notes:
 EXAMPLES = r'''
 
 # Create a Person vertex (label) with entity_name "Ada" from Neo4j localhost
-- name: create user, labelled as a "Person" Node
+- name: "Create user, labelled as a Person Node"
   platform42.neo4j.vertex:
     neo4j_uri: "neo4j://127.0.0.1:7687"
     database: "neo4j"
@@ -57,7 +57,7 @@ EXAMPLES = r'''
         type: int
 
 # Create a Product vertex (label) with entity_name "Widget-123" from Neo4j Aura
-- name: Create a product vertex
+- name: "Create a product vertex"
   platform42.neo4j.vertex:
     neo4j_uri: "neo4j+s://<AURA_INSTANCEID>.databases.neo4j.io"
     database: "neo4j"

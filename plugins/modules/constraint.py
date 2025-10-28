@@ -40,7 +40,7 @@ author:
 '''
 
 EXAMPLES = r'''
-- name: Ensure uniqueness constraint for User.entity_name
+- name: "Ensure uniqueness constraint for User.entity_name"
   platform42.neo4j.constraint:
     neo4j_uri: "{{ NEO4J_URI }}"
     database: "{{ NEO4J_DATABASE }}"
@@ -50,7 +50,7 @@ EXAMPLES = r'''
     property: entity_name
     state: PRESENT
 
-- name: Remove uniqueness constraint from Account.account_id
+- name: "Remove uniqueness constraint from Account.account_id"
   platform42.neo4j.constraint:
     neo4j_uri: "{{ NEO4J_URI }}"
     database: "{{ NEO4J_DATABASE }}"
