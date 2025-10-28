@@ -43,12 +43,12 @@ class CypherQuery(StrEnum):
         ;
         """
     VERTEX_DEL = """
-        MERGE (n:`{label}` {{ entity_name: $entity_name }})
+        MERGE (n:`{label}` {{entity_name: $entity_name}})
         DETACH DELETE n
         ;
         """
     VERTEX_ADD_UNIQUE = """
-        MERGE (n:`{label}` {{ entity_name: $entity_name }})
+        MERGE (n:`{label}` {{entity_name: $entity_name}})
         {set_clause} 
         RETURN 
             id(n) AS node_id, 
@@ -57,7 +57,7 @@ class CypherQuery(StrEnum):
         ;
         """
     VERTEX_ADD = """
-        CREATE (n:`{label}` {{ entity_name: $entity_name }})
+        CREATE (n:`{label}` {{entity_name: $entity_name}})
         {set_clause} 
         RETURN 
             id(n) AS node_id, 
@@ -66,22 +66,22 @@ class CypherQuery(StrEnum):
         ;
         """
     EDGE_DEL = """
-        MATCH (a:`{label_from}` {{ entity_name: $entity_name_from }})
-        MATCH (b:`{label_to}` {{ entity_name: $entity_name_to }})
+        MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
+        MATCH (b:`{label_to}` {{entity_name: $entity_name_to}})
         MERGE (a)-[r:`{relation_type}`]->(b)
         DELETE r
         ;
         """
     EDGE_DEL_BI = """
-        MATCH (a:`{label_from}` {{ entity_name: $entity_name_from }})
-        MATCH (b:`{label_to}` {{ entity_name: $entity_name_to }})
+        MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
+        MATCH (b:`{label_to}` {{entity_name: $entity_name_to}})
         MERGE (a)-[r:`{relation_type}`]-(b)
         DELETE r
         ;
         """
     EDGE_ADD = """
-        MATCH (a:`{label_from}` {{ entity_name: $entity_name_from }})
-        MATCH (b:`{label_to}` {{ entity_name: $entity_name_to }})
+        MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
+        MATCH (b:`{label_to}` {{entity_name: $entity_name_to}})
         MERGE (a)-[r:`{relation_type}`]->(b)
         {set_clause}
         RETURN 
@@ -91,8 +91,8 @@ class CypherQuery(StrEnum):
         ;
         """
     EDGE_ADD_BI = """
-        MATCH (a:`{label_from}` {{ entity_name: $entity_name_from }})
-        MATCH (b:`{label_to}` {{ entity_name: $entity_name_to }})
+        MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
+        MATCH (b:`{label_to}` {{entity_name: $entity_name_to}})
         MERGE (a)-[r1:`{relation_type}`]->(b)
         {set_clause_r1}
         MERGE (b)-[r2:`{relation_type}`]->(a)
@@ -114,14 +114,14 @@ class CypherQuery(StrEnum):
         ;
         """
     LABEL_DEL ="""
-        MATCH (n:`{base_label}` {entity_name: $entity_name})
+        MATCH (n:`{base_label}` {{entity_name: $entity_name}})
         REMOVE n:`{label_to_remove}`
         RETURN 
             labels(n) AS labels
         ;    
         """
     LABEL_ADD ="""
-        MATCH (n:`{base_label}` {entity_name: $entity_name})
+        MATCH (n:`{base_label}` {{entity_name: $entity_name}})
         SET n:`{label_to_create}`
         RETURN 
             labels(n) AS labels
