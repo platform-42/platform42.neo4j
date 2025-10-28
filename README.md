@@ -15,15 +15,14 @@ Ansible collection for managing **Neo4j graph databases**: create and update ver
 - **Query execution (`query_read` and `query_write` modules)**  
   Run read-only or write Cypher queries against the graph. Supports parameterized queries and returns JSON-serializable results including summary statistics.
 
-- **Database cleanup (`graph_reset` or custom cleanup scripts)**  
+- **Database cleanup (`graph_reset`)**  
   Easily remove nodes, relationships, or entire datasets by executing Cypher commands in an automated, repeatable manner.
 
 - **Constraint management (`constraint` module)**
   Define and enforce schema-level rules in the Neo4j database. Supports creating unique property constraints on nodes using Cypher CREATE CONSTRAINT … IF NOT EXISTS, ensuring data integrity and idempotent schema management.
 
 - **Label management (`label` module)**
-  Manage labels on existing Neo4j nodes declaratively through Ansible.
-  This module allows you to add or remove labels on nodes, supporting idempotent operations via Cypher SET n:Label and REMOVE n:Label.
+  Manage labels on existing Neo4j nodes declaratively through Ansible. This module allows you to add or remove labels on nodes, supporting idempotent operations via Cypher SET n:Label and REMOVE n:Label.
 
 - **Statistics and diagnostics**  
   Each module returns detailed execution summaries (nodes/relationships created, deleted, properties set, etc.), enabling auditability and observability in automation pipelines.
