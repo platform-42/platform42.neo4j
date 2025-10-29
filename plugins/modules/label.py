@@ -156,7 +156,7 @@ def main() -> None:
         u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
         u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: u_shared.flatten_query(cypher_query_inline),
         u_skel.JsonTKN.STATS.value: u_cypher.cypher_stats(summary),
-        u_skel.JsonTKN.CYPHER_RESPONSE.value: cypher_response
+        u_skel.JsonTKN.CYPHER_RESPONSE.value: u_shared.serialize_neo4j(cypher_response)
         }
     state: str = module.params[u_skel.JsonTKN.STATE.value]
     constraints_changed: int = summary.counters.constraints_added if u_skel.state_present(state) else summary.counters.constraints_removed

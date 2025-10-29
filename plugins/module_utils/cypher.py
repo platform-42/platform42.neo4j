@@ -289,7 +289,6 @@ def edge_del(
         )
     return query_build(cypher_query, cypher_params)
 
-
 #
 #   edge_add:
 #       creates (bi-directional) relationship via MERGE operation (idempotence)
@@ -347,12 +346,14 @@ def edge_add(
 
 #
 #   query_read:
-#       non destructive query. protected by session.execute_read()
+#       non destructive query. 
+#       protected by session.execute_read()
 #   notes:
 #       query_read is a difficult beast
-#       cypher is now defined outside the context of Ansible
-#       therefore we cannot apply enforcements like lowercase for keys
-#       In query_ready, query defines the “API contract” itself; no schema or object model exists outside the query.
+#       - cypher is now defined outside the context of Ansible
+#       - therefore we cannot apply enforcements like lowercase for keys
+#       - In query_ready, query defines the “API contract” itself; no schema or 
+#         object model exists outside the query. Therefore, no sanitising of parameters
 #
 #   returns:
 #       cypher_query -> cypher query with bindings
@@ -371,7 +372,7 @@ def query_read(
     # normalise
     normalised_parameters: Dict[str, Any] = {key: value for key, value in parameters.items()}
 #
-#   rejected - violation of the cypher contract
+#   rejected .lower() - violation of the cypher contract
 #   normalised_parameters: Dict[str, Any] = {key.lower(): value for key, value in parameters.items()}
 #
     # cypher construction - values for bindings

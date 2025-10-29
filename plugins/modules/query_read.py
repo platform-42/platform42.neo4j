@@ -131,7 +131,7 @@ def main() -> None:
         )
     try:
         with driver.session(database=db_database) as session:
-            data, summary = session.execute_read(u_cypher.query_read_tx, cypher_query, cypher_params)
+            cypher_response, summary = session.execute_read(u_cypher.query_read_tx, cypher_query, cypher_params)
     except Exception as e:
         diagnostics = {
             u_skel.JsonTKN.CYPHER_QUERY.value: u_shared.flatten_query(cypher_query),
@@ -147,7 +147,7 @@ def main() -> None:
         u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
         u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: u_shared.flatten_query(cypher_query_inline),
         u_skel.JsonTKN.STATS.value: u_cypher.cypher_stats(summary),
-        u_skel.JsonTKN.CYPHER_RESPONSE.value: u_shared.serialize_neo4j(data)
+        u_skel.JsonTKN.CYPHER_RESPONSE.value: u_shared.serialize_neo4j(cypher_response)
     }
     module.exit_json(**u_skel.ansible_exit(
         changed=False,

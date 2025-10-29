@@ -18,7 +18,7 @@ from . import skeleton as u_skel
 
 def serialize_neo4j(
     value
-) -> Any:
+):
     if isinstance(value, (DateTime, Date, Time)):
         return value.isoformat()
     elif isinstance(value, list):
