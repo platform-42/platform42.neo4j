@@ -13,7 +13,18 @@ from datetime import datetime
 import os
 import re
 
+from neo4j.time import DateTime, Date, Time
 from . import skeleton as u_skel
+
+def serialize_neo4j(value):
+    if isinstance(value, (DateTime, Date, Time)):
+        return value.isoformat()
+    elif isinstance(value, list):
+        return [serialize_neo4j(v) for v in value]
+    elif isinstance(value, dict):
+        return {k: serialize_neo4j(v) for k, v in value.items()}
+    else:
+        return value
 
 def parse_datetime(
     val: str
