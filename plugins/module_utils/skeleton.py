@@ -73,7 +73,7 @@ class JsonTKN(StrEnum):
     STATS = "stats"
     TO = "to"
     TYPE = "type"
-    UNIQUE = "unique"
+    SINGLETON = "singleton"
     USERNAME = "username"
     VALUE = "value"
 

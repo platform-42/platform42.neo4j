@@ -51,6 +51,7 @@ EXAMPLES = r'''
     label: "Person"
     state: PRESENT
     entity_name: "Ada"
+    singleton: True
     properties:
       age: 
         value: 30
@@ -66,6 +67,7 @@ EXAMPLES = r'''
     label: "Product"
     state: PRESENT
     entity_name: "Widget-123"
+    singleton: True
     properties:
       sku: 
         value: "widget-123"
@@ -83,11 +85,11 @@ def vertex(
     label: str = module_params[u_skel.JsonTKN.LABEL.value]
     entity_name: str =module_params[u_skel.JsonTKN.ENTITY_NAME.value]
     state: str = module_params[u_skel.JsonTKN.STATE.value]
-    unique: bool = module_params[u_skel.JsonTKN.UNIQUE.value]
+    singleton: bool = module_params[u_skel.JsonTKN.SINGLETON.value]
     if u_skel.state_present(state):
         return u_cypher.vertex_add(
             check_mode,
-            unique,
+            singleton,
             label,
             entity_name,
             properties

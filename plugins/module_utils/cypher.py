@@ -217,7 +217,7 @@ def vertex_del(
 #
 def vertex_add(
     check_mode: bool,
-    unique: bool,
+    singleton: bool,
     label: str,
     entity_name: str,
     properties: Optional[Dict[str, Any]] = None,
@@ -238,7 +238,7 @@ def vertex_add(
     }
     cypher_query: str = u_cyph_q.cypher_vertex_add(
         check_mode=check_mode,
-        unique=unique,
+        singleton=singleton,
         label=normalised_label,
         properties=normalised_properties
     )

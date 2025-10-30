@@ -47,7 +47,7 @@ class CypherQuery(StrEnum):
         DETACH DELETE n
         ;
         """
-    VERTEX_ADD_UNIQUE = """
+    VERTEX_ADD_SINGLETON = """
         MERGE (n:`{label}` {{entity_name: $entity_name}})
         {set_clause} 
         RETURN 
@@ -148,15 +148,15 @@ def cypher_vertex_del(
 
 def cypher_vertex_add(
     check_mode: bool,
-    unique: bool,
+    singleton: bool,
     label: str,
     properties: Dict[str, Any]
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
     set_clause_n = f"SET n += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
-    if unique:
-        return str(CypherQuery.VERTEX_ADD_UNIQUE.value.format(
+    if singleton:
+        return str(CypherQuery.VERTEX_ADD_SINGLETON.value.format(
             label=label,
             set_clause=set_clause_n
             )
