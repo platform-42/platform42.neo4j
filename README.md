@@ -46,10 +46,10 @@ pip3 install regex
 ansible-galaxy collection install git@github.com:platform-42/platform42.neo4j.git
 ```
 
-The last step is not mandatory. 
-It is to provide ansible-doc access to the document pages.
-The playbooks that utilise this collection, always install it before usage.
+For usage from Ansible playbooks, please download our sample U-bahn project
+`git@github.com:platform-42/ansbl-play-u_bahn-sample.git`
 
+---
 
 ## Usage
 
