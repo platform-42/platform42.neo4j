@@ -43,7 +43,7 @@ pip3 install neo4j
 pip3 install regex
 
 # Install collection from Ansible Galaxy
-ansible-galaxy collection install platform42.neo4j
+ansible-galaxy collection install git@github.com:platform-42/platform42.neo4j.git
 ```
 
 The last step is not mandatory. 
