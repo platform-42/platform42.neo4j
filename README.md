@@ -87,7 +87,7 @@ NEO4J_DATABASE: <project>|defaults to neo4j
     label: Station
     entity_name: "Pankow"
     state: PRESENT
-    unique: True
+    singleton: True
   register: station
 
 # create relationship between 2 nodes
@@ -184,7 +184,7 @@ properties:
 ```
 
 As a consequence a property must implement both `type` and `value`
-`type` can be `str|int|float|bool|datetime`
+`type` can be `str|int|float|bool|datetime`. More complex types are not supported (yet)
 
 ```yaml
 #
