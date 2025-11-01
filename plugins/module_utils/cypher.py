@@ -260,7 +260,7 @@ def edge_del(
     entity_name_from: str,
     label_to: str,
     entity_name_to: str,
-    bi_directional: bool = False
+    bi_directional: Optional[bool] = False
 ) -> Tuple[str, Dict[str, Any], str]:
 
     # normalise
@@ -307,7 +307,7 @@ def edge_add(
     label_to: str,
     entity_name_to: str,
     properties: Optional[Dict[str, Any]] = None,
-    bi_directional: bool = False
+    bi_directional: Optional[bool] = False,
 ) -> Tuple[str, Dict[str, Any], str]:
 
     # optionals
