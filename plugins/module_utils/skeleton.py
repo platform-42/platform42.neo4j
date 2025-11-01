@@ -10,6 +10,8 @@
 from typing import Dict, Any
 from strenum import StrEnum
 
+import traceback
+
 class YamlATTR(StrEnum):
     CHANGED = "changed"
     DEFAULT = "default"
@@ -31,6 +33,7 @@ class YamlState(StrEnum):
     PRESENT = "present"
 
 class JsonTKN(StrEnum):
+    ARGS = "args"
     BASE_LABEL = "base_label"
     BI_DIRECTIONAL = "bi_directional"
     CHANGED = "changed"
@@ -52,6 +55,7 @@ class JsonTKN(StrEnum):
     LABELS = "labels"
     LABELS_ADDED = "labels_added"
     LABELS_REMOVED = "labels_removed"
+    MODULE = "module"
     MSG = "msg"
     NEO4J_URI = "neo4j_uri"
     NODES_CREATED = "nodes_created"
@@ -66,6 +70,7 @@ class JsonTKN(StrEnum):
     QUERY_TYPE = "query_type"
     RELATIONSHIPS_CREATED = "relationships_created"
     RELATIONSHIPS_DELETED = "relationships_deleted"
+    REPR = "repr"
     RESULT = "result"
     SINGLETON = "singleton"
     STATE = "state"
@@ -80,6 +85,24 @@ def state_present(
     state: str
 ) -> bool:
     return state.lower() == str(YamlState.PRESENT.value)
+
+def ansible_diagnostics(
+    e: BaseException, 
+    max_trace_len: int = 5000
+) -> Dict[str, Any]:
+    tb: str = traceback.format_exc()
+    if len(tb) > max_trace_len:
+        tb = tb[:max_trace_len] + "... [truncated]"
+
+    return {
+        JsonTKN.TYPE.value: type(e).__name__,
+        JsonTKN.MODULE.value: type(e).__module__,
+        JsonTKN.ERROR_MSG.value: str(e),
+        JsonTKN.REPR.value: repr(e),
+        JsonTKN.ARGS.value: list(e.args)
+#        "traceback": tb,
+    }
+
 
 def ansible_fail(
     diagnostics: Dict[str, Any]
