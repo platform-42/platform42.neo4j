@@ -43,7 +43,7 @@ class CypherQuery(StrEnum):
         ;
         """
     VERTEX_DEL = """
-        MERGE (n:`{label}` {{entity_name: $entity_name}})
+        MATCH (n:`{label}` {{entity_name: $entity_name}})
         DETACH DELETE n
         ;
         """
@@ -68,14 +68,14 @@ class CypherQuery(StrEnum):
     EDGE_DEL = """
         MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
         MATCH (b:`{label_to}` {{entity_name: $entity_name_to}})
-        MERGE (a)-[r:`{relation_type}`]->(b)
+        MATCH (a)-[r:`{relation_type}`]->(b)
         DELETE r
         ;
         """
     EDGE_DEL_BI = """
         MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
         MATCH (b:`{label_to}` {{entity_name: $entity_name_to}})
-        MERGE (a)-[r:`{relation_type}`]-(b)
+        MATCH (a)-[r:`{relation_type}`]-(b)
         DELETE r
         ;
         """
