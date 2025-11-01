@@ -129,20 +129,21 @@ def main() -> None:
         query,
         parameters
         )
+    payload: Dict[str, Any]
     try:
         with driver.session(database=db_database) as session:
             cypher_response, summary = session.execute_read(u_cypher.query_read_tx, cypher_query, cypher_params)
     except Exception as e:
-        diagnostics = {
+        payload = {
             u_skel.JsonTKN.CYPHER_QUERY.value: u_shared.flatten_query(cypher_query),
             u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
             u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: u_shared.flatten_query(cypher_query_inline),
-            u_skel.JsonTKN.ERROR_MSG.value: repr(e)
+            u_skel.JsonTKN.DIAGNOSTICS.value: u_skel.ansible_diagnostics(e)
         }
-        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+        module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
     finally:
         driver.close()
-    payload: Dict[str, Any] = {
+    payload = {
         u_skel.JsonTKN.CYPHER_QUERY.value: u_shared.flatten_query(cypher_query),
         u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
         u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: u_shared.flatten_query(cypher_query_inline),
