@@ -47,9 +47,9 @@ def validate_optionals(
     try:
         casted_properties = type_casted_properties(properties)
     except (KeyError, ValueError) as e:
-        return False, {}, { u_skel.JsonTKN.ERROR_MSG.value: repr(e) }
+        return False, {}, u_skel.ansible_diagnostics(e)
     except Exception as e:
-        return False, {}, { u_skel.JsonTKN.ERROR_MSG.value: repr(e) }
+        return False, {}, u_skel.ansible_diagnostics(e)
     return True, casted_properties, {}
 
 # Mapping of type names to conversion functions
