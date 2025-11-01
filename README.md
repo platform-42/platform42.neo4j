@@ -2,11 +2,12 @@
 
 Ansible collection for managing **Neo4j graph databases**: create and update vertices (nodes), edges (relationships), constraints, execute queries, and clean up the database. This collection provides a declarative, idempotent interface to Neo4j, allowing automation of graph data management in a consistent and reliable way.
 
-## release 2.6.0 notes
-- changed unique vertex to concept of singleton. Singleton pattern is vertex default. It means: it always try to merge duplicate vertices.
-In our implementation, `entity_name` is used as merge key.
-- bugfix: Neo4j responses could contain Neo4j datatypes that were not serializable to JSON. Implemented serialization for neo4j.time Date, Time and DateTime objects
-- added requirements.txt to identify Python dependencies
+## release 2.7.0 notes
+
+Bugfixes:
+- vertex delete pattern incorrect
+- edge delete pattern incorrect
+- edge bi-directional delete pattern incorrect
 
 ---
 
