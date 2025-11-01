@@ -25,7 +25,7 @@ from strenum import StrEnum
 #       set_clause_r -> relationships (edges)
 #       set_clause_n -> nodes (vertices)
 #       amount: 5000 -> binding -> {amount: $amount}
-#       cypher maps values to binding at query execution time (session.run)
+#       cypher, maps values to binding at query execution time (session.run)
 #   - check_mode implements Ansible check_mode
 #       check_mode validates all YAML-parameters for correctness
 #       check_mode connects to Neo4j and returns version if connected
