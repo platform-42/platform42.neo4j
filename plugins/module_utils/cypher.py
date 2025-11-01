@@ -273,15 +273,16 @@ def edge_del(
         u_skel.JsonTKN.ENTITY_NAME_FROM.value: entity_name_from,
         u_skel.JsonTKN.ENTITY_NAME_TO.value: entity_name_to
     }
+    cypher_query: str
     if bi_directional:
-        cypher_query: str = u_cyph_q.cypher_edge_del_bi(
+        cypher_query = u_cyph_q.cypher_edge_del_bi(
             check_mode=check_mode,
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type
         )
     else:
-        cypher_query: str = u_cyph_q.cypher_edge_del(
+        cypher_query = u_cyph_q.cypher_edge_del(
             check_mode=check_mode,
             label_from=normalised_label_from,
             label_to=normalised_label_to,
@@ -325,8 +326,9 @@ def edge_add(
         u_skel.JsonTKN.ENTITY_NAME_TO.value: entity_name_to,
         **normalised_properties
     }
+    cypher_query: str
     if bi_directional:
-        cypher_query: str = u_cyph_q.cypher_edge_add_bi(
+        cypher_query = u_cyph_q.cypher_edge_add_bi(
             check_mode=check_mode,
             label_from=normalised_label_from,
             label_to=normalised_label_to,
@@ -334,7 +336,7 @@ def edge_add(
             properties=normalised_properties
         )
     else:
-        cypher_query: str = u_cyph_q.cypher_edge_add(
+        cypher_query = u_cyph_q.cypher_edge_add(
             check_mode=check_mode,
             label_from=normalised_label_from,
             label_to=normalised_label_to,
