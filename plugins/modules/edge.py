@@ -93,6 +93,7 @@ def edge(
     entity_name_to: str = module_params[u_skel.JsonTKN.TO.value][u_skel.JsonTKN.ENTITY_NAME.value]
     bi_directional: bool = module_params[u_skel.JsonTKN.BI_DIRECTIONAL.value]
     state: str = module_params[u_skel.JsonTKN.STATE.value]
+    unique_key: str = module_params[u_skel.JsonTKN.UNIQUE_KEY.value]
     if u_skel.state_present(state):
         return u_cypher.edge_add(
             check_mode,
@@ -102,7 +103,8 @@ def edge(
             label_to,
             entity_name_to,
             properties,
-            bi_directional
+            bi_directional,
+            unique_key
         )
     return u_cypher.edge_del(
         check_mode,
@@ -111,7 +113,8 @@ def edge(
         entity_name_from,
         label_to,
         entity_name_to,
-        bi_directional
+        bi_directional,
+        unique_key
     )
 
 def validate_cypher_inputs(

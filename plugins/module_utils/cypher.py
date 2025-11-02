@@ -260,8 +260,11 @@ def edge_del(
     entity_name_from: str,
     label_to: str,
     entity_name_to: str,
-    bi_directional: Optional[bool] = False
+    bi_directional: Optional[bool] = False,
+    unique_key: Optional[str] = None
 ) -> Tuple[str, Dict[str, Any], str]:
+    # optionals
+    has_relation_predicate: bool = False if unique_key is None else True
 
     # normalise
     normalised_relation_type: str = relation_type.upper()
@@ -280,7 +283,7 @@ def edge_del(
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
-            has_relation_predicate=True
+            has_relation_predicate=has_relation_predicate
         )
     else:
         cypher_query = u_cyph_q.cypher_edge_del(
@@ -288,7 +291,7 @@ def edge_del(
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
-            has_relation_predicate=True
+            has_relation_predicate=has_relation_predicate
         )
     return query_build(cypher_query, cypher_params)
 
@@ -310,11 +313,12 @@ def edge_add(
     entity_name_to: str,
     properties: Optional[Dict[str, Any]] = None,
     bi_directional: Optional[bool] = False,
+    unique_key: Optional[str] = None
 ) -> Tuple[str, Dict[str, Any], str]:
-
     # optionals
     if properties is None:
         properties = {}
+    has_relation_predicate: bool = False if unique_key is None else True
 
     # normalise
     normalised_relation_type: str = relation_type.upper()
@@ -335,7 +339,7 @@ def edge_add(
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
-            has_relation_predicate=True,
+            has_relation_predicate=has_relation_predicate,
             properties=normalised_properties
         )
     else:
@@ -344,7 +348,7 @@ def edge_add(
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
-            has_relation_predicate=True,
+            has_relation_predicate=has_relation_predicate,
             properties=normalised_properties
         )
     return query_build(cypher_query, cypher_params)
@@ -370,7 +374,6 @@ def query_read(
     query: str,
     parameters: Optional[Dict[str, Any]] = None
 ) -> Tuple[str, Dict[str, Any], str]:
-
     # optionals
     if parameters is None:
         parameters = {}
