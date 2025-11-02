@@ -30,6 +30,13 @@ from strenum import StrEnum
 #       check_mode validates all YAML-parameters for correctness
 #       check_mode connects to Neo4j and returns version if connected
 #
+
+class RelationType(StrEnum):
+    NODE = "n"
+    RELATION = "r"
+    RELATION_BI_1 = "r1"
+    RELATION_BI_2 = "r2"
+
 class CypherQuery(StrEnum):
     SIMULATION = """
         CALL dbms.components() YIELD versions 
@@ -127,6 +134,12 @@ class CypherQuery(StrEnum):
             labels(n) AS labels
         ;    
         """
+    
+def set_clause(
+    relation_type: str,
+    properties: Dict[str, Any]
+) -> str:
+    return f"SET {relation_type} += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
 
 def cypher_graph_reset(
     check_mode: bool
@@ -154,16 +167,15 @@ def cypher_vertex_add(
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
-    set_clause_n = f"SET n += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
     if singleton:
         return str(CypherQuery.VERTEX_ADD_SINGLETON.value.format(
             label=label,
-            set_clause=set_clause_n
+            set_clause=set_clause(RelationType.NODE.value, properties)
             )
         )
     return str(CypherQuery.VERTEX_ADD.value.format(
         label=label,
-        set_clause=set_clause_n
+        set_clause=set_clause(RelationType.NODE.value, properties)
         )
     )
 
@@ -171,10 +183,12 @@ def cypher_edge_del(
     check_mode: bool,
     label_from: str,
     label_to: str,
-    relation_type: str
+    relation_type: str,
+    has_relation_predicate: bool
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
+    set_relation_predicate: str = f"" if has_relation_predicate else ""
     return str(CypherQuery.EDGE_DEL.value.format(
         label_from=label_from,
         label_to=label_to,
@@ -186,10 +200,12 @@ def cypher_edge_del_bi(
     check_mode: bool,
     label_from: str,
     label_to: str,
-    relation_type: str
+    relation_type: str,
+    has_relation_predicate: bool
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
+    set_relation_predicate: str = f"" if has_relation_predicate else ""
     return str(CypherQuery.EDGE_DEL_BI.value.format(
         label_from=label_from,
         label_to=label_to,
@@ -202,15 +218,16 @@ def cypher_edge_add(
     label_from: str,
     label_to: str,
     relation_type: str,
+    has_relation_predicate: bool,
     properties: Dict[str, Any]
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
-    set_clause_r = f"SET r += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
+    set_relation_predicate: str = f"" if has_relation_predicate else ""
     return str(CypherQuery.EDGE_ADD.value.format(
         label_from=label_from,
         label_to=label_to,
-        set_clause=set_clause_r,
+        set_clause=set_clause(RelationType.RELATION.value, properties)
         relation_type=relation_type
         )
     )
@@ -220,18 +237,17 @@ def cypher_edge_add_bi(
     label_from: str,
     label_to: str,
     relation_type: str,
+    has_relation_predicate: bool,
     properties: Dict[str, Any]
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
-    set_clause_r1 = f"SET r1 += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
-    set_clause_r2 = f"SET r2 += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
     return str(CypherQuery.EDGE_ADD_BI.value.format(
         label_from=label_from,
         label_to=label_to,
         relation_type=relation_type,
-        set_clause_r1=set_clause_r1,
-        set_clause_r2=set_clause_r2
+        set_clause_r1=set_clause(RelationType.RELATION_BI_1.value, properties),
+        set_clause_r2=set_clause(RelationType.RELATION_BI_2.value, properties)
         )
     )
 

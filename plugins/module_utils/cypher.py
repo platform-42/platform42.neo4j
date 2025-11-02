@@ -279,14 +279,16 @@ def edge_del(
             check_mode=check_mode,
             label_from=normalised_label_from,
             label_to=normalised_label_to,
-            relation_type=normalised_relation_type
+            relation_type=normalised_relation_type,
+            has_relation_predicate=True
         )
     else:
         cypher_query = u_cyph_q.cypher_edge_del(
             check_mode=check_mode,
             label_from=normalised_label_from,
             label_to=normalised_label_to,
-            relation_type=normalised_relation_type
+            relation_type=normalised_relation_type,
+            has_relation_predicate=True
         )
     return query_build(cypher_query, cypher_params)
 
@@ -333,6 +335,7 @@ def edge_add(
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
+            has_relation_predicate=True,
             properties=normalised_properties
         )
     else:
@@ -341,6 +344,7 @@ def edge_add(
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
+            has_relation_predicate=True,
             properties=normalised_properties
         )
     return query_build(cypher_query, cypher_params)
