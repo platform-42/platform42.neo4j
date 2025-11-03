@@ -7,7 +7,7 @@
     Description: 
         Cypher queries - returns string with bindings
 """
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from strenum import StrEnum
 
 #
@@ -75,14 +75,14 @@ class CypherQuery(StrEnum):
     EDGE_DEL = """
         MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
         MATCH (b:`{label_to}` {{entity_name: $entity_name_to}})
-        MATCH (a)-[r:`{relation_type}`]->(b)
+        MATCH (a)-[r:`{relation_type}` {relation_predicate}]->(b)
         DELETE r
         ;
         """
     EDGE_DEL_BI = """
         MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
         MATCH (b:`{label_to}` {{entity_name: $entity_name_to}})
-        MATCH (a)-[r:`{relation_type}`]-(b)
+        MATCH (a)-[r:`{relation_type}` {relation_predicate}]-(b)
         DELETE r
         ;
         """
@@ -141,6 +141,12 @@ def set_clause(
 ) -> str:
     return f"SET {relation_type} += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
 
+def set_relation_predicate(
+    has_relation_predicate: bool,
+    unique_key: Optional[str]
+) -> str:
+    return f" {{ {unique_key}: $unique_key_value }}" if has_relation_predicate else ""
+
 def cypher_graph_reset(
     check_mode: bool
 ) -> str:
@@ -188,11 +194,11 @@ def cypher_edge_del(
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
-    set_relation_predicate: str = f"" if has_relation_predicate else ""
     return str(CypherQuery.EDGE_DEL.value.format(
         label_from=label_from,
         label_to=label_to,
-        relation_type=relation_type
+        relation_type=relation_type,
+        relation_predicate=set_relation_predicate(has_relation_predicate)
         )
     )
 
@@ -205,11 +211,11 @@ def cypher_edge_del_bi(
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
-    set_relation_predicate: str = f"" if has_relation_predicate else ""
     return str(CypherQuery.EDGE_DEL_BI.value.format(
         label_from=label_from,
         label_to=label_to,
-        relation_type=relation_type
+        relation_type=relation_type,
+        relation_predicate=set_relation_predicate(has_relation_predicate)
         )
     )
 
