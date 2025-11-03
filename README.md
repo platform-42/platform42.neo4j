@@ -5,14 +5,12 @@ Ansible collection for managing **Neo4j graph databases**: create and update ver
 ## release 2.8.0 notes
 - Implemented property driven relationships.
 
-A relationship is defined by a path between 2 nodes (n)-[r]->(n).
-In most cases, merging identical relationships makes sense (e.g. routeplanners)
-With moneylaundering concepts, a TRANSACTION can be a relationship that mandates "duplicates". In those cases, a property associated with the relationship can be designated as the defining unique key. 
-With transactions, a transaction_timestamp would make sense as a unique_key.
+A relationship is defined as a path between 2 nodes (n)-[r]->(n).
+In most cases, merging identical relationships makes sense.
+With moneylaundering concepts, a TRANSACTION is a relationship that mandates "duplicates". 
+For those cases, a relationship property can be designated as the defining unique key. 
 
-In the example below, properties are attributes of a relationship. Amount an transaction_date are possible candidates to define uniqueness of the relationship.
-
-Thus:
+Consider this edge definition (relationship):
 ```yaml
 - name: "create TRANSACTION relationship
   platform42.neo4j.edge:
@@ -36,12 +34,17 @@ Thus:
         type: datetime
     state: PRESENT
     unique_key: transction_date
-  register: track
+  register: transaction
 ```
-Will create an edge like:
+
+In `amount` and `transaction_date` are properties of `TRANSACTION`.
+If `transaction_date` is designated as `unique_key`, it will internally create an edge with `transaction_date` as unique identifier.
+
+```text
 MATCH (a:`Account` {entity_name: "IBAN_1"})
 MATCH (b:`Account` {entity_name: "IBAN_2"})
 MERGE (a)-[r:`TRANSACTION` {transction_date: "2025-10-31T15:00:00.000" }]->(b)
+```
 
 ---
 
