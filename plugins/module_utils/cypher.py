@@ -263,8 +263,6 @@ def edge_del(
     bi_directional: Optional[bool] = False,
     unique_key: Optional[str] = None
 ) -> Tuple[str, Dict[str, Any], str]:
-    # optionals
-    has_relation_predicate: bool = False if unique_key is None else True
 
     # normalise
     normalised_relation_type: str = relation_type.upper()
@@ -318,7 +316,6 @@ def edge_add(
     # optionals
     if properties is None:
         properties = {}
-    has_relation_predicate: bool = False if unique_key is None else True
 
     # normalise
     normalised_relation_type: str = relation_type.upper()
@@ -339,7 +336,6 @@ def edge_add(
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
-            has_relation_predicate=has_relation_predicate,
             properties=normalised_properties,
             unique_key="something"
         )
@@ -349,7 +345,6 @@ def edge_add(
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
-            has_relation_predicate=has_relation_predicate,
             properties=normalised_properties,
             unique_key="something"
         )
