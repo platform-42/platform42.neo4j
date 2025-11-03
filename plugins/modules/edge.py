@@ -159,7 +159,7 @@ def validate_cypher_inputs(
         return False, diagnostics
 
     # validate edge properties against injection via JSON-key
-    properties: List[Dict[str, Any]] = module_params[u_skel.JsonTKN.PROPERTIES.value]
+    properties: Dict[str, Any] = module_params[u_skel.JsonTKN.PROPERTIES.value]
     for key in properties.keys():
         result, diagnostics = u_schema.validate_pattern(
             u_schema.SchemaProperties.PROPERTY_KEYS,
@@ -179,10 +179,10 @@ def validate_cypher_inputs(
             return False, diagnostics
 
     # validate unique key against set of property keys
-    normalized_property_keys = [key.strip().lower() for key in properties.keys()]
-    if unique_key.strip().lower() not in normalized_property_keys:
-        diagnostics = f"unique_key '{unique_key}' not found in properties. Available keys: {list(properties.keys())}"
-        return False, diagnostics
+        normalized_property_keys = [key.strip().lower() for key in properties.keys()]
+        if unique_key.strip().lower() not in normalized_property_keys:
+            diagnostics = {u_skel.JsonTKN.ERROR_MSG: f"unique_key '{unique_key}' not found in properties"}
+            return False, diagnostics
     return True, {}
 
 def main() -> None:
