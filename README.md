@@ -12,7 +12,7 @@ For those cases, a relationship property can be designated as the defining uniqu
 
 Consider this edge definition (relationship):
 ```yaml
-- name: "create TRANSACTION relationship
+- name: "create TRANSACTION relationship"
   platform42.neo4j.edge:
     neo4j_uri: "{{ NEO4J_URI }}"
     database: "{{ NEO4J_DATABASE }}"
