@@ -281,7 +281,7 @@ def edge_del(
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
-            unique_key="something"
+            unique_key=unique_key
         )
     else:
         cypher_query = u_cyph_q.cypher_edge_del(
@@ -289,7 +289,7 @@ def edge_del(
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
-            unique_key="something"
+            unique_key=unique_key
         )
     return query_build(cypher_query, cypher_params)
 
@@ -337,7 +337,7 @@ def edge_add(
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
             properties=normalised_properties,
-            unique_key="something"
+            unique_key=unique_key
         )
     else:
         cypher_query = u_cyph_q.cypher_edge_add(
@@ -346,7 +346,7 @@ def edge_add(
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
             properties=normalised_properties,
-            unique_key="something"
+            unique_key=unique_key
         )
     return query_build(cypher_query, cypher_params)
 
