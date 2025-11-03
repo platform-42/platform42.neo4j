@@ -166,12 +166,13 @@ def validate_cypher_inputs(
         )
         if not result:
             return False, diagnostics
-    result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.PROPERTY,
-        module_params[u_skel.JsonTKN.UNIQUE_KEY.value]
-        )
-    if not result:
-        return False, diagnostics
+    if module_params[u_skel.JsonTKN.UNIQUE_KEY.value]:
+        result, diagnostics = u_schema.validate_pattern(
+            u_schema.SchemaProperties.PROPERTY,
+            module_params[u_skel.JsonTKN.UNIQUE_KEY.value]
+            )
+        if not result:
+            return False, diagnostics
     return True, {}
 
 def main() -> None:
