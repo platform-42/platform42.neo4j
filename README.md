@@ -3,11 +3,45 @@
 Ansible collection for managing **Neo4j graph databases**: create and update vertices (nodes), edges (relationships), constraints, execute queries, and clean up the database. This collection provides a declarative, idempotent interface to Neo4j, allowing automation of graph data management in a consistent and reliable way.
 
 ## release 2.8.0 notes
+- Implemented property driven relationships.
 
-Bugfixes:
-- vertex delete pattern incorrect
-- edge delete pattern incorrect
-- edge bi-directional delete pattern incorrect
+A relationship is defined by a path between 2 nodes (n)-[r]->(n).
+In most cases, merging identical relationships makes sense (e.g. routeplanners)
+With moneylaundering concepts, a TRANSACTION can be a relationship that mandates "duplicates". In those cases, a property associated with the relationship can be designated as the defining unique key. 
+With transactions, a transaction_timestamp would make sense as a unique_key.
+
+In the example below, properties are attributes of a relationship. Amount an transaction_date are possible candidates to define uniqueness of the relationship.
+
+Thus:
+```yaml
+- name: "create TRANSACTION relationship
+  platform42.neo4j.edge:
+    neo4j_uri: "{{ NEO4J_URI }}"
+    database: "{{ NEO4J_DATABASE }}"
+    username: "{{ NEO4J_USERNAME }}"
+    password: "{{ NEO4J_PASSWORD }}"
+    type: TRANSACTION
+    from:
+      label: Account
+      entity_name: IBAN_1
+    to:
+      label: Account
+      entity_name: IBAN_2
+    properties:
+      amount: 
+        value: 1000
+        type: float
+      transaction_date: 
+        value: 2025-10-31T15:00:00.000
+        type: datetime
+    state: PRESENT
+    unique_key: transction_date
+  register: track
+```
+Will create an edge like:
+MATCH (a:`Account` {entity_name: "IBAN_1"})
+MATCH (b:`Account` {entity_name: "IBAN_2"})
+MERGE (a)-[r:`TRANSACTION` {transction_date: "2025-10-31T15:00:00.000" }]->(b)
 
 ---
 
