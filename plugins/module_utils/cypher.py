@@ -268,6 +268,9 @@ def edge_del(
     normalised_relation_type: str = relation_type.upper()
     normalised_label_from: str = label_from.capitalize()
     normalised_label_to: str = label_to.capitalize()
+    normalised_unique_key: str = None
+    if unique_key:
+        normalised_unique_key = unique_key.lower()
 
     # cypher construction - values for bindings
     cypher_params: Dict[str, Any] = {
@@ -281,7 +284,7 @@ def edge_del(
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
-            unique_key=unique_key
+            unique_key=normalised_unique_key
         )
     else:
         cypher_query = u_cyph_q.cypher_edge_del(
@@ -289,7 +292,7 @@ def edge_del(
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
-            unique_key=unique_key
+            unique_key=normalised_unique_key
         )
     return query_build(cypher_query, cypher_params)
 
@@ -322,6 +325,9 @@ def edge_add(
     normalised_label_from: str = label_from.capitalize()
     normalised_label_to: str = label_to.capitalize()
     normalised_properties: Dict[str, Any] = {key.lower(): value for key, value in properties.items()}
+    normalised_unique_key: str = None
+    if unique_key:
+        normalised_unique_key = unique_key.lower()
 
     # cypher construction - values for bindings
     cypher_params: Dict[str, Any] = {
@@ -337,7 +343,7 @@ def edge_add(
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
             properties=normalised_properties,
-            unique_key=unique_key
+            unique_key=normalised_unique_key
         )
     else:
         cypher_query = u_cyph_q.cypher_edge_add(
@@ -346,7 +352,7 @@ def edge_add(
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
             properties=normalised_properties,
-            unique_key=unique_key
+            unique_key=normalised_unique_key
         )
     return query_build(cypher_query, cypher_params)
 

@@ -146,7 +146,7 @@ def set_relation_predicate(
 ) -> str:
     if unique_key is None:
         return f""
-    return f" {{ {unique_key}: $unique_key_value }}" if unique_key else ""
+    return f" {{ {unique_key}: ${unique_key} }}" if unique_key else ""
 
 def cypher_graph_reset(
     check_mode: bool
