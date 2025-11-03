@@ -89,7 +89,7 @@ class CypherQuery(StrEnum):
     EDGE_ADD = """
         MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
         MATCH (b:`{label_to}` {{entity_name: $entity_name_to}})
-        MERGE (a)-[r:`{relation_type}`]->(b)
+        MERGE (a)-[r:`{relation_type}` {relation_predicate}]->(b)
         {set_clause}
         RETURN 
             type(r) AS relation_type,
@@ -100,9 +100,9 @@ class CypherQuery(StrEnum):
     EDGE_ADD_BI = """
         MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
         MATCH (b:`{label_to}` {{entity_name: $entity_name_to}})
-        MERGE (a)-[r1:`{relation_type}`]->(b)
+        MERGE (a)-[r1:`{relation_type}` {relation_predicate}]->(b)
         {set_clause_r1}
-        MERGE (b)-[r2:`{relation_type}`]->(a)
+        MERGE (b)-[r2:`{relation_type}` {relation_predicate}]->(a)
         {set_clause_r2}
         RETURN  
             type(r1) AS relation_type,
@@ -142,10 +142,9 @@ def set_clause(
     return f"SET {relation_type} += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
 
 def set_relation_predicate(
-    has_relation_predicate: bool,
     unique_key: Optional[str]
 ) -> str:
-    return f" {{ {unique_key}: $unique_key_value }}" if has_relation_predicate else ""
+    return f" {{ {unique_key}: $unique_key_value }}" if unique_key else ""
 
 def cypher_graph_reset(
     check_mode: bool
@@ -190,7 +189,7 @@ def cypher_edge_del(
     label_from: str,
     label_to: str,
     relation_type: str,
-    has_relation_predicate: bool
+    unique_key: Optional[str] = None
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
@@ -198,7 +197,7 @@ def cypher_edge_del(
         label_from=label_from,
         label_to=label_to,
         relation_type=relation_type,
-        relation_predicate=set_relation_predicate(has_relation_predicate)
+        relation_predicate=set_relation_predicate(unique_key)
         )
     )
 
@@ -207,7 +206,7 @@ def cypher_edge_del_bi(
     label_from: str,
     label_to: str,
     relation_type: str,
-    has_relation_predicate: bool
+    unique_key: Optional[str] = None
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
@@ -215,7 +214,7 @@ def cypher_edge_del_bi(
         label_from=label_from,
         label_to=label_to,
         relation_type=relation_type,
-        relation_predicate=set_relation_predicate(has_relation_predicate)
+        relation_predicate=set_relation_predicate(unique_key)
         )
     )
 
@@ -224,17 +223,17 @@ def cypher_edge_add(
     label_from: str,
     label_to: str,
     relation_type: str,
-    has_relation_predicate: bool,
-    properties: Dict[str, Any]
+    properties: Dict[str, Any],
+    unique_key: Optional[str] = None
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
-    set_relation_predicate: str = f"" if has_relation_predicate else ""
     return str(CypherQuery.EDGE_ADD.value.format(
         label_from=label_from,
         label_to=label_to,
         set_clause=set_clause(RelationType.RELATION.value, properties),
-        relation_type=relation_type
+        relation_type=relation_type,
+        relation_predicate=set_relation_predicate(unique_key)
         )
     )
 
@@ -243,8 +242,8 @@ def cypher_edge_add_bi(
     label_from: str,
     label_to: str,
     relation_type: str,
-    has_relation_predicate: bool,
-    properties: Dict[str, Any]
+    properties: Dict[str, Any],
+    unique_key: Optional[str] = None
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
@@ -253,7 +252,8 @@ def cypher_edge_add_bi(
         label_to=label_to,
         relation_type=relation_type,
         set_clause_r1=set_clause(RelationType.RELATION_BI_1.value, properties),
-        set_clause_r2=set_clause(RelationType.RELATION_BI_2.value, properties)
+        set_clause_r2=set_clause(RelationType.RELATION_BI_2.value, properties),
+        relation_predicate=set_relation_predicate(unique_key)
         )
     )
 
