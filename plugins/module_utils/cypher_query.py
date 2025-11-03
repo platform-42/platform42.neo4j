@@ -153,7 +153,7 @@ def set_clause(
 def set_relation_predicate(
     unique_key: Optional[str]
 ) -> str:
-    return f"{{ {unique_key}: ${unique_key} }}" if unique_key else ""
+    return f"{{{unique_key}: ${unique_key}}}" if unique_key else ""
 
 def cypher_graph_reset(
     check_mode: bool
