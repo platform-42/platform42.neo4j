@@ -1,8 +1,8 @@
-# platform42.neo4j - release 2.7.0
+# platform42.neo4j - release 2.8.0
 
 Ansible collection for managing **Neo4j graph databases**: create and update vertices (nodes), edges (relationships), constraints, execute queries, and clean up the database. This collection provides a declarative, idempotent interface to Neo4j, allowing automation of graph data management in a consistent and reliable way.
 
-## release 2.7.0 notes
+## release 2.8.0 notes
 
 Bugfixes:
 - vertex delete pattern incorrect

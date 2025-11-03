@@ -3,7 +3,7 @@
     Filename: ./module_utils/cypher.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-26
-    Version: 2.7.0
+    Version: 2.8.0
     Description: 
         Ansible module argument parsing and validation
 """
@@ -268,7 +268,7 @@ def edge_del(
     normalised_relation_type: str = relation_type.upper()
     normalised_label_from: str = label_from.capitalize()
     normalised_label_to: str = label_to.capitalize()
-    normalised_unique_key: str = None
+    normalised_unique_key: Optional[str] = None
     if unique_key:
         normalised_unique_key = unique_key.lower()
 
@@ -325,7 +325,7 @@ def edge_add(
     normalised_label_from: str = label_from.capitalize()
     normalised_label_to: str = label_to.capitalize()
     normalised_properties: Dict[str, Any] = {key.lower(): value for key, value in properties.items()}
-    normalised_unique_key: str = None
+    normalised_unique_key: Optional[str] = None
     if unique_key:
         normalised_unique_key = unique_key.lower()
 

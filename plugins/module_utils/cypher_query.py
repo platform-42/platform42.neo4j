@@ -3,7 +3,7 @@
     Filename: ./module_utils/cypher_query.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-26
-    Version: 2.7.0
+    Version: 2.8.0
     Description: 
         Cypher queries - returns string with bindings
 """
@@ -29,6 +29,15 @@ from strenum import StrEnum
 #   - check_mode implements Ansible check_mode
 #       check_mode validates all YAML-parameters for correctness
 #       check_mode connects to Neo4j and returns version if connected
+#   - set_relation_predicate -> ability to have duplicate relationships based on property
+#       check if the unique_key is part of a property_keys
+#       if so, the value of the binding is already in place and therefore
+#       ${unique_key} doesn't need any conversion whatsoever. It points already to the type-casted
+#       properties
+#
+#       so if unique_key contains "line", its binding will be "$line" and its value
+#       is already a guaranteed typecasted property that exists (cypher_params).
+#       no duplication, reuse of existing key.
 #
 
 class RelationType(StrEnum):
@@ -144,9 +153,7 @@ def set_clause(
 def set_relation_predicate(
     unique_key: Optional[str]
 ) -> str:
-    if unique_key is None:
-        return f""
-    return f" {{ {unique_key}: ${unique_key} }}" if unique_key else ""
+    return f"{{ {unique_key}: ${unique_key} }}" if unique_key else ""
 
 def cypher_graph_reset(
     check_mode: bool
