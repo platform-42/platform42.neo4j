@@ -74,7 +74,7 @@ def graph_reset(
 def constraint_del(
     check_mode: bool,
     label: str,
-    property: str
+    property_key: str
 ) -> Tuple[str, Dict[str, Any], str]:
 
     # normalise
@@ -85,7 +85,7 @@ def constraint_del(
     cypher_query: str = u_cyph_q.cypher_constraint_del(
         check_mode=check_mode,
         label=normalised_label,
-        property=property
+        property_key=property_key
     )
     return query_build(cypher_query, cypher_params)
 
@@ -101,7 +101,7 @@ def constraint_del(
 def constraint_add(
     check_mode: bool,
     label: str,
-    property: str
+    property_key: str
 ) -> Tuple[str, Dict[str, Any], str]:
 
     # normalise
@@ -112,7 +112,7 @@ def constraint_add(
     cypher_query: str = u_cyph_q.cypher_constraint_add(
         check_mode=check_mode,
         label=normalised_label,
-        property=property
+        property_key=property_key
     )
     return query_build(cypher_query, cypher_params)
 
