@@ -143,7 +143,7 @@ class CypherQuery(StrEnum):
             labels(n) AS labels
         ;    
         """
-    
+
 def set_clause(
     relation_type: str,
     properties: Dict[str, Any]
@@ -159,11 +159,7 @@ def set_constraint_name(
     label: str,
     property: str
 ) -> str:
-    return "constraint_{label_id}_{property_id}_unique".format(
-        label_id=label.lower(),
-        property_id=property.lower()
-    )
-
+    return f"constraint_{label.lower()}_{property.lower()}_unique"
 
 def cypher_graph_reset(
     check_mode: bool
@@ -279,7 +275,7 @@ def cypher_edge_add_bi(
 def cypher_constraint_del(
     check_mode: bool,
     label: str,
-    property: str 
+    property: str
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
@@ -294,7 +290,7 @@ def cypher_constraint_del(
 def cypher_constraint_add(
     check_mode: bool,
     label: str,
-    property: str 
+    property: str
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
