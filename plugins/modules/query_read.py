@@ -19,6 +19,7 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.skeleton as u_s
 import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cypher
 import ansible_collections.platform42.neo4j.plugins.module_utils.schema as u_schema
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
+import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
 
 from neo4j import Driver
 
@@ -111,15 +112,8 @@ def main() -> None:
     result, diagnostics = validate_cypher_inputs(module.params)
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-    db_uri: str = module.params[u_skel.JsonTKN.NEO4J_URI.value]
     db_database: str = module.params[u_skel.JsonTKN.DATABASE.value]
-    db_username: str = module.params[u_skel.JsonTKN.USERNAME.value]
-    db_password: str = module.params[u_skel.JsonTKN.PASSWORD.value]
-    driver: Driver = u_cypher.get_neo4j_driver(
-         db_uri=db_uri,
-         db_username=db_username,
-         db_password=db_password
-    )
+    driver: Driver = u_driver.get_driver(module.params)
     query: str = module.params[u_skel.JsonTKN.QUERY.value]
     parameters: Dict[str, Any] = module.params[u_skel.JsonTKN.PARAMETERS.value]
     cypher_query: str

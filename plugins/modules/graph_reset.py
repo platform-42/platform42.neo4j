@@ -18,6 +18,7 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.argument_spec a
 import ansible_collections.platform42.neo4j.plugins.module_utils.skeleton as u_skel
 import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cypher
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
+import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
 
 from neo4j import Driver, ResultSummary, Result
 
@@ -61,15 +62,8 @@ def main() -> None:
         argument_spec=u_args.argument_spec_graph_reset(),
         supports_check_mode=True
     )
-    db_uri: str = module.params[u_skel.JsonTKN.NEO4J_URI.value]
     db_database: str = module.params[u_skel.JsonTKN.DATABASE.value]
-    db_username: str = module.params[u_skel.JsonTKN.USERNAME.value]
-    db_password: str = module.params[u_skel.JsonTKN.PASSWORD.value]
-    driver: Driver = u_cypher.get_neo4j_driver(
-         db_uri=db_uri,
-         db_username=db_username,
-         db_password=db_password
-    )
+    driver: Driver = u_driver.get_driver(module.params)
     cypher_query: str
     cypher_params: Dict[str, Any]
     cypher_query_inline: str

@@ -200,10 +200,7 @@ def main() -> None:
         )
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-    db_uri: str = module.params[u_skel.JsonTKN.NEO4J_URI.value]
     db_database: str = module.params[u_skel.JsonTKN.DATABASE.value]
-    db_username: str = module.params[u_skel.JsonTKN.USERNAME.value]
-    db_password: str = module.params[u_skel.JsonTKN.PASSWORD.value]
     driver: Driver = u_driver.get_driver(module.params)
     cypher_query: str
     cypher_params: Dict[str, Any]
