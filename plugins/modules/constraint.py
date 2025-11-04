@@ -112,7 +112,7 @@ def main() -> None:
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     db_database: str = module.params[u_skel.JsonTKN.DATABASE.value]
-    driver: Driver = u_driver.get_neo4j_driver(module.params)
+    driver: Driver = u_driver.get_driver(module.params)
     cypher_query: str
     cypher_params: Dict[str, Any]
     cypher_query_inline: str
