@@ -124,9 +124,9 @@ class CypherQuery(StrEnum):
         ;
         """
     CONSTRAINT_ADD = """
-        CREATE CONSTRAINT constraint_{label_id}_{property_id}_unique IF NOT EXISTS
+        CREATE CONSTRAINT {constraint_name} IF NOT EXISTS
         FOR (n:`{label}`)
-        REQUIRE n.`{property}` IS UNIQUE
+        REQUIRE n.`{property_key}` IS UNIQUE
         ;
         """
     LABEL_DEL ="""
@@ -157,9 +157,9 @@ def set_relation_predicate(
 
 def set_constraint_name(
     label: str,
-    property: str
+    property_key: str
 ) -> str:
-    return f"constraint_{label.lower()}_{property.lower()}_unique"
+    return f"constraint_{label.lower()}_{property_key.lower()}_unique"
 
 def cypher_graph_reset(
     check_mode: bool
@@ -275,14 +275,14 @@ def cypher_edge_add_bi(
 def cypher_constraint_del(
     check_mode: bool,
     label: str,
-    property: str
+    property_key: str
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
     return str(CypherQuery.CONSTRAINT_DEL.value.format(
         constraint_name=set_constraint_name(
-            label=label.lower(),
-            property=property.lower()
+            label,
+            property_key
             )
         )
     )
@@ -290,15 +290,17 @@ def cypher_constraint_del(
 def cypher_constraint_add(
     check_mode: bool,
     label: str,
-    property: str
+    property_key: str
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
     return str(CypherQuery.CONSTRAINT_ADD.value.format(
-        label_id=label.lower(),
-        property_id=property.lower(),
         label=label,
-        property=property
+        property_key=property_key,
+        constraint_name=set_constraint_name(
+            label, 
+            property_key
+            )
         )
     )
 
