@@ -172,7 +172,7 @@ def validate_cypher_inputs(
     unique_key: str = module_params[u_skel.JsonTKN.UNIQUE_KEY.value]
     if unique_key:
         result, diagnostics = u_schema.validate_pattern(
-            u_schema.SchemaProperties.PROPERTY,
+            u_schema.SchemaProperties.PROPERTY_KEY,
             module_params[u_skel.JsonTKN.UNIQUE_KEY.value]
             )
         if not result:
