@@ -63,7 +63,6 @@ class JsonTKN(StrEnum):
     PATTERN = "pattern"
     PROPERTIES = "properties"
     PROPERTIES_SET = "properties_set"
-    PROPERTY = "property"
     PROPERTY_KEY = "property_key"
     QUERY = "query"
     QUERY_TYPE = "query_type"
@@ -94,8 +93,7 @@ def ansible_diagnostics(
         JsonTKN.ERROR_MSG.value: str(e),
         JsonTKN.REPR.value: repr(e),
         JsonTKN.ARGS.value: list(e.args)
-    }
-
+        }
 
 def ansible_fail(
     diagnostics: Dict[str, Any]

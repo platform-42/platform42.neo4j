@@ -62,13 +62,12 @@ TYPE_HANDLERS: Dict[str, Callable[[Any], Any]] = {
 }
 
 #
-#   ansible_cast_properties
-#       a little bit of voodo
-#       - remember, a property now consists of a value and a type
-#       - if the type is unknown, it is considered as a string
-#       - Cypher will emit an error if that assumption was wrong
-#       - initial support for int, float, bool and str
-#       - we simply return a new properties Dict with a casted value
+#   type_casted_properties:
+#   - a property now consists of a value and a type
+#   - if the type is unknown, it is considered as a string
+#     Cypher will emit an error if that assumption was wrong
+#   - initial support for int, float, bool, datatime and str
+#   - returns a new properties Dict with a casted value
 #
 def type_casted_properties(
     properties: Dict[str, Dict[str, Any]]
