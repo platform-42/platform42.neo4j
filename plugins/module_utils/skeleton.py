@@ -64,6 +64,7 @@ class JsonTKN(StrEnum):
     PROPERTIES = "properties"
     PROPERTIES_SET = "properties_set"
     PROPERTY = "property"
+    PROPERTY_KEY = "property_key"
     QUERY = "query"
     QUERY_TYPE = "query_type"
     RELATIONSHIPS_CREATED = "relationships_created"

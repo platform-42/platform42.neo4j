@@ -29,7 +29,7 @@ short_description: Manage uniqueness constraints in Neo4j
 version_added: "2.3.0"
 description:
   - This module ensures the presence or absence of a uniqueness constraint
-    on a given label and property within a Neo4j database.
+    on a given label and property (key) within a Neo4j database.
   - Constraints are used to guarantee that a property value is unique
     for all nodes of a given label, preventing accidental duplication.
   - The module is idempotent and safe to run multiple times.
@@ -47,7 +47,7 @@ EXAMPLES = r'''
     username: "{{ NEO4J_USERNAME }}"
     password: "{{ NEO4J_PASSWORD }}"
     label: User
-    property: entity_name
+    property_key: entity_name
     state: PRESENT
 
 - name: "Remove uniqueness constraint from Account.account_id"
@@ -57,7 +57,7 @@ EXAMPLES = r'''
     username: "{{ NEO4J_USERNAME }}"
     password: "{{ NEO4J_PASSWORD }}"
     label: Account
-    property: account_id
+    property_key: account_id
     state: ABSENT
 '''
 
@@ -67,17 +67,17 @@ def constraint(
 ) -> Tuple[str, Dict[str, Any], str]:
     state: str = module_params[u_skel.JsonTKN.STATE.value]
     label: str = module_params[u_skel.JsonTKN.LABEL.value]
-    property: str = module_params[u_skel.JsonTKN.PROPERTY.value]
+    property_key: str = module_params[u_skel.JsonTKN.PROPERTY_KEY.value]
     if u_skel.state_present(state):
         return u_cypher.constraint_add(
             check_mode=check_mode,
             label=label,
-            property=property
+            property_key=property_key
             )
     return u_cypher.constraint_del(
         check_mode=check_mode,
         label=label,
-        property=property
+        property_key=property_key
         )
 
 def validate_cypher_inputs(
@@ -92,10 +92,10 @@ def validate_cypher_inputs(
         )
     if not result:
         return False, diagnostics
-    # validate property against injection
+    # validate property_key against injection
     result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.PROPERTY,
-        module_params[u_skel.JsonTKN.PROPERTY.value]
+        u_schema.SchemaProperties.PROPERTY_KEY,
+        module_params[u_skel.JsonTKN.PROPERTY_KEY.value]
         )
     if not result:
         return False, diagnostics
