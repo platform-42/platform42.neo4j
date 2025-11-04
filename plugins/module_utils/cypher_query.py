@@ -246,9 +246,9 @@ def cypher_edge_add(
     return str(CypherQuery.EDGE_ADD.value.format(
         label_from=label_from,
         label_to=label_to,
-        set_clause=set_clause(RelationType.RELATION.value, properties),
         relation_type=relation_type,
-        relation_predicate=set_relation_predicate(unique_key)
+        relation_predicate=set_relation_predicate(unique_key),
+        set_clause=set_clause(RelationType.RELATION.value, properties)
         )
     )
 

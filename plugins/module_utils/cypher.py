@@ -335,6 +335,7 @@ def edge_add(
         u_skel.JsonTKN.ENTITY_NAME_TO.value: entity_name_to,
         **normalised_properties
     }
+    
     cypher_query: str
     if bi_directional:
         cypher_query = u_cyph_q.cypher_edge_add_bi(
