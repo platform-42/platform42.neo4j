@@ -146,7 +146,7 @@ def main() -> None:
         module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
     finally:
         driver.close()
-    payload: Dict[str, Any] = {
+    payload = {
         u_skel.JsonTKN.CYPHER_QUERY.value: u_shared.flatten_query(cypher_query),
         u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
         u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: u_shared.flatten_query(cypher_query_inline),
