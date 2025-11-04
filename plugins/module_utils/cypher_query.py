@@ -30,14 +30,14 @@ from strenum import StrEnum
 #       check_mode validates all YAML-parameters for correctness
 #       check_mode connects to Neo4j and returns version if connected
 #   - set_relation_predicate -> ability to have duplicate relationships based on property
-#       check if the unique_key is part of a property_keys
-#       if so, the value of the binding is already in place and therefore
+#       validates if the unique_key is part of a property_keys
+#       if part, the value of the binding is already in place and therefore
 #       ${unique_key} doesn't need any conversion whatsoever. It points already to the type-casted
-#       properties
+#       property-value
 #
 #       so if unique_key contains "line", its binding will be "$line" and its value
-#       is already a guaranteed typecasted property that exists (cypher_params).
-#       no duplication, reuse of existing key.
+#       is a guaranteed typecasted property that exists in cypher_params.
+#       no duplication, just reuse of existing validated key
 #
 
 class RelationType(StrEnum):
