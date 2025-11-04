@@ -37,8 +37,8 @@ Consider this edge definition (relationship):
   register: transaction
 ```
 
-In `amount` and `transaction_date` are properties of `TRANSACTION`.
-If `transaction_date` is designated as `unique_key`, it will internally create an edge with `transaction_date` as unique identifier.
+`amount` and `transaction_date` are properties of `TRANSACTION` relationship.
+If `transaction_date` is designated as `unique_key`, it will internally create an edge with `transaction_date` as a unique identifier.
 
 ```text
 MATCH (a:`Account` {entity_name: "IBAN_1"})
