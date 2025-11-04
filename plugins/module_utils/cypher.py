@@ -8,7 +8,7 @@
         Ansible module argument parsing and validation
 """
 from typing import Dict, Any, Optional, Tuple, List
-from neo4j import Transaction, GraphDatabase, Driver, basic_auth, ResultSummary, Result
+from neo4j import Transaction, ResultSummary, Result
 
 from . import skeleton as u_skel
 from . import cypher_query as u_cyph_q
@@ -25,16 +25,6 @@ from . import cypher_query as u_cyph_q
 #             cypher_params: Dict[str, Any] -> NEO4J values for bindings
 #       cypher_query_inline: str -> NEO4J query with substituted values for debugging in NEO4J console
 #
-
-def get_neo4j_driver(
-    db_uri: str,
-    db_username: str,
-    db_password: str
-) -> Driver:
-    return GraphDatabase.driver(
-        uri=db_uri,
-        auth=basic_auth(db_username, db_password)
-    )
 
 def query_build(
     cypher_query: str,
