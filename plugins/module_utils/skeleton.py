@@ -10,8 +10,6 @@
 from typing import Dict, Any
 from strenum import StrEnum
 
-import traceback
-
 class YamlATTR(StrEnum):
     CHANGED = "changed"
     DEFAULT = "default"
@@ -87,20 +85,14 @@ def state_present(
     return state.lower() == str(YamlState.PRESENT.value)
 
 def ansible_diagnostics(
-    e: BaseException, 
-    max_trace_len: int = 5000
+    e: BaseException
 ) -> Dict[str, Any]:
-    tb: str = traceback.format_exc()
-    if len(tb) > max_trace_len:
-        tb = tb[:max_trace_len] + "... [truncated]"
-
     return {
         JsonTKN.TYPE.value: type(e).__name__,
         JsonTKN.MODULE.value: type(e).__module__,
         JsonTKN.ERROR_MSG.value: str(e),
         JsonTKN.REPR.value: repr(e),
         JsonTKN.ARGS.value: list(e.args)
-#        "traceback": tb,
     }
 
 
