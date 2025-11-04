@@ -167,7 +167,7 @@ def validate_cypher_inputs(
         )
         if not result:
             return False, diagnostics
-        
+
     # validate unique key if available
     unique_key: str = module_params[u_skel.JsonTKN.UNIQUE_KEY.value]
     if unique_key:
