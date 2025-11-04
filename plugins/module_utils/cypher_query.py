@@ -155,6 +155,15 @@ def set_relation_predicate(
 ) -> str:
     return f"{{{unique_key}: ${unique_key}}}" if unique_key else ""
 
+def set_constraint_name(
+    label: str,
+    property: str 
+) -> str:
+    return "constraint_{label_id}_{property_id}_unique".format(
+        label_id=label.lower(),
+        property_id=property.lower()
+    )    
+
 def cypher_graph_reset(
     check_mode: bool
 ) -> str:
@@ -273,12 +282,11 @@ def cypher_constraint_del(
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
-    contraint_name: str = "constraint_{label_id}_{property_id}_unique".format(
-        label_id=label.lower(),
-        property_id=property.lower()
-    )
     return str(CypherQuery.CONSTRAINT_DEL.value.format(
-        constraint_name=contraint_name
+        constraint_name=set_constraint_name(
+            label_id=label.lower(),
+            property_id=property.lower()
+            )
         )
     )
 
