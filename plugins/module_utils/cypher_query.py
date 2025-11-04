@@ -298,7 +298,7 @@ def cypher_constraint_add(
         label=label,
         property_key=property_key,
         constraint_name=set_constraint_name(
-            label, 
+            label,
             property_key
             )
         )
