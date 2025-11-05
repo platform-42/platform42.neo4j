@@ -124,6 +124,7 @@ def validate_cypher_inputs(
 ) -> Tuple[bool, Dict[str, Any]]:
     result: bool
     diagnostics: Dict[str, Any]
+
     # validate edge-type against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.TYPE,
@@ -131,6 +132,7 @@ def validate_cypher_inputs(
         )
     if not result:
         return False, diagnostics
+    
     # validate edge from-label against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.LABEL,
@@ -138,6 +140,7 @@ def validate_cypher_inputs(
         )
     if not result:
         return False, diagnostics
+    
     # validate edge from-entity_name against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.ENTITY_NAME,
@@ -145,6 +148,7 @@ def validate_cypher_inputs(
         )
     if not result:
         return False, diagnostics
+    
     # validate edge to-label against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.LABEL,
@@ -152,6 +156,7 @@ def validate_cypher_inputs(
         )
     if not result:
         return False, diagnostics
+    
     # validate edge to-entity_name against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.ENTITY_NAME,
@@ -214,8 +219,7 @@ def main() -> None:
     try:
         with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
             response: Result = session.run(cypher_query, cypher_params)
-            records = list(response)
-            cypher_response: List[Dict[str, Any]] = [record.data() for record in records]
+            cypher_response: List[Dict[str, Any]] = [record.data() for record in list(response)]
             summary: ResultSummary = response.consume()
     except Exception as e:
         payload = {
