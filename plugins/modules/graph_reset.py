@@ -82,9 +82,9 @@ def main() -> None:
     finally:
         driver.close()
     payload = {
-        u_skel.JsonTKN.CYPHER_QUERY.value: u_shared.flatten_query(cypher_query),
+        u_skel.JsonTKN.CYPHER_QUERY.value: u_skel.flatten_query(cypher_query),
         u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
-        u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: u_shared.flatten_query(cypher_query_inline),
+        u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: u_skel.flatten_query(cypher_query_inline),
         u_skel.JsonTKN.STATS.value: u_cypher.cypher_stats(summary),
         u_skel.JsonTKN.CYPHER_RESPONSE.value: u_shared.serialize_neo4j(cypher_response)
     }
