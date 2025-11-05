@@ -11,6 +11,8 @@
 from typing import Dict, Any
 from strenum import StrEnum
 
+from . import shared as u_shared
+
 class YamlATTR(StrEnum):
     CHANGED = "changed"
     DEFAULT = "default"
@@ -84,6 +86,22 @@ def state_present(
     state: str
 ) -> bool:
     return state.lower() == str(YamlState.PRESENT.value)
+
+def payload_exit() -> None:
+    pass
+
+def payload_fail(
+    cypher_query: str,
+    cypher_params: Dict[str, Any],
+    cypher_query_inline: str,
+    e: BaseException
+) -> Dict[str, Any]:
+    return {
+        JsonTKN.CYPHER_QUERY.value: u_shared.flatten_query(cypher_query),
+        JsonTKN.CYPHER_PARAMS.value: cypher_params,
+        JsonTKN.CYPHER_QUERY_INLINE.value: u_shared.flatten_query(cypher_query_inline),
+        JsonTKN.DIAGNOSTICS.value: ansible_diagnostics(e)
+    }
 
 def ansible_diagnostics(
     e: BaseException
