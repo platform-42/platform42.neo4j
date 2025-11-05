@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring,line-too-long
+# pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring,
+# pylint: disable=line-too-long,too-many-arguments
 """
     Filename: ./modules/graph_reset.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
