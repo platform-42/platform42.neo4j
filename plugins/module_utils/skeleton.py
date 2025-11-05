@@ -8,10 +8,11 @@
     Description: 
         Ansible core skeleton functions
 """
+import os
+import re
+
 from typing import Dict, Any
 from strenum import StrEnum
-
-from . import shared as u_shared
 
 class YamlATTR(StrEnum):
     CHANGED = "changed"
@@ -87,6 +88,16 @@ def state_present(
 ) -> bool:
     return state.lower() == str(YamlState.PRESENT.value)
 
+def flatten_query(
+    query: str
+) -> str:
+    return re.sub(r'\s+', ' ', query).strip()
+
+def file_splitext(
+    filename: str
+) -> str:
+    return os.path.splitext(os.path.basename(filename))[0]
+
 def payload_exit() -> None:
     pass
 
@@ -97,9 +108,9 @@ def payload_fail(
     e: BaseException
 ) -> Dict[str, Any]:
     return {
-        JsonTKN.CYPHER_QUERY.value: u_shared.flatten_query(cypher_query),
+        JsonTKN.CYPHER_QUERY.value: flatten_query(cypher_query),
         JsonTKN.CYPHER_PARAMS.value: cypher_params,
-        JsonTKN.CYPHER_QUERY_INLINE.value: u_shared.flatten_query(cypher_query_inline),
+        JsonTKN.CYPHER_QUERY_INLINE.value: flatten_query(cypher_query_inline),
         JsonTKN.DIAGNOSTICS.value: ansible_diagnostics(e)
     }
 
