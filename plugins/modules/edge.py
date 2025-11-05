@@ -193,7 +193,7 @@ def validate_cypher_inputs(
     return True, {}
 
 def main() -> None:
-    module_name: str = u_shared.file_splitext(__file__)
+    module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_edge(),
         supports_check_mode=True
