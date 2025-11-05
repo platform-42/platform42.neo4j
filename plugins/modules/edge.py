@@ -132,7 +132,7 @@ def validate_cypher_inputs(
         )
     if not result:
         return False, diagnostics
-    
+
     # validate edge from-label against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.LABEL,
@@ -140,7 +140,7 @@ def validate_cypher_inputs(
         )
     if not result:
         return False, diagnostics
-    
+
     # validate edge from-entity_name against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.ENTITY_NAME,
@@ -148,7 +148,7 @@ def validate_cypher_inputs(
         )
     if not result:
         return False, diagnostics
-    
+
     # validate edge to-label against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.LABEL,
@@ -156,7 +156,7 @@ def validate_cypher_inputs(
         )
     if not result:
         return False, diagnostics
-    
+
     # validate edge to-entity_name against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.ENTITY_NAME,
