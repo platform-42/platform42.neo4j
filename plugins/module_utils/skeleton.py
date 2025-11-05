@@ -98,8 +98,20 @@ def file_splitext(
 ) -> str:
     return os.path.splitext(os.path.basename(filename))[0]
 
-def payload_exit() -> None:
-    pass
+def payload_exit(
+    cypher_query: str,
+    cypher_params: Dict[str, Any],
+    cypher_query_inline: str,
+    cypher_response: Any,
+    stats: Dict[str, Any]
+) -> None:
+    return {
+        JsonTKN.CYPHER_QUERY.value: flatten_query(cypher_query),
+        JsonTKN.CYPHER_PARAMS.value: cypher_params,
+        JsonTKN.CYPHER_QUERY_INLINE.value: flatten_query(cypher_query_inline),
+        JsonTKN.STATS.value: stats,
+        JsonTKN.CYPHER_RESPONSE.value: cypher_response
+    }
 
 def payload_fail(
     cypher_query: str,
