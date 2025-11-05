@@ -124,8 +124,7 @@ def main() -> None:
     try:
         with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
             response: Result = session.run(cypher_query, cypher_params)
-            records = list(response)
-            cypher_response: List[Dict[str, Any]] = [record.data() for record in records]
+            cypher_response: List[Dict[str, Any]] = [record.data() for record in list(response)]
             summary: ResultSummary = response.consume()
     except Exception as e:
         payload = {
