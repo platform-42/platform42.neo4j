@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring,
-# pylint: disable=line-too-long,too-many-arguments
+# pylint: disable=line-too-long,too-many-arguments,too-many-locals
 """
     Filename: ./modules/query_read.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)

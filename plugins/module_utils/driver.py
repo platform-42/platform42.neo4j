@@ -1,10 +1,10 @@
 # pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring,
-# pylint: disable=line-too-long,too-many-arguments
+# pylint: disable=line-too-long,too-many-arguments,too-many-locals
 """
     Filename: ./module_utils/driver.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
-    Date: 2025-10-26
-    Version: 2.8.0
+    Date: 2025-11-04
+    Version: 2.9.0
     Description: 
         Neo4j driver functions
 """

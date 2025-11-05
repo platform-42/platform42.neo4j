@@ -1,5 +1,5 @@
 # pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring,
-# pylint: disable=line-too-long,too-many-arguments
+# pylint: disable=line-too-long,too-many-arguments,too-many-locals
 """
     Filename: ./module_utils/shared.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
