@@ -120,7 +120,6 @@ def main() -> None:
     result, diagnostics = validate_cypher_inputs(module.params)
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-    db_database: str = module.params[u_skel.JsonTKN.DATABASE.value]
     driver: Driver = u_driver.get_driver(module.params)
     cypher_query: str
     cypher_params: Dict[str, Any]
@@ -131,7 +130,7 @@ def main() -> None:
     )
     payload: Dict[str, Any]
     try:
-        with driver.session(database=db_database) as session:
+        with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
             response: Result = session.run(cypher_query, cypher_params)
             records = list(response)
             cypher_response: List[Dict[str, Any]] = [record.data() for record in records]

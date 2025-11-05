@@ -62,7 +62,6 @@ def main() -> None:
         argument_spec=u_args.argument_spec_graph_reset(),
         supports_check_mode=True
     )
-    db_database: str = module.params[u_skel.JsonTKN.DATABASE.value]
     driver: Driver = u_driver.get_driver(module.params)
     cypher_query: str
     cypher_params: Dict[str, Any]
@@ -72,7 +71,7 @@ def main() -> None:
         )
     payload: Dict[str, Any]
     try:
-        with driver.session(database=db_database) as session:
+        with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
             response: Result = session.run(cypher_query)
             records = list(response)
             cypher_response: List[Dict[str, Any]] = [record.data() for record in records]
