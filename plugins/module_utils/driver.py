@@ -1,3 +1,13 @@
+# pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring,
+# pylint: disable=line-too-long,too-many-arguments
+"""
+    Filename: ./module_utils/driver.py
+    Author: diederick de Buck (diederick.de.buck@gmail.com)
+    Date: 2025-10-26
+    Version: 2.8.0
+    Description: 
+        Neo4j driver functions
+"""
 from typing import Dict, Any
 from neo4j import GraphDatabase, Driver, basic_auth
 
