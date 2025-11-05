@@ -93,7 +93,7 @@ def argument_spec_query_read() -> Dict[str, Any]:
         }
     }
 
-def argument_spec_vertice() -> Dict[str, Any]:
+def argument_spec_vertex() -> Dict[str, Any]:
     return {
         u_skel.JsonTKN.NEO4J_URI.value: {
             u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
