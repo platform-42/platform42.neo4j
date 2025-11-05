@@ -11,10 +11,8 @@
 from typing import Dict, Any, Callable, Tuple
 from datetime import datetime
 
-import os
-import re
-
 from neo4j.time import DateTime, Date, Time
+
 from . import skeleton as u_skel
 
 def serialize_neo4j(
@@ -99,13 +97,3 @@ def type_casted_properties(
                 )
 
     return casted_properties
-
-def flatten_query(
-    query: str
-) -> str:
-    return re.sub(r'\s+', ' ', query).strip()
-
-def file_splitext(
-    filename: str
-) -> str:
-    return os.path.splitext(os.path.basename(filename))[0]
