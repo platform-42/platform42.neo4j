@@ -108,7 +108,7 @@ def main() -> None:
     module: AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_query_read(),
         supports_check_mode=False
-    )
+        )
     result: bool
     diagnostics: Dict[str, Any]
     result, diagnostics = validate_cypher_inputs(module.params)
@@ -117,13 +117,11 @@ def main() -> None:
     driver: Driver = u_driver.get_driver(module.params)
     query: str = module.params[u_skel.JsonTKN.QUERY.value]
     parameters: Dict[str, Any] = module.params[u_skel.JsonTKN.PARAMETERS.value]
-    cypher_query: str
-    cypher_params: Dict[str, Any]
-    cypher_query_inline: str
-    cypher_query, cypher_params, cypher_query_inline = u_cypher.query_read(
+    query_read_result: Tuple[str, Dict[str, Any], str] = u_cypher.query_read(
         query,
         parameters
         )
+    cypher_query, cypher_params, cypher_query_inline = query_read_result
     payload: Dict[str, Any]
     try:
         with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
@@ -147,7 +145,7 @@ def main() -> None:
         changed=False,
         payload_key=module_name,
         payload=payload)
-    )
+        )
 
 if __name__ == '__main__':
     main()

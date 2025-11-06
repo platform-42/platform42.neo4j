@@ -138,7 +138,7 @@ def main() -> None:
     module: AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_vertex(),
         supports_check_mode=True
-    )
+        )
     result: bool
     diagnostics: Dict[str, Any]
     result, diagnostics = validate_cypher_inputs(module.params)
@@ -150,14 +150,12 @@ def main() -> None:
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)
-    cypher_query: str
-    cypher_params: Dict[str, Any]
-    cypher_query_inline: str
-    cypher_query, cypher_params, cypher_query_inline = vertex(
+    vertex_result: Tuple[str, Dict[str, Any], str] = vertex(
         module.check_mode,
         module.params,
         casted_properties
         )
+    cypher_query, cypher_params, cypher_query_inline = vertex_result
     payload: Dict[str, Any]
     try:
         with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:

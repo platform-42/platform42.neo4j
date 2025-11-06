@@ -12,7 +12,7 @@
 """
 
 # pylint: disable=import-error
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Tuple
 from ansible.module_utils.basic import AnsibleModule
 
 import ansible_collections.platform42.neo4j.plugins.module_utils.argument_spec as u_args
@@ -63,14 +63,12 @@ def main() -> None:
     module: AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_graph_reset(),
         supports_check_mode=True
-    )
+        )
     driver: Driver = u_driver.get_driver(module.params)
-    cypher_query: str
-    cypher_params: Dict[str, Any]
-    cypher_query_inline: str
-    cypher_query, cypher_params, cypher_query_inline = u_cypher.graph_reset(
+    graph_reset_result: Tuple[str, Dict[str, Any], str] = u_cypher.graph_reset(
         module.check_mode
         )
+    cypher_query, cypher_params, cypher_query_inline = graph_reset_result
     payload: Dict[str, Any]
     try:
         with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
@@ -96,7 +94,7 @@ def main() -> None:
         changed=True,
         payload_key=module_name,
         payload=payload)
-    )
+        )
 
 if __name__ == '__main__':
     main()

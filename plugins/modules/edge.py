@@ -198,7 +198,7 @@ def main() -> None:
     module: AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_edge(),
         supports_check_mode=True
-    )
+        )
     result, diagnostics = validate_cypher_inputs(module.params)
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
@@ -208,14 +208,12 @@ def main() -> None:
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)
-    cypher_query: str
-    cypher_params: Dict[str, Any]
-    cypher_query_inline: str
-    cypher_query, cypher_params, cypher_query_inline = edge(
+    edge_result: Tuple[str, Dict[str, Any], str] = edge(
         module.check_mode,
         module.params,
         casted_properties
         )
+    cypher_query, cypher_params, cypher_query_inline = edge_result
     payload: Dict[str, Any]
     try:
         with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
@@ -244,7 +242,7 @@ def main() -> None:
         changed=changed,
         payload_key=module_name,
         payload=payload)
-    )
+        )
 
 if __name__ == '__main__':
     main()
