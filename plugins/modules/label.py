@@ -61,16 +61,11 @@ EXAMPLES = r'''
     entity_name: Alice
     label: Verified
     state: ABSENT
-    properties:
-      validation_method: 
-        value: sms
-        type: str
 '''
 
 def label(
     check_mode: bool,
-    module_params: Dict[str, Any],
-    properties: Dict[str, Any]
+    module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
     base_label: str = module_params[u_skel.JsonTKN.BASE_LABEL.value]
     label: str = module_params[u_skel.JsonTKN.LABEL.value]
@@ -81,8 +76,7 @@ def label(
             check_mode,
             base_label,
             label,
-            entity_name,
-            properties
+            entity_name
             )
     return u_cypher.label_del(
         check_mode,
@@ -121,16 +115,6 @@ def validate_cypher_inputs(
     if not result:
         return False, diagnostics
 
-    key: str
-    # validate vertex properties against injection via JSON-key
-    for key in module_params[u_skel.JsonTKN.PROPERTIES.value].keys():
-        result, diagnostics = u_schema.validate_pattern(
-            u_schema.SchemaProperties.PROPERTY_KEYS,
-            key
-        )
-        if not result:
-            return False, diagnostics
-
     return True, {}
 
 def main() -> None:
@@ -148,8 +132,7 @@ def main() -> None:
     driver: Driver = u_driver.get_driver(module.params)
     label_result: Tuple[str, Dict[str, Any], str] = label(
         module.check_mode,
-        module.params,
-        casted_properties
+        module.params
         )
     cypher_query, cypher_params, cypher_query_inline = label_result
     payload: Dict[str, Any]
