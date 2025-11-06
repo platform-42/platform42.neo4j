@@ -6,3 +6,4 @@ strict = true
 [tool.pylint.DESIGN]
 max-locals = 25
 max-line-length = 120
+max-returns = 10
