@@ -61,6 +61,10 @@ EXAMPLES = r'''
     entity_name: Alice
     label: Verified
     state: ABSENT
+    properties:
+      validation_method: 
+        value: sms
+        type: str
 '''
 
 def label(
