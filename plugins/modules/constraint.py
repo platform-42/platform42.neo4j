@@ -23,6 +23,7 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_sha
 import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
 
 from neo4j import Driver, ResultSummary, Result
+from neo4j.exceptions import Neo4jError
 
 DOCUMENTATION = r'''
 ---

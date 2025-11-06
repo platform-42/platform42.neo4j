@@ -23,6 +23,7 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_sha
 import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
 
 from neo4j import Driver
+from neo4j.exceptions import Neo4jError
 
 DOCUMENTATION = r'''
 ---
@@ -127,8 +128,11 @@ def main() -> None:
     try:
         with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
             cypher_response, summary = session.execute_read(u_cypher.query_read_tx, cypher_query, cypher_params)
-    except Exception as e:
+    except Neo4jError as e:            
         payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e)
+        module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
+    except Exception as e:
+        payload = u_skel.payload_abend(cypher_query_inline, e)
         module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
     finally:
         driver.close()
