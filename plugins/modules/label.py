@@ -5,7 +5,7 @@
     Filename: ./modules/label.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-27
-    Version: 2.8.0
+    Version: 2.9.0
     Description: 
         Ansible module to create graph relationship (edge)
 """
@@ -52,7 +52,7 @@ EXAMPLES = r'''
 
 - name: "Remove label Verified to user entity_name=Alice"
   platform42.neo4j.label:
-    neo4j_uri: "{{ NEO4J_URI }}"
+    neo4j_uri: "neo4j+s://<AURA_INSTANCEID>.databases.neo4j.io"
     database: "{{ NEO4J_DATABASE }}"
     username: "{{ NEO4J_USERNAME }}"
     password: "{{ NEO4J_PASSWORD }}"

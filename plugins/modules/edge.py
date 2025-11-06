@@ -6,7 +6,7 @@
     Filename: ./modules/edge.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-05
-    Version: 2.8.0
+    Version: 2.9.0
     Description: 
         Ansible module to create graph relationship (edge)
 """
