@@ -77,10 +77,10 @@ def main() -> None:
             response: Result = session.run(cypher_query)
             cypher_response: List[Dict[str, Any]] = [record.data() for record in list(response)]
             summary: ResultSummary = response.consume()
-    except Neo4jError as e:
+    except Neo4jError as e: 
         payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e)
         module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
-    except Exception as e:
+    except Exception as e: # pylint: disable=broad-exception-caught
         payload = u_skel.payload_abend(cypher_query_inline, e)
         module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
     finally:
