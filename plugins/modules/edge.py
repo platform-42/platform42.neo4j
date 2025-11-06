@@ -226,13 +226,13 @@ def main() -> None:
         module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
     finally:
         driver.close()
-    payload = {
-        u_skel.JsonTKN.CYPHER_QUERY.value: u_skel.flatten_query(cypher_query),
-        u_skel.JsonTKN.CYPHER_PARAMS.value: cypher_params,
-        u_skel.JsonTKN.CYPHER_QUERY_INLINE.value: u_skel.flatten_query(cypher_query_inline),
-        u_skel.JsonTKN.STATS.value: u_cypher.cypher_stats(summary),
-        u_skel.JsonTKN.CYPHER_RESPONSE.value: u_shared.serialize_neo4j(cypher_response)
-        }
+    payload = u_skel.payload_exit(
+        cypher_query, 
+        cypher_params, 
+        cypher_query_inline,
+        u_shared.serialize_neo4j(cypher_response),
+        u_cypher.cypher_stats(summary)
+        )
     state: str = module.params[u_skel.JsonTKN.STATE.value]
     relationships_changed: int = summary.counters.relationships_created if u_skel.state_present(state) else summary.counters.relationships_deleted
     changed: bool = relationships_changed > 0
