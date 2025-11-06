@@ -20,7 +20,7 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.schema as u_sch
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
 import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
 
-from neo4j import Driver, ResultSummary, Result
+from neo4j import Driver, ResultSummary, Result, SummaryCounters
 from neo4j.exceptions import Neo4jError
 
 DOCUMENTATION = r'''
@@ -139,7 +139,8 @@ def main() -> None:
         u_cypher.cypher_stats(summary)
         )
     state: str = module.params[u_skel.JsonTKN.STATE.value]
-    constraints_changed: int = summary.counters.constraints_added if u_skel.state_present(state) else summary.counters.constraints_removed
+    counters: SummaryCounters = summary.counters
+    constraints_changed: int = counters.constraints_added if u_skel.state_present(state) else counters.constraints_removed
     changed: bool = constraints_changed > 0
     module.exit_json(**u_skel.ansible_exit(
         changed=changed,
