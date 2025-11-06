@@ -9,3 +9,10 @@ max-line-length = 120
 max-returns = 10
 max-args = 6
 max-positional-arguments = 6
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = [
+    "C0114",  # missing-module-docstring
+    "C0115",  # missing-class-docstring
+    "C0116"   # missing-function-docstring
+]
