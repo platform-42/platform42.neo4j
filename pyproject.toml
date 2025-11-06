@@ -2,3 +2,6 @@
 ignore_missing_imports = true
 mypy_path = ["ansible_collections/platform42/neo4j/plugins"]
 strict = true
+
+[tool.pylint.DESIGN]
+max-locals = 25
