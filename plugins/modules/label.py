@@ -94,6 +94,7 @@ def validate_cypher_inputs(
 ) -> Tuple[bool, Dict[str, Any]]:
     result: bool
     diagnostics: Dict[str, Any]
+
     # validate base_label against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.LABEL,
@@ -101,6 +102,7 @@ def validate_cypher_inputs(
         )
     if not result:
         return False, diagnostics
+    
     # validate label against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.LABEL,
@@ -108,6 +110,7 @@ def validate_cypher_inputs(
         )
     if not result:
         return False, diagnostics
+    
     # validate entity_name against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.ENTITY_NAME,
@@ -115,6 +118,17 @@ def validate_cypher_inputs(
         )
     if not result:
         return False, diagnostics
+
+    key: str
+    # validate vertex properties against injection via JSON-key
+    for key in module_params[u_skel.JsonTKN.PROPERTIES.value].keys():
+        result, diagnostics = u_schema.validate_pattern(
+            u_schema.SchemaProperties.PROPERTY_KEYS,
+            key
+        )
+        if not result:
+            return False, diagnostics
+
     return True, {}
 
 def main() -> None:
