@@ -82,8 +82,8 @@ def main() -> None:
     finally:
         driver.close()
     payload = u_skel.payload_exit(
-        cypher_query, 
-        cypher_params, 
+        cypher_query,
+        cypher_params,
         cypher_query_inline,
         u_shared.serialize_neo4j(cypher_response),
         u_cypher.cypher_stats(summary)
