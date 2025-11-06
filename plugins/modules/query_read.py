@@ -128,7 +128,7 @@ def main() -> None:
     try:
         with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
             cypher_response, summary = session.execute_read(u_cypher.query_read_tx, cypher_query, cypher_params)
-    except Neo4jError as e:            
+    except Neo4jError as e:
         payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e)
         module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
     except Exception as e:
