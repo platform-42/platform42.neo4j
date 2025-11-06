@@ -5,7 +5,7 @@
 # underscores or numbers and cannot contain consecutive underscores
 namespace: platform42
 name: neo4j
-version: 2.9.0
+version: 3.0.0
 readme: README.md
 authors:
 - Diederick de Buck <diederick.de.buck@platform-42.com>

@@ -3,7 +3,7 @@
     Filename: ./module_utils/argument_spec.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-26
-    Version: 2.9.0
+    Version: 3.0.0
     Description: 
         Ansible module argument spec
 """

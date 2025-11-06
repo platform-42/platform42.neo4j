@@ -1,8 +1,8 @@
-# platform42.neo4j - release 2.9.0
+# platform42.neo4j - release 3.0.0
 
 Ansible collection for managing **Neo4j graph databases**: create and update vertices (nodes), edges (relationships), constraints, execute queries, and clean up the database. This collection provides a declarative, idempotent interface to Neo4j, allowing automation of graph data management in a consistent and reliable way.
 
-## release 2.9.0 notes
+## release 3.0.0 notes
 - Implemented property driven relationships.
 
 A relationship is defined as a path between 2 nodes (n)-[r]->(n).
