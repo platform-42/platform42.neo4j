@@ -69,7 +69,8 @@ EXAMPLES = r'''
 
 def label(
     check_mode: bool,
-    module_params: Dict[str, Any]
+    module_params: Dict[str, Any],
+    properties: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
     base_label: str = module_params[u_skel.JsonTKN.BASE_LABEL.value]
     label: str = module_params[u_skel.JsonTKN.LABEL.value]
@@ -77,16 +78,17 @@ def label(
     state: str = module_params[u_skel.JsonTKN.STATE.value]
     if u_skel.state_present(state):
         return u_cypher.label_add(
-            check_mode=check_mode,
-            base_label=base_label,
-            label=label,
-            entity_name=entity_name
+            check_mode,
+            base_label,
+            label,
+            entity_name,
+            properties
             )
     return u_cypher.label_del(
-        check_mode=check_mode,
-        base_label=base_label,
-        label=label,
-        entity_name=entity_name
+        check_mode,
+        base_label,
+        label,
+        entity_name
         )
 
 def validate_cypher_inputs(
@@ -140,10 +142,14 @@ def main() -> None:
     result, diagnostics = validate_cypher_inputs(module.params)
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+    result, casted_properties, diagnostics = u_shared.validate_optionals(module.params[u_skel.JsonTKN.PROPERTIES.value])
+    if not result:
+        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)
     label_result: Tuple[str, Dict[str, Any], str] = label(
         module.check_mode,
-        module.params
+        module.params,
+        casted_properties
         )
     cypher_query, cypher_params, cypher_query_inline = label_result
     payload: Dict[str, Any]

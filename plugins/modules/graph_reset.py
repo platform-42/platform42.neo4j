@@ -65,9 +65,7 @@ def main() -> None:
         supports_check_mode=True
         )
     driver: Driver = u_driver.get_driver(module.params)
-    graph_reset_result: Tuple[str, Dict[str, Any], str] = u_cypher.graph_reset(
-        module.check_mode
-        )
+    graph_reset_result: Tuple[str, Dict[str, Any], str] = u_cypher.graph_reset(module.check_mode)
     cypher_query, cypher_params, cypher_query_inline = graph_reset_result
     payload: Dict[str, Any]
     try:
