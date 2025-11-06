@@ -113,7 +113,7 @@ def payload_exit(
         JsonTKN.CYPHER_RESPONSE.value: cypher_response
         }
 
-# catastrophic failure - cypher buffers might be corrupted. 
+# catastrophic failure - cypher buffers might be corrupted
 def payload_abend(
     cypher_query_inline: str,
     e: BaseException
@@ -124,7 +124,7 @@ def payload_abend(
         JsonTKN.DIAGNOSTICS.value: ansible_diagnostics(e)
         }
 
-# functional failure, cypher buffers have consistent state
+# functional failure - cypher buffers have consistent state
 def payload_fail(
     cypher_query: str,
     cypher_params: Dict[str, Any],
