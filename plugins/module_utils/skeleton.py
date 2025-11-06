@@ -104,14 +104,14 @@ def payload_exit(
     cypher_query_inline: str,
     cypher_response: Any,
     stats: Dict[str, Any]
-) -> None:
+) -> Dict[str, Any]:
     return {
         JsonTKN.CYPHER_QUERY.value: flatten_query(cypher_query),
         JsonTKN.CYPHER_PARAMS.value: cypher_params,
         JsonTKN.CYPHER_QUERY_INLINE.value: flatten_query(cypher_query_inline),
         JsonTKN.STATS.value: stats,
         JsonTKN.CYPHER_RESPONSE.value: cypher_response
-    }
+        }
 
 def payload_fail(
     cypher_query: str,
@@ -124,7 +124,7 @@ def payload_fail(
         JsonTKN.CYPHER_PARAMS.value: cypher_params,
         JsonTKN.CYPHER_QUERY_INLINE.value: flatten_query(cypher_query_inline),
         JsonTKN.DIAGNOSTICS.value: ansible_diagnostics(e)
-    }
+        }
 
 def ansible_diagnostics(
     e: BaseException
