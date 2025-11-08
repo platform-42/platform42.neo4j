@@ -138,7 +138,6 @@ def main() -> None:
         u_shared.unescape_string(cypher_query_inline),
         u_shared.serialize_neo4j(cypher_response),
         u_cypher.cypher_stats(summary),
-        "pruts": module.params[u_skel.JsonTKN.QUERY.value]
         )
     module.exit_json(**u_skel.ansible_exit(
         changed=False,
