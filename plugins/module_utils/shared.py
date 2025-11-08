@@ -13,6 +13,13 @@ from neo4j.time import DateTime, Date, Time
 
 from . import skeleton as u_skel
 
+import codecs
+
+def unescape_string(
+        s: str
+    ) -> str:
+    return codecs.decode(s, "unicode_escape")
+
 def serialize_neo4j(
     value: Any
 ) -> Any:

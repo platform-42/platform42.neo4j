@@ -135,7 +135,7 @@ def main() -> None:
     payload = u_skel.payload_exit(
         cypher_query,
         cypher_params,
-        cypher_query_inline,
+        u_shared.unescape_string(cypher_query_inline),
         u_shared.serialize_neo4j(cypher_response),
         u_cypher.cypher_stats(summary)
         )
