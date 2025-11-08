@@ -139,7 +139,6 @@ def main() -> None:
         u_shared.serialize_neo4j(cypher_response),
         u_cypher.cypher_stats(summary),
         )
-    payload["pruts"] = module.params[u_skel.JsonTKN.QUERY.value]
     module.exit_json(**u_skel.ansible_exit(
         changed=False,
         payload_key=module_name,

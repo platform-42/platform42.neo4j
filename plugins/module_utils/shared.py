@@ -18,7 +18,8 @@ import codecs
 def unescape_string(
         s: str
     ) -> str:
-    return codecs.decode(s, "unicode_escape")
+    return s.replace('\\"', '"').encode('utf-8').decode('unicode_escape')
+
 
 def serialize_neo4j(
     value: Any
