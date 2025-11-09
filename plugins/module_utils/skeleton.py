@@ -26,6 +26,7 @@ class YamlATTR(StrEnum):
     TYPE_DICT = "dict"
     TYPE_FLOAT = "float"
     TYPE_INT = "int"
+    TYPE_LIST = "list"
     TYPE_STR = "str"
 
 class YamlState(StrEnum):
