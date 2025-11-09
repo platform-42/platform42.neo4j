@@ -2,7 +2,7 @@
     Filename: ./module_utils/driver.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-11-04
-    Version: 3.0.0
+    Version: 3.1.0
     Description: 
         Neo4j driver functions
 """

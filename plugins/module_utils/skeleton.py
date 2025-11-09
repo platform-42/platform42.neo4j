@@ -2,7 +2,7 @@
     Filename: ./module_utils/skeleton.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-26
-    Version: 3.0.0
+    Version: 3.1.0
     Description: 
         Ansible core skeleton functions
 """
