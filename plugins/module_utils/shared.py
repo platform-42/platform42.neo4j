@@ -6,7 +6,7 @@
     Description: 
         Shared utility functions
 """
-from typing import Dict, Any, Callable, Tuple
+from typing import Dict, Any, Callable, Tuple, List
 from datetime import datetime
 
 from neo4j.time import DateTime, Date, Time
@@ -33,18 +33,6 @@ def serialize_neo4j(
     else:
         return value
 
-def parse_datetime(
-    val: str
-) -> datetime:
-    return datetime.fromisoformat(val.replace("Z", "+00:00"))
-
-def parse_bool(
-    val: Any
-) -> bool:
-    if isinstance(val, bool):
-        return val
-    return str(val).lower() in ("true", "1", "yes", "y")
-
 def validate_optionals(
     properties: Dict[str, Any]
 ) -> Tuple[bool, Dict[str, Any], Dict[str, Any]]:
@@ -56,6 +44,18 @@ def validate_optionals(
     except Exception as e:
         return False, {}, u_skel.ansible_diagnostics(e)
     return True, casted_properties, {}
+
+def parse_datetime(
+    val: str
+) -> datetime:
+    return datetime.fromisoformat(val.replace("Z", "+00:00"))
+
+def parse_bool(
+    val: Any
+) -> bool:
+    if isinstance(val, bool):
+        return val
+    return str(val).lower() in ("true", "1", "yes", "y")
 
 # Mapping of type names to conversion functions
 TYPE_HANDLERS: Dict[str, Callable[[Any], Any]] = {
@@ -74,7 +74,7 @@ TYPE_HANDLERS: Dict[str, Callable[[Any], Any]] = {
 #   - initial support for int, float, bool, datatime and str
 #   - returns a new properties Dict with a casted value
 #
-def type_casted_properties(
+def type_casted_properties_org(
     properties: Dict[str, Dict[str, Any]]
 ) -> Dict[str, Any]:
     casted_properties: Dict[str, Any] = {}
@@ -101,5 +101,62 @@ def type_casted_properties(
             raise ValueError(
                 f"Failed to cast property '{key}' with value '{raw_value}' to type '{data_type}': {repr(e)}"
                 )
+
+    return casted_properties
+
+def parse_list(
+        element_value: Any, 
+        element_type: str
+) -> List[Any]:
+    if not isinstance(element_value, list):
+        raise TypeError(f"Expected a list for type 'list', got {type(element_value).__name__}")
+    
+    # Reuse your existing handlers for element types
+    handler = TYPE_HANDLERS.get(element_type)
+    if handler is None:
+        raise ValueError(f"Unsupported element type for list: {element_type}")
+    
+    try:
+        return [handler(v) for v in element_value]
+    except Exception as e:
+        raise ValueError(f"Failed to cast list elements to '{element_type}': {repr(e)}")
+
+def type_casted_properties(
+        properties: Dict[str, Dict[str, Any]]
+) -> Dict[str, Any]:
+    casted_properties: Dict[str, Any] = {}
+
+    for key, value in properties.items():
+        # Validate structure
+        if not isinstance(value, dict):
+            raise ValueError(
+                f"Property '{key}' must be a dict with 'value' and optional 'type', got {type(value).__name__}"
+            )
+
+        if u_skel.JsonTKN.VALUE.value not in value:
+            raise KeyError(
+                f"Property '{key}' is missing required '{u_skel.JsonTKN.VALUE.value}' field"
+            )
+
+        raw_value = value[u_skel.JsonTKN.VALUE.value]
+        data_type = value.get(u_skel.JsonTKN.TYPE.value, u_skel.YamlATTR.TYPE_STR.value)
+
+        # Handle list types explicitly
+        if data_type == u_skel.YamlATTR.TYPE_LIST.value:
+            element_type = value.get(
+                u_skel.JsonTKN.ELEMENT_TYPE.value,
+                u_skel.YamlATTR.TYPE_STR.value
+            )
+            casted_value = parse_list(raw_value, element_type)
+        else:
+            handler = TYPE_HANDLERS.get(data_type, str)
+            try:
+                casted_value = handler(raw_value)
+            except Exception as e:
+                raise ValueError(
+                    f"Failed to cast property '{key}' with value '{raw_value}' to type '{data_type}': {repr(e)}"
+                )
+        # Assign final casted value
+        casted_properties[key] = casted_value
 
     return casted_properties
