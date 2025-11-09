@@ -76,6 +76,10 @@ EXAMPLES = r'''
       price: 
         value: 9.99
         type: float
+      sizes:
+        type: list
+        value: ["S", "M", "L", "XL", "XXL"]
+        element_type: str
 '''
 
 def vertex(
