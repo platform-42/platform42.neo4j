@@ -45,6 +45,7 @@ class JsonTKN(StrEnum):
     CYPHER_RESPONSE = "cypher_response"
     DATABASE = "database"
     DIAGNOSTICS = "diagnostics"
+    ELEMENT_TYPE = "element_type"
     ENTITY_NAME = "entity_name"
     ENTITY_NAME_FROM = "entity_name_from"
     ENTITY_NAME_TO = "entity_name_to"
