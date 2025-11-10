@@ -59,7 +59,7 @@ EXAMPLES = r'''
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
-        argument_spec=u_args.argument_spec_graph_reset(),
+        argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_graph_reset(),
         supports_check_mode=True
         )
     driver: Driver = u_driver.get_driver(module.params)

@@ -32,13 +32,10 @@ def argument_spec_neo4j() -> Dict[str, Any]:
     }
 
 def argument_spec_graph_reset() -> Dict[str, Any]:
-    argument_spec: Dict[str, Any] = argument_spec_neo4j()
-    argument_spec.update({})
-    return argument_spec
+    return {}
 
 def argument_spec_constraint() -> Dict[str, Any]:
-    argument_spec: Dict[str, Any] = argument_spec_neo4j()
-    argument_spec.update({
+    return {
         u_skel.JsonTKN.LABEL.value: {
             u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
             u_skel.YamlATTR.REQUIRED.value: True
@@ -52,12 +49,10 @@ def argument_spec_constraint() -> Dict[str, Any]:
             u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
             u_skel.YamlATTR.REQUIRED.value: True
         }
-    })
-    return argument_spec
+    }
 
 def argument_spec_query_read() -> Dict[str, Any]:
-    argument_spec: Dict[str, Any] = argument_spec_neo4j()
-    argument_spec.update({
+    return {
         u_skel.JsonTKN.QUERY.value: {
             u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
             u_skel.YamlATTR.REQUIRED.value: True
@@ -72,12 +67,10 @@ def argument_spec_query_read() -> Dict[str, Any]:
             u_skel.YamlATTR.REQUIRED.value: False,
             u_skel.YamlATTR.DEFAULT.value: False
         }
-    })
-    return argument_spec
+    }
 
 def argument_spec_vertex() -> Dict[str, Any]:
-    argument_spec: Dict[str, Any] = argument_spec_neo4j()
-    argument_spec.update({
+    return {
         u_skel.JsonTKN.LABEL.value: {
             u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
             u_skel.YamlATTR.REQUIRED.value: True
@@ -101,12 +94,10 @@ def argument_spec_vertex() -> Dict[str, Any]:
             u_skel.YamlATTR.REQUIRED.value: False,
             u_skel.YamlATTR.DEFAULT.value: True
         }
-    })
-    return argument_spec
+    }
 
 def argument_spec_edge() -> Dict[str, Any]:
-    argument_spec: Dict[str, Any] = argument_spec_neo4j()
-    argument_spec.update({
+    return {
         u_skel.JsonTKN.TYPE.value: {
             u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
             u_skel.YamlATTR.REQUIRED.value: True
@@ -159,12 +150,10 @@ def argument_spec_edge() -> Dict[str, Any]:
             u_skel.YamlATTR.REQUIRED.value: False,
             u_skel.YamlATTR.DEFAULT.value: None
         }
-    })
-    return argument_spec
+    }
 
 def argument_spec_label() -> Dict[str, Any]:
-    argument_spec: Dict[str, Any] = argument_spec_neo4j()
-    argument_spec.update({
+    return {
         u_skel.JsonTKN.BASE_LABEL.value: {
             u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
             u_skel.YamlATTR.REQUIRED.value: True
@@ -187,5 +176,4 @@ def argument_spec_label() -> Dict[str, Any]:
             u_skel.YamlATTR.REQUIRED.value: False,
             u_skel.YamlATTR.DEFAULT.value: {}
         }
-    })
-    return argument_spec
+    }

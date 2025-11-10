@@ -138,7 +138,7 @@ def validate_cypher_inputs(
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
-        argument_spec=u_args.argument_spec_vertex(),
+        argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_vertex(),
         supports_check_mode=True
         )
     result: bool

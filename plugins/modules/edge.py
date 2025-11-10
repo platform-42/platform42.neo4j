@@ -194,7 +194,7 @@ def validate_cypher_inputs(
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
-        argument_spec=u_args.argument_spec_edge(),
+        argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_edge(),
         supports_check_mode=True
         )
     result, diagnostics = validate_cypher_inputs(module.params)
