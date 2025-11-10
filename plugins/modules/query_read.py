@@ -128,7 +128,7 @@ def main() -> None:
                 [Callable[[Any, Any, Any], Any], str, Dict[str, Any]],
                 Tuple[Any, Any]
                 ] = session.execute_write if write_access else session.execute_read
-            cypher_response, summary = executor(u_cypher.query_read_tx, cypher_query, cypher_params)
+            cypher_response, summary = executor(u_cypher.query_tx, cypher_query, cypher_params)
     except Neo4jError as e:
         payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e)
         module.fail_json(**u_skel.ansible_fail(diagnostics=payload))

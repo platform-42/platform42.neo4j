@@ -401,14 +401,14 @@ def query_read(
     return query_build(cypher_query, cypher_params)
 
 #
-#   query_read_tx:
+#   query_tx:
 #       transactional wrapper to support session.execute_read()
 #
 #   returns:
 #       data -> cypher response
 #       summary -> cypher stats summary
 #
-def query_read_tx(
+def query_tx(
     tx: Transaction,
     cypher_query: str,
     cypher_params: Dict[str, Any]
