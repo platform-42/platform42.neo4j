@@ -66,44 +66,6 @@ TYPE_HANDLERS: Dict[str, Callable[[Any], Any]] = {
     u_skel.YamlATTR.TYPE_DATETIME.value: parse_datetime
 }
 
-#
-#   type_casted_properties:
-#   - a property now consists of a value and a type
-#   - if the type is unknown, it is considered as a string
-#     Cypher will emit an error if that assumption was wrong
-#   - initial support for int, float, bool, datatime and str
-#   - returns a new properties Dict with a casted value
-#
-def type_casted_properties_org(
-    properties: Dict[str, Dict[str, Any]]
-) -> Dict[str, Any]:
-    casted_properties: Dict[str, Any] = {}
-    for key, value in properties.items():
-        # Ensure value is a dict
-        if not isinstance(value, dict):
-            raise ValueError(
-                f"Property '{key}' must be a dict with 'value' and optional 'type', got {type(value).__name__}"
-                )
-
-        # Ensure 'value' exists
-        if u_skel.JsonTKN.VALUE.value not in value:
-            raise KeyError(
-                f"Property '{key}' is missing required '{u_skel.JsonTKN.VALUE.value}' field"
-                )
-
-        raw_value = value[u_skel.JsonTKN.VALUE.value]
-        data_type = value.get(u_skel.JsonTKN.TYPE.value, u_skel.YamlATTR.TYPE_STR.value)
-        handler = TYPE_HANDLERS.get(data_type, str)
-
-        try:
-            casted_properties[key] = handler(raw_value)
-        except Exception as e:
-            raise ValueError(
-                f"Failed to cast property '{key}' with value '{raw_value}' to type '{data_type}': {repr(e)}"
-                )
-
-    return casted_properties
-
 def parse_list(
         element_value: Any, 
         element_type: str
@@ -121,6 +83,15 @@ def parse_list(
     except Exception as e:
         raise ValueError(f"Failed to cast list elements to '{element_type}': {repr(e)}")
 
+#
+#   type_casted_properties:
+#   - a property now consists of value and type for simple types.
+#   - a property now consists of value, type and element_type for list of simple type.
+#   - if the type is unknown, it is considered as a string.
+#       Cypher will emit an error if that assumption was wrong.
+#   - initial support for int, float, bool, datatime, str and list.
+#   - returns a new properties Dict with a casted value.
+#
 def type_casted_properties(
         properties: Dict[str, Dict[str, Any]]
 ) -> Dict[str, Any]:
