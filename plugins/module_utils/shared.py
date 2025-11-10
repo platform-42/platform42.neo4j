@@ -9,15 +9,33 @@
 from typing import Dict, Any, Callable, Tuple, List
 from datetime import datetime
 
+import yaml
+import os
+
 from neo4j.time import DateTime, Date, Time
 
 from . import skeleton as u_skel
 
-import codecs
+def load_yaml_file(
+    path: str
+) -> List[Dict[str, Any]]:
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"Vertex file not found: {path}")
+
+    with open(path, "r", encoding="utf-8") as f:
+        try:
+            data = yaml.safe_load(f)
+        except yaml.YAMLError as e:
+            raise ValueError(f"Failed to parse YAML file {path}: {e}")
+
+    if not isinstance(data, list):
+        raise ValueError(f"Vertex file {path} must contain a list of vertex definitions")
+
+    return data
 
 def unescape_string(
-        s: str
-    ) -> str:
+    s: str
+) -> str:
     return s.replace('\\"', '"').encode('utf-8').decode('unicode_escape')
 
 def serialize_neo4j(
@@ -82,21 +100,21 @@ TYPE_HANDLERS: Dict[str, Callable[[Any], Any]] = {
 }
 
 def parse_list(
-        element_value: Any, 
-        element_type: str
+    element_value: Any,
+    element_type: str
 ) -> List[Any]:
     if not isinstance(element_value, list):
         raise TypeError(
             f"Expected a list for type 'list', got {type(element_value).__name__}"
             )
-    
+
     # Reuse your existing handlers for element types
     handler = TYPE_HANDLERS.get(element_type)
     if handler is None:
         raise ValueError(
             f"Unsupported element type for list: {element_type}"
             )
-    
+
     try:
         return [handler(v) for v in element_value]
     except Exception as e:
