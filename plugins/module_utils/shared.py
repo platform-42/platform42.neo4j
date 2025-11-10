@@ -62,9 +62,8 @@ def validate_vertex_file(
             expected_type = rules.get(u_skel.YamlATTR.TYPE.value)
             if expected_type and key in vertex:
                 if expected_type == u_skel.YamlATTR.TYPE_STR.value and not isinstance(vertex[key], str):
-                   return False, {u_skel.JsonTKN.ERROR_MSG: f"Vertex {i}: Field '{key}' must be a string"}
+                    return False, {u_skel.JsonTKN.ERROR_MSG: f"Vertex {i}: Field '{key}' must be a string"}
     return True, {}
-
 
 def validate_optionals(
     properties: Dict[str, Any]
@@ -132,7 +131,7 @@ def parse_list(
 #   - returns a new properties Dict with a casted value.
 #
 def type_casted_properties(
-        properties: Dict[str, Dict[str, Any]]
+    properties: Dict[str, Dict[str, Any]]
 ) -> Dict[str, Any]:
     casted_properties: Dict[str, Any] = {}
 
