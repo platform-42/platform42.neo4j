@@ -25,29 +25,13 @@ from . import cypher_query as u_cyph_q
 #       cypher_query_inline: str -> NEO4J query with substituted values for debugging in NEO4J console
 #
 
-def query_build_org(
+def query_build(
     cypher_query: str,
     cypher_params: Dict[str, Any]
 )-> Tuple[str, Dict[str, Any], str]:
     cypher_query_inline: str = cypher_query
     for key, value in cypher_params.items():
         cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
-    return cypher_query, cypher_params, cypher_query_inline
-
-def query_build(
-    cypher_query: str,
-    cypher_params: Dict[str, Any]
-) -> Tuple[str, Dict[str, Any], str]:
-    cypher_query_inline = cypher_query
-    for key, value in cypher_params.items():
-        if isinstance(value, str):
-            safe_val = value.replace("'", "\\'")
-            replacement = f"'{safe_val}'"
-        elif value is None:
-            replacement = "null"
-        else:
-            replacement = str(value)
-        cypher_query_inline = cypher_query_inline.replace(f"${key}", replacement)
     return cypher_query, cypher_params, cypher_query_inline
 
 #
@@ -361,7 +345,6 @@ def edge_add(
             unique_key=normalised_unique_key
         )
     return query_build(cypher_query, cypher_params)
-
 
 #
 #   query_read:
