@@ -181,7 +181,7 @@ def vertex_del(
     label: str,
     entity_name: str
 ) -> Tuple[str, Dict[str, Any], str]:
-    
+
     # normalise
     normalised_label: str = label.capitalize()
 
@@ -324,7 +324,7 @@ def edge_add(
         u_skel.JsonTKN.ENTITY_NAME_TO.value: entity_name_to,
         **normalised_properties
     }
-    
+
     cypher_query: str
     if bi_directional:
         cypher_query = u_cyph_q.cypher_edge_add_bi(
@@ -348,13 +348,13 @@ def edge_add(
 
 #
 #   query_read:
-#       non destructive query. 
+#       non destructive query.
 #       protected by session.execute_read()
 #   notes:
 #       query_read is a difficult beast
 #       - cypher is now defined outside the context of Ansible
 #       - therefore we cannot apply enforcements like lowercase for keys
-#       - In query_ready, query defines the “API contract” itself; no schema or 
+#       - In query_ready, query defines the “API contract” itself; no schema or
 #         object model exists outside the query. Therefore, no sanitising of parameters
 #
 #   returns:

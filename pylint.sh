@@ -10,3 +10,5 @@ pylint argument_spec.py
 pylint cypher_query.py
 pylint schema.py
 pylint skeleton.py
+pylint shared.py
+pylint cypher.py
