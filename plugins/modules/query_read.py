@@ -10,7 +10,7 @@
 """
 
 # pylint: disable=import-error
-from typing import Dict, Any, Tuple
+from typing import Dict, Any, Tuple, Callable
 from ansible.module_utils.basic import AnsibleModule
 
 import ansible_collections.platform42.neo4j.plugins.module_utils.argument_spec as u_args
@@ -121,9 +121,14 @@ def main() -> None:
         )
     cypher_query, cypher_params, cypher_query_inline = query_read_result
     payload: Dict[str, Any]
+    write_access: bool = module.params[u_skel.JsonTKN.WRITE_ACCESS.value]
     try:
         with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
-            cypher_response, summary = session.execute_read(u_cypher.query_read_tx, cypher_query, cypher_params)
+            executor: Callable[
+                [Callable[[Any, Any, Any], Any], str, Dict[str, Any]],
+                Tuple[Any, Any]
+                ] = session.execute_write if write_access else session.execute_read
+            cypher_response, summary = executor(u_cypher.query_read_tx, cypher_query, cypher_params)
     except Neo4jError as e:
         payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e)
         module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
