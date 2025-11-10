@@ -82,6 +82,7 @@ class JsonTKN(StrEnum):
     UNIQUE_KEY = "unique_key"
     USERNAME = "username"
     VALUE = "value"
+    WRITE_ACCESS = "write_access"
 
 def state_present(
     state: str

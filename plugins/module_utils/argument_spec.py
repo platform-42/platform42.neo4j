@@ -90,6 +90,11 @@ def argument_spec_query_read() -> Dict[str, Any]:
             u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_DICT.value,
             u_skel.YamlATTR.REQUIRED.value: False,
             u_skel.YamlATTR.DEFAULT.value: {}
+        },
+        u_skel.JsonTKN.WRITE_ACCESS.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_BOOL.value,
+            u_skel.YamlATTR.REQUIRED.value: False,
+            u_skel.YamlATTR.DEFAULT.value: False
         }
     }
 
