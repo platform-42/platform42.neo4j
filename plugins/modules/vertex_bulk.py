@@ -66,10 +66,11 @@ EXAMPLES = r'''
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
-        argument_spec=u_args.argument_spec_vertex_bulk(),
+        argument_spec=u_args.argument_spec_neo4j(),
         supports_check_mode=True
         )
-
+#    vertices: List[Dict[str, Any]] = load_yaml_file(module.params[u_skel.JsonTKN.VERTEX_FILE.value])
+#    u_shared.validate_vertex_file(vertices, u_args.argument_spec_vertex_bulk())
 
 if __name__ == '__main__':
     main()

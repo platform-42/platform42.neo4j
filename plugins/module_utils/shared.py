@@ -20,7 +20,6 @@ def unescape_string(
     ) -> str:
     return s.replace('\\"', '"').encode('utf-8').decode('unicode_escape')
 
-
 def serialize_neo4j(
     value: Any
 ) -> Any:
@@ -32,6 +31,22 @@ def serialize_neo4j(
         return {k: serialize_neo4j(v) for k, v in value.items()}
     else:
         return value
+
+def validate_vertex_file(
+    vertices: List[Dict[str, Any]],
+    vertex_spec: Dict[str, Dict[str, Any]]
+) -> Tuple[bool, Dict[str, Any]]:
+    for i, vertex in enumerate(vertices):
+        for key, rules in vertex_spec.items():
+            if rules.get(u_skel.YamlATTR.REQUIRED.value, False) and key not in vertex:
+                return False, {u_skel.JsonTKN.ERROR_MSG: f"Vertex {i}: Missing required field '{key}'"}            
+            # Optional: type checks
+            expected_type = rules.get(u_skel.YamlATTR.TYPE.value)
+            if expected_type and key in vertex:
+                if expected_type == u_skel.YamlATTR.TYPE_STR.value and not isinstance(vertex[key], str):
+                   return False, {u_skel.JsonTKN.ERROR_MSG: f"Vertex {i}: Field '{key}' must be a string"}
+    return True, {}
+
 
 def validate_optionals(
     properties: Dict[str, Any]
@@ -71,17 +86,23 @@ def parse_list(
         element_type: str
 ) -> List[Any]:
     if not isinstance(element_value, list):
-        raise TypeError(f"Expected a list for type 'list', got {type(element_value).__name__}")
+        raise TypeError(
+            f"Expected a list for type 'list', got {type(element_value).__name__}"
+            )
     
     # Reuse your existing handlers for element types
     handler = TYPE_HANDLERS.get(element_type)
     if handler is None:
-        raise ValueError(f"Unsupported element type for list: {element_type}")
+        raise ValueError(
+            f"Unsupported element type for list: {element_type}"
+            )
     
     try:
         return [handler(v) for v in element_value]
     except Exception as e:
-        raise ValueError(f"Failed to cast list elements to '{element_type}': {repr(e)}")
+        raise ValueError(
+            f"Failed to cast list elements to '{element_type}': {repr(e)}"
+            )
 
 #
 #   type_casted_properties:

@@ -83,6 +83,7 @@ class JsonTKN(StrEnum):
     USERNAME = "username"
     VALUE = "value"
     WRITE_ACCESS = "write_access"
+    VERTEX_FILE = "vertex_file"
 
 def state_present(
     state: str
