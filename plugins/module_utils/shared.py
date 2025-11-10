@@ -9,8 +9,8 @@
 from typing import Dict, Any, Callable, Tuple, List
 from datetime import datetime
 
-import yaml
 import os
+import yaml
 
 from neo4j.time import DateTime, Date, Time
 
@@ -57,7 +57,7 @@ def validate_vertex_file(
     for i, vertex in enumerate(vertices):
         for key, rules in vertex_spec.items():
             if rules.get(u_skel.YamlATTR.REQUIRED.value, False) and key not in vertex:
-                return False, {u_skel.JsonTKN.ERROR_MSG: f"Vertex {i}: Missing required field '{key}'"}            
+                return False, {u_skel.JsonTKN.ERROR_MSG: f"Vertex {i}: Missing required field '{key}'"}
             # Optional: type checks
             expected_type = rules.get(u_skel.YamlATTR.TYPE.value)
             if expected_type and key in vertex:
