@@ -370,12 +370,9 @@ def query_read(
     if parameters is None:
         parameters = {}
 
-    # normalise
+    # normalise - no lowercase from raw-cypher, keep contract as is
     normalised_parameters: Dict[str, Any] = {key: value for key, value in parameters.items()}
-#
-#   rejected .lower() - violation of the cypher contract
-#   normalised_parameters: Dict[str, Any] = {key.lower(): value for key, value in parameters.items()}
-#
+
     # cypher construction - values for bindings
     cypher_params: Dict[str, Any] = {
         **normalised_parameters
