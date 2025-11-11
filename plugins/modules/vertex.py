@@ -19,6 +19,7 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cyp
 import ansible_collections.platform42.neo4j.plugins.module_utils.schema as u_schema
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
 import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
+import ansible_collections.platform42.neo4j.plugins.module_utils.input as u_input
 
 from neo4j import Driver, ResultSummary, Result, SummaryCounters
 from neo4j.exceptions import Neo4jError
@@ -110,20 +111,6 @@ def validate_cypher_inputs(
 ) -> Tuple[bool, Dict[str, Any]]:
     result: bool
     diagnostics: Dict[str, Any]
-    # validate vertex Label against injection
-    result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.LABEL,
-        module_params[u_skel.JsonTKN.LABEL.value]
-        )
-    if not result:
-        return False, diagnostics
-    # validate vertex name against injection
-    result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.ENTITY_NAME,
-        module_params[u_skel.JsonTKN.ENTITY_NAME.value]
-        )
-    if not result:
-        return False, diagnostics
     key: str
     # validate vertex properties against injection via JSON-key
     for key in module_params[u_skel.JsonTKN.PROPERTIES.value].keys():
@@ -146,6 +133,15 @@ def main() -> None:
     result, diagnostics = validate_cypher_inputs(module.params)
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+    result, diagnostics = u_input.validate_cypher_inputs(
+        [u_skel.JsonTKN.LABEL.value,
+         u_skel.JsonTKN.ENTITY_NAME.value,
+         ],
+        module.params
+        )
+    if not result:
+        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+
     result, casted_properties, diagnostics = u_shared.validate_optionals(module.params[u_skel.JsonTKN.PROPERTIES.value])
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
