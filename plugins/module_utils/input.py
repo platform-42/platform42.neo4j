@@ -47,7 +47,7 @@ def _validate_from(
     if not result:
         return False, diagnostics
     result, diagnostics = u_schema.validate_pattern_2(
-        u_schema.IdentifierPattern.NEO4J_IDENTIFIER,
+        u_schema.IdentifierPattern.UNICODE_NAME,
         value[u_skel.JsonTKN.ENTITY_NAME.value]
         )
     if not result:
@@ -64,7 +64,7 @@ def _validate_to(
     if not result:
         return False, diagnostics
     result, diagnostics = u_schema.validate_pattern_2(
-        u_schema.IdentifierPattern.NEO4J_IDENTIFIER,
+        u_schema.IdentifierPattern.UNICODE_NAME,
         value[u_skel.JsonTKN.ENTITY_NAME.value]
         )
     if not result:
