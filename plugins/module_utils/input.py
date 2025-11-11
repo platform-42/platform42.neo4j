@@ -18,9 +18,9 @@ def validate_cypher_inputs(
     mask = set(cypher_input_list)
 
     VALIDATORS = {
-        u_skel.JsonTKN.TYPE.value: _validate_type,
-        u_skel.JsonTKN.LABEL.value: _validate_label,
-        u_skel.JsonTKN.BASE_LABEL.value: _validate_label,
+        u_skel.JsonTKN.TYPE.value: _validate_identifier,
+        u_skel.JsonTKN.LABEL.value: _validate_identifier,
+        u_skel.JsonTKN.BASE_LABEL.value: _validate_identifier,
         u_skel.JsonTKN.ENTITY_NAME.value: _validate_entity_name,
         u_skel.JsonTKN.FROM.value: _validate_from,
         u_skel.JsonTKN.TO.value: _validate_to,
@@ -35,24 +35,15 @@ def validate_cypher_inputs(
         if not validator:
             continue  # Ignore tokens not handled here
         value: Any = module_params.get(token)
-        if value is not None:
-            result, diagnostics = validator(value)
+        if value is None:
+            continue  # Skip missing fields
+
+        result, diagnostics = validator(value)
         if not result:
             return False, diagnostics
     return True, {}
 
-def _validate_type(
-    value: str
-) -> Tuple[bool, Dict[str, Any]]:
-    result, diagnostics = u_schema.validate_patterns(
-        u_schema.IdentifierPattern.NEO4J_IDENTIFIER,
-        value
-        )
-    if not result:
-        return False, diagnostics
-    return True, {}
-
-def _validate_label(
+def _validate_identifier(
     value: str
 ) -> Tuple[bool, Dict[str, Any]]:
     result, diagnostics = u_schema.validate_patterns(
