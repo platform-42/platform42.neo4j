@@ -49,3 +49,11 @@ def validate_pattern(
     if not regex.match(pattern, value):
         return False, {u_skel.JsonTKN.ERROR_MSG.value: f"value {value} must match pattern {pattern}"}
     return True, {}
+
+def validate_pattern_2(
+    pattern: IdentifierPattern,
+    value: str
+) -> Tuple[bool, Dict[str, Any]]:
+    if not regex.match(pattern.value, value):
+        return False, {u_skel.JsonTKN.ERROR_MSG.value: f"value {value} must match pattern {pattern}"}
+    return True, {}

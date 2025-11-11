@@ -4,9 +4,9 @@ from . import skeleton as u_skel
 from . import schema as u_schema
 
 def validate_cypher_inputs(
-    module_params: Dict[str, Any],
-    cypher_input_list: List
-):
+    cypher_input_list: List[str],
+    module_params: Dict[str, Any]
+) -> None:
     mask = set(cypher_input_list)
 
     VALIDATORS = {
@@ -19,13 +19,16 @@ def validate_cypher_inputs(
             continue  # Ignore tokens not handled here
         value = module_params.get(token)
         if value is not None:
-            validator(value)
+            result, diagnostics = validator(value)
+        if not result:
+            return False, diagnostics
+    return True, {}
 
 def _validate_type(
     value: str
 ) -> Tuple[bool, Dict[str, Any]]:
-    result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.TYPE,
+    result, diagnostics = u_schema.validate_pattern_2(
+        u_schema.IdentifierPattern.NEO4J_IDENTIFIER,
         value
         )
     if not result:

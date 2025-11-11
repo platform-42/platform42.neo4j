@@ -125,14 +125,6 @@ def validate_cypher_inputs(
     result: bool
     diagnostics: Dict[str, Any]
 
-    # validate edge-type against injection
-    result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.TYPE,
-        module_params[u_skel.JsonTKN.TYPE.value]
-        )
-    if not result:
-        return False, diagnostics
-
     # validate edge from-label against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.LABEL,
