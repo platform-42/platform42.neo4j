@@ -125,38 +125,6 @@ def validate_cypher_inputs(
     result: bool
     diagnostics: Dict[str, Any]
 
-    # validate edge from-label against injection
-    result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.LABEL,
-        module_params[u_skel.JsonTKN.FROM][u_skel.JsonTKN.LABEL.value]
-        )
-    if not result:
-        return False, diagnostics
-
-    # validate edge from-entity_name against injection
-    result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.ENTITY_NAME,
-        module_params[u_skel.JsonTKN.FROM][u_skel.JsonTKN.ENTITY_NAME.value]
-        )
-    if not result:
-        return False, diagnostics
-
-    # validate edge to-label against injection
-    result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.LABEL,
-        module_params[u_skel.JsonTKN.TO][u_skel.JsonTKN.LABEL.value]
-        )
-    if not result:
-        return False, diagnostics
-
-    # validate edge to-entity_name against injection
-    result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.ENTITY_NAME,
-        module_params[u_skel.JsonTKN.TO][u_skel.JsonTKN.ENTITY_NAME.value]
-        )
-    if not result:
-        return False, diagnostics
-
     # validate edge properties against injection via JSON-key
     properties: Dict[str, Any] = module_params[u_skel.JsonTKN.PROPERTIES.value]
     for key in properties.keys():
@@ -194,7 +162,9 @@ def main() -> None:
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     result, diagnostics = u_input.validate_cypher_inputs(
-        [u_skel.JsonTKN.TYPE.value
+        [u_skel.JsonTKN.TYPE.value,
+         u_skel.JsonTKN.FROM.value,
+         u_skel.JsonTKN.TO.value
          ],
         module.params
         )
