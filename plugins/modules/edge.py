@@ -65,6 +65,7 @@ EXAMPLES = r'''
       since: 
         value: 2020
         type: int
+    unique_key: "since"
 
 # Create a PURCHASED relationship without additional properties
 - name: "Create PURCHASED edge"
@@ -119,38 +120,12 @@ def edge(
         unique_key
     )
 
-def validate_cypher_inputs(
-    module_params: Dict[str, Any]
-) -> Tuple[bool, Dict[str, Any]]:
-    result: bool
-    diagnostics: Dict[str, Any]
-
-    # validate edge properties against injection via JSON-key
-    properties: Dict[str, Any] = module_params[u_skel.JsonTKN.PROPERTIES.value]
-    for key in properties.keys():
-        result, diagnostics = u_schema.validate_pattern(
-            u_schema.SchemaProperties.PROPERTY_KEYS,
-            key
-        )
-        if not result:
-            return False, diagnostics
-
-    # validate unique key if available
-    unique_key: str = module_params[u_skel.JsonTKN.UNIQUE_KEY.value]
-    if unique_key:
-        result, diagnostics = u_schema.validate_pattern(
-            u_schema.SchemaProperties.PROPERTY_KEY,
-            module_params[u_skel.JsonTKN.UNIQUE_KEY.value]
-            )
-        if not result:
-            return False, diagnostics
-
-    # validate unique key against set of property keys
-        normalized_property_keys = [key.strip().lower() for key in properties.keys()]
-        if unique_key.strip().lower() not in normalized_property_keys:
-            diagnostics = {u_skel.JsonTKN.ERROR_MSG: f"unique_key '{unique_key}' not found in properties"}
-            return False, diagnostics
-    return True, {}
+ # validate unique key against set of property keys
+#        normalized_property_keys = [key.strip().lower() for key in properties.keys()]
+#        if unique_key.strip().lower() not in normalized_property_keys:
+#            diagnostics = {u_skel.JsonTKN.ERROR_MSG: f"unique_key '{unique_key}' not found in properties"}
+##            return False, diagnostics
+ #   return True, {}
 
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
@@ -158,13 +133,12 @@ def main() -> None:
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_edge(),
         supports_check_mode=True
         )
-    result, diagnostics = validate_cypher_inputs(module.params)
-    if not result:
-        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     result, diagnostics = u_input.validate_cypher_inputs(
         [u_skel.JsonTKN.TYPE.value,
          u_skel.JsonTKN.FROM.value,
-         u_skel.JsonTKN.TO.value
+         u_skel.JsonTKN.TO.value,
+         u_skel.JsonTKN.PROPERTIES.value,
+         u_skel.JsonTKN.UNIQUE_KEY.value
          ],
         module.params
         )

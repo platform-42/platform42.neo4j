@@ -33,11 +33,6 @@ def load_yaml_file(
 
     return data
 
-def unescape_string(
-    s: str
-) -> str:
-    return s.replace('\\"', '"').encode('utf-8').decode('unicode_escape')
-
 def serialize_neo4j(
     value: Any
 ) -> Any:

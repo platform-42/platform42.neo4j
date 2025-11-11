@@ -82,31 +82,16 @@ def constraint(
         property_key=property_key
         )
 
-def validate_cypher_inputs(
-    module_params: Dict[str, Any]
-) -> Tuple[bool, Dict[str, Any]]:
-    result: bool
-    diagnostics: Dict[str, Any]
-    # validate property_key against injection
-    result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.PROPERTY_KEY,
-        module_params[u_skel.JsonTKN.PROPERTY_KEY.value]
-        )
-    if not result:
-        return False, diagnostics
-    return True, {}
-
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_constraint(),
         supports_check_mode=True
         )
-    result, diagnostics = validate_cypher_inputs(module.params)
-    if not result:
-        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     result, diagnostics = u_input.validate_cypher_inputs(
-        [u_skel.JsonTKN.LABEL.value],
+        [u_skel.JsonTKN.LABEL.value,
+         u_skel.JsonTKN.PROPERTY_KEY.value
+         ],
         module.params
         )
     if not result:

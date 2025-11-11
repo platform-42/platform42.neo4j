@@ -19,6 +19,7 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cyp
 import ansible_collections.platform42.neo4j.plugins.module_utils.schema as u_schema
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
 import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
+import ansible_collections.platform42.neo4j.plugins.module_utils.input as u_input
 
 from neo4j import Driver
 from neo4j.exceptions import Neo4jError
@@ -85,22 +86,6 @@ EXAMPLES = r'''
         type: str
 '''
 
-def validate_cypher_inputs(
-        module_params: Dict[str, Any]
-) -> Tuple[bool, Dict[str, Any]]:
-    result: bool
-    diagnostics: Dict[str, Any]
-    key: str
-    # validate edge properties against injection via JSON-key
-    for key in module_params[u_skel.JsonTKN.PARAMETERS.value].keys():
-        result, diagnostics = u_schema.validate_pattern(
-            u_schema.SchemaProperties.PROPERTY_KEYS,
-            key
-        )
-        if not result:
-            return False, diagnostics
-    return True, {}
-
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
@@ -109,7 +94,10 @@ def main() -> None:
         )
     result: bool
     diagnostics: Dict[str, Any]
-    result, diagnostics = validate_cypher_inputs(module.params)
+    result, diagnostics = u_input.validate_cypher_inputs(
+        [u_skel.JsonTKN.PARAMETERS.value],
+        module.params
+        )
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)

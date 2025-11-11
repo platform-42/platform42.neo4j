@@ -106,22 +106,6 @@ def vertex(
         entity_name
         )
 
-def validate_cypher_inputs(
-    module_params: Dict[str, Any]
-) -> Tuple[bool, Dict[str, Any]]:
-    result: bool
-    diagnostics: Dict[str, Any]
-    key: str
-    # validate vertex properties against injection via JSON-key
-    for key in module_params[u_skel.JsonTKN.PROPERTIES.value].keys():
-        result, diagnostics = u_schema.validate_pattern(
-            u_schema.SchemaProperties.PROPERTY_KEYS,
-            key
-        )
-        if not result:
-            return False, diagnostics
-    return True, {}
-
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
@@ -130,12 +114,10 @@ def main() -> None:
         )
     result: bool
     diagnostics: Dict[str, Any]
-    result, diagnostics = validate_cypher_inputs(module.params)
-    if not result:
-        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     result, diagnostics = u_input.validate_cypher_inputs(
         [u_skel.JsonTKN.LABEL.value,
          u_skel.JsonTKN.ENTITY_NAME.value,
+         u_skel.JsonTKN.PROPERTIES.value
          ],
         module.params
         )
