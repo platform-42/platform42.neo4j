@@ -54,6 +54,8 @@ class JsonTKN(StrEnum):
     FROM = "from"
     JSON_KEYS = "json_keys"
     LABEL = "label"
+    LABEL_FROM = "label_from"
+    LABEL_TO = "label_to"
     LABELS = "labels"
     LABELS_ADDED = "labels_added"
     LABELS_REMOVED = "labels_removed"
