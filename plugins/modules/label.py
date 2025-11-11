@@ -19,6 +19,7 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cyp
 import ansible_collections.platform42.neo4j.plugins.module_utils.schema as u_schema
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
 import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
+import ansible_collections.platform42.neo4j.plugins.module_utils.input as u_input
 
 from neo4j import Driver, ResultSummary, Result, SummaryCounters
 from neo4j.exceptions import Neo4jError
@@ -83,37 +84,7 @@ def label(
         entity_name
         )
 
-def validate_cypher_inputs(
-    module_params: Dict[str, Any]
-) -> Tuple[bool, Dict[str, Any]]:
-    result: bool
-    diagnostics: Dict[str, Any]
 
-    # validate base_label against injection
-    result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.LABEL,
-        module_params[u_skel.JsonTKN.BASE_LABEL.value]
-        )
-    if not result:
-        return False, diagnostics
-    
-    # validate label against injection
-    result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.LABEL,
-        module_params[u_skel.JsonTKN.LABEL.value]
-        )
-    if not result:
-        return False, diagnostics
-    
-    # validate entity_name against injection
-    result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.ENTITY_NAME,
-        module_params[u_skel.JsonTKN.ENTITY_NAME.value]
-        )
-    if not result:
-        return False, diagnostics
-
-    return True, {}
 
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
@@ -121,10 +92,13 @@ def main() -> None:
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_label(),
         supports_check_mode=True
         )
-    result, diagnostics = validate_cypher_inputs(module.params)
-    if not result:
-        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-    result, casted_properties, diagnostics = u_shared.validate_optionals(module.params[u_skel.JsonTKN.PROPERTIES.value])
+    result, diagnostics = u_input.validate_cypher_inputs(
+        [u_skel.JsonTKN.BASE_LABEL.value,
+         u_skel.JsonTKN.LABEL.value,
+         u_skel.JsonTKN.ENTITY_NAME.value
+         ],
+        module.params
+        )
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)

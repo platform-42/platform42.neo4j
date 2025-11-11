@@ -19,6 +19,7 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cyp
 import ansible_collections.platform42.neo4j.plugins.module_utils.schema as u_schema
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
 import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
+import ansible_collections.platform42.neo4j.plugins.module_utils.input as u_input
 
 from neo4j import Driver, ResultSummary, Result, SummaryCounters
 from neo4j.exceptions import Neo4jError
@@ -86,13 +87,6 @@ def validate_cypher_inputs(
 ) -> Tuple[bool, Dict[str, Any]]:
     result: bool
     diagnostics: Dict[str, Any]
-    # validate label against injection
-    result, diagnostics = u_schema.validate_pattern(
-        u_schema.SchemaProperties.LABEL,
-        module_params[u_skel.JsonTKN.LABEL.value]
-        )
-    if not result:
-        return False, diagnostics
     # validate property_key against injection
     result, diagnostics = u_schema.validate_pattern(
         u_schema.SchemaProperties.PROPERTY_KEY,
@@ -109,6 +103,12 @@ def main() -> None:
         supports_check_mode=True
         )
     result, diagnostics = validate_cypher_inputs(module.params)
+    if not result:
+        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+    result, diagnostics = u_input.validate_cypher_inputs(
+        [u_skel.JsonTKN.LABEL.value],
+        module.params
+        )
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)

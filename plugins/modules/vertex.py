@@ -141,7 +141,6 @@ def main() -> None:
         )
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-
     result, casted_properties, diagnostics = u_shared.validate_optionals(module.params[u_skel.JsonTKN.PROPERTIES.value])
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))

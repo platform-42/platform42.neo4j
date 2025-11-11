@@ -12,6 +12,7 @@ def validate_cypher_inputs(
     VALIDATORS = {
         u_skel.JsonTKN.TYPE.value: _validate_type,
         u_skel.JsonTKN.LABEL.value: _validate_label,
+        u_skel.JsonTKN.BASE_LABEL.value: _validate_label,
         u_skel.JsonTKN.ENTITY_NAME.value: _validate_entity_name,
         u_skel.JsonTKN.FROM.value: _validate_from,
         u_skel.JsonTKN.TO.value: _validate_to,
