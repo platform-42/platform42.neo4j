@@ -12,6 +12,7 @@ def validate_cypher_inputs(
     VALIDATORS = {
         u_skel.JsonTKN.TYPE.value: _validate_type,
         u_skel.JsonTKN.LABEL.value: _validate_label,
+        u_skel.JsonTKN.ENTITY_NAME.value: _validate_entity_name,
         u_skel.JsonTKN.FROM.value: _validate_from,
         u_skel.JsonTKN.TO.value: _validate_to,
     }
@@ -43,6 +44,17 @@ def _validate_label(
 ) -> Tuple[bool, Dict[str, Any]]:
     result, diagnostics = u_schema.validate_pattern_2(
         u_schema.IdentifierPattern.NEO4J_IDENTIFIER,
+        value
+        )
+    if not result:
+        return False, diagnostics
+    return True, {}
+
+def _validate_entity_name(
+    value: str
+) -> Tuple[bool, Dict[str, Any]]:
+    result, diagnostics = u_schema.validate_pattern_2(
+        u_schema.IdentifierPattern.UNICODE_NAME,
         value
         )
     if not result:
