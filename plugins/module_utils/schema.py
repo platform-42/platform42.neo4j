@@ -14,9 +14,11 @@ import regex
 
 from . import skeleton as u_skel
 
+
 class IdentifierPattern(StrEnum):
     UNICODE_NAME = r"^[\p{L}\p{N}_\s\-\(\)]*$"
     NEO4J_IDENTIFIER = r"^[A-Za-z_][A-Za-z0-9_]*$"
+
 
 def validate_patterns(
     pattern: IdentifierPattern,

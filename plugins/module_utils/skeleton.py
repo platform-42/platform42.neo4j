@@ -12,6 +12,7 @@ import re
 from typing import Dict, Any
 from strenum import StrEnum
 
+
 class YamlATTR(StrEnum):
     CHANGED = "changed"
     DEFAULT = "default"
@@ -29,9 +30,11 @@ class YamlATTR(StrEnum):
     TYPE_LIST = "list"
     TYPE_STR = "str"
 
+
 class YamlState(StrEnum):
     ABSENT = "absent"
     PRESENT = "present"
+
 
 class JsonTKN(StrEnum):
     ARGS = "args"
@@ -87,20 +90,24 @@ class JsonTKN(StrEnum):
     WRITE_ACCESS = "write_access"
     VERTEX_FILE = "vertex_file"
 
+
 def state_present(
     state: str
 ) -> bool:
     return state.lower() == str(YamlState.PRESENT.value)
+
 
 def flatten_query(
     query: str
 ) -> str:
     return re.sub(r'\s+', ' ', query).strip()
 
+
 def file_splitext(
     filename: str
 ) -> str:
     return os.path.splitext(os.path.basename(filename))[0]
+
 
 def payload_exit(
     cypher_query: str,
@@ -117,6 +124,7 @@ def payload_exit(
         JsonTKN.CYPHER_RESPONSE.value: cypher_response
         }
 
+
 # catastrophic failure - cypher buffers might be corrupted
 def payload_abend(
     cypher_query_inline: str,
@@ -127,6 +135,7 @@ def payload_abend(
         JsonTKN.CYPHER_QUERY_INLINE.value: cypher_query_inline,
         JsonTKN.DIAGNOSTICS.value: ansible_diagnostics(e)
         }
+
 
 # functional failure - cypher buffers have consistent state
 def payload_fail(
@@ -142,6 +151,7 @@ def payload_fail(
         JsonTKN.DIAGNOSTICS.value: ansible_diagnostics(e)
         }
 
+
 def ansible_diagnostics(
     e: BaseException
 ) -> Dict[str, Any]:
@@ -153,6 +163,7 @@ def ansible_diagnostics(
         JsonTKN.ARGS.value: list(e.args)
         }
 
+
 def ansible_fail(
     diagnostics: Dict[str, Any]
 ) -> Dict[str, Any]:
@@ -161,6 +172,7 @@ def ansible_fail(
         JsonTKN.CHANGED.value: False,
         JsonTKN.MSG.value: diagnostics
         }
+
 
 def ansible_exit(
     changed: bool,

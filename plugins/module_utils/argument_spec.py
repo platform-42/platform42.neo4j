@@ -27,7 +27,8 @@ def argument_spec_neo4j() -> Dict[str, Any]:
         },
         u_skel.JsonTKN.PASSWORD.value: {
             u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
-            u_skel.YamlATTR.REQUIRED.value: True
+            u_skel.YamlATTR.REQUIRED.value: True,
+            u_skel.YamlATTR.NO_LOG.value: True
         }
     }
 
