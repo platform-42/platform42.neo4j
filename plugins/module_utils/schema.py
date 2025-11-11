@@ -18,7 +18,7 @@ class IdentifierPattern(StrEnum):
     UNICODE_NAME = r"^[\p{L}\p{N}_\s\-\(\)]*$"
     NEO4J_IDENTIFIER = r"^[A-Za-z_][A-Za-z0-9_]*$"
 
-def validate_pattern(
+def validate_patterns(
     pattern: IdentifierPattern,
     value: str
 ) -> Tuple[bool, Dict[str, Any]]:

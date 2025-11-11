@@ -44,7 +44,7 @@ def validate_cypher_inputs(
 def _validate_type(
     value: str
 ) -> Tuple[bool, Dict[str, Any]]:
-    result, diagnostics = u_schema.validate_pattern(
+    result, diagnostics = u_schema.validate_patterns(
         u_schema.IdentifierPattern.NEO4J_IDENTIFIER,
         value
         )
@@ -55,7 +55,7 @@ def _validate_type(
 def _validate_label(
     value: str
 ) -> Tuple[bool, Dict[str, Any]]:
-    result, diagnostics = u_schema.validate_pattern(
+    result, diagnostics = u_schema.validate_patterns(
         u_schema.IdentifierPattern.NEO4J_IDENTIFIER,
         value
         )
@@ -66,7 +66,7 @@ def _validate_label(
 def _validate_entity_name(
     value: str
 ) -> Tuple[bool, Dict[str, Any]]:
-    result, diagnostics = u_schema.validate_pattern(
+    result, diagnostics = u_schema.validate_patterns(
         u_schema.IdentifierPattern.UNICODE_NAME,
         value
         )
@@ -77,13 +77,13 @@ def _validate_entity_name(
 def _validate_from(
     value: Dict[str, Any]
 ) -> Tuple[bool, Dict[str, Any]]:
-    result, diagnostics = u_schema.validate_pattern(
+    result, diagnostics = u_schema.validate_patterns(
         u_schema.IdentifierPattern.NEO4J_IDENTIFIER,
         value[u_skel.JsonTKN.LABEL.value]
         )
     if not result:
         return False, diagnostics
-    result, diagnostics = u_schema.validate_pattern(
+    result, diagnostics = u_schema.validate_patterns(
         u_schema.IdentifierPattern.UNICODE_NAME,
         value[u_skel.JsonTKN.ENTITY_NAME.value]
         )
@@ -94,13 +94,13 @@ def _validate_from(
 def _validate_to(
     value: Dict[str, Any]
 ) -> Tuple[bool, Dict[str, Any]]:
-    result, diagnostics = u_schema.validate_pattern(
+    result, diagnostics = u_schema.validate_patterns(
         u_schema.IdentifierPattern.NEO4J_IDENTIFIER,
         value[u_skel.JsonTKN.LABEL.value]
         )
     if not result:
         return False, diagnostics
-    result, diagnostics = u_schema.validate_pattern(
+    result, diagnostics = u_schema.validate_patterns(
         u_schema.IdentifierPattern.UNICODE_NAME,
         value[u_skel.JsonTKN.ENTITY_NAME.value]
         )
@@ -112,7 +112,7 @@ def _validate_keys(
     value: Dict[str, Any]
 ) -> Tuple[bool, Dict[str, Any]]:
     for key in value.keys():
-        result, diagnostics = u_schema.validate_pattern(
+        result, diagnostics = u_schema.validate_patterns(
             u_schema.IdentifierPattern.NEO4J_IDENTIFIER,
             key
         )
@@ -123,7 +123,7 @@ def _validate_keys(
 def _validate_key(
     value: str
 ) -> Tuple[bool, Dict[str, Any]]:
-    result, diagnostics = u_schema.validate_pattern(
+    result, diagnostics = u_schema.validate_patterns(
         u_schema.IdentifierPattern.NEO4J_IDENTIFIER,
         value
         )
