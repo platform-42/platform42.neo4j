@@ -12,7 +12,6 @@ from datetime import datetime
 from . import skeleton as u_skel
 
 
-
 def validate_optionals(
     properties: Dict[str, Any]
 ) -> Tuple[bool, Dict[str, Any], Dict[str, Any]]:
@@ -80,18 +79,20 @@ def parse_list(
 #
 def type_casted_properties(
     properties: Dict[str, Dict[str, Any]]
-) -> Tuple[bool, Dict[str, Any]]:
+) -> Dict[str, Any]:
     casted_properties: Dict[str, Any] = {}
 
     for key, value in properties.items():
         # Validate structure
         if not isinstance(value, dict):
-            error_msg = f"Property '{key}' must be a dict with 'value' and optional 'type', got {type(value).__name__}"
-            return False, {u_skel.JsonTKN.ERROR_MSG.value: error_msg}
+            raise ValueError(
+                f"Property '{key}' must be a dict with 'value' and optional 'type', got {type(value).__name__}"
+            )
 
         if u_skel.JsonTKN.VALUE.value not in value:
-            error_msg = f"Property '{key}' is missing required '{u_skel.JsonTKN.VALUE.value}' field"
-            return False, {u_skel.JsonTKN.ERROR_MSG.value: error_msg}
+            raise KeyError(
+                f"Property '{key}' is missing required '{u_skel.JsonTKN.VALUE.value}' field"
+            )
 
         raw_value = value[u_skel.JsonTKN.VALUE.value]
         data_type = value.get(u_skel.JsonTKN.TYPE.value, u_skel.YamlATTR.TYPE_STR.value)
@@ -114,4 +115,4 @@ def type_casted_properties(
         # Assign final casted value
         casted_properties[key] = casted_value
 
-    return True, casted_properties
+    return casted_properties
