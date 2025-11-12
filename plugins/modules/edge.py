@@ -20,6 +20,7 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.schema as u_sch
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
 import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
 import ansible_collections.platform42.neo4j.plugins.module_utils.input as u_input
+import ansible_collections.platform42.neo4j.plugins.module_utils.properties as u_prop
 
 from neo4j import Driver, ResultSummary, Result, SummaryCounters
 from neo4j.exceptions import Neo4jError
@@ -144,7 +145,9 @@ def main() -> None:
         )
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-    result, casted_properties, diagnostics = u_shared.validate_optionals(module.params[u_skel.JsonTKN.PROPERTIES.value])
+    result, casted_properties, diagnostics =  u_prop.type_casted_properties(
+        module.params[u_skel.JsonTKN.PROPERTIES.value]
+        )
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)
