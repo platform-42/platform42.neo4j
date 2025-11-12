@@ -15,6 +15,7 @@ from neo4j.time import DateTime, Date, Time
 
 from . import skeleton as u_skel
 
+
 def load_yaml_file(
     path: str
 ) -> List[Dict[str, Any]]:
@@ -31,6 +32,7 @@ def load_yaml_file(
         raise ValueError(f"Vertex file {path} must contain a list of vertex definitions")
 
     return data
+
 
 def serialize_neo4j(
     value: Any
@@ -58,7 +60,3 @@ def validate_vertex_file(
                 if expected_type == u_skel.YamlATTR.TYPE_STR.value and not isinstance(vertex[key], str):
                     return False, {u_skel.JsonTKN.ERROR_MSG: f"Vertex {i}: Field '{key}' must be a string"}
     return True, {}
-
-
-
-
