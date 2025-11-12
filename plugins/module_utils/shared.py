@@ -2,7 +2,7 @@
     Filename: ./module_utils/shared.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-26
-    Version: 3.1.0
+    Version: 4.0.0
     Description: 
         Shared utility functions
 """

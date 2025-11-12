@@ -4,7 +4,7 @@
     Filename: ./modules/label.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-27
-    Version: 3.1.0
+    Version: 4.0.0
     Description: 
         Ansible module to create graph relationship (edge)
 """
