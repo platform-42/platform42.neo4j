@@ -39,12 +39,11 @@ def serialize_neo4j(
 ) -> Any:
     if isinstance(value, (DateTime, Date, Time)):
         return value.isoformat()
-    elif isinstance(value, list):
+    if isinstance(value, list):
         return [serialize_neo4j(v) for v in value]
-    elif isinstance(value, dict):
+    if isinstance(value, dict):
         return {k: serialize_neo4j(v) for k, v in value.items()}
-    else:
-        return value
+    return value
 
 def validate_vertex_file(
     vertices: List[Dict[str, Any]],
