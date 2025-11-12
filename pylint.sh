@@ -17,4 +17,3 @@ pylint --init-hook "import sys; sys.path.append('./plugins')" properties.py
 pylint --init-hook "import sys; sys.path.append('./plugins')" schema.py
 pylint --init-hook "import sys; sys.path.append('./plugins')" shared.py
 pylint --init-hook "import sys; sys.path.append('./plugins')" skeleton.py
-pylint --init-hook "import sys; sys.path.append('./plugins')"
