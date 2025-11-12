@@ -5,15 +5,16 @@ pylint plugins/modules/vertex.py
 pylint plugins/modules/edge.py
 
 PYTHONPATH=./plugins/module_utils
-PYLINT_INIT_HOOK="--init-hook "import sys; sys.path.append('./plugins')"
+PYLINT_INIT_HOOK=--init-hook "import sys; sys.path.append('./plugins')
 
 cd $PYTHONPATH
-pylint ${PYLINT_INIT_HOOK} argument_spec.py
-pylint ${PYLINT_INIT_HOOK} cypher_query.py
-pylint ${PYLINT_INIT_HOOK} cypher.py
-pylint ${PYLINT_INIT_HOOK} driver
-pylint ${PYLINT_INIT_HOOK} input.py
-pylint ${PYLINT_INIT_HOOK} properties.py
-pylint ${PYLINT_INIT_HOOK} schema.py
-pylint ${PYLINT_INIT_HOOK} shared.py
-pylint ${PYLINT_INIT_HOOK} skeleton.py
+pylint --init-hook "import sys; sys.path.append('./plugins')" argument_spec.py
+pylint --init-hook "import sys; sys.path.append('./plugins')" cypher_query.py
+pylint --init-hook "import sys; sys.path.append('./plugins')" cypher.py
+pylint --init-hook "import sys; sys.path.append('./plugins')" driver
+pylint --init-hook "import sys; sys.path.append('./plugins')" input.py
+pylint --init-hook "import sys; sys.path.append('./plugins')" properties.py
+pylint --init-hook "import sys; sys.path.append('./plugins')" schema.py
+pylint --init-hook "import sys; sys.path.append('./plugins')" shared.py
+pylint --init-hook "import sys; sys.path.append('./plugins')" skeleton.py
+pylint --init-hook "import sys; sys.path.append('./plugins')"
