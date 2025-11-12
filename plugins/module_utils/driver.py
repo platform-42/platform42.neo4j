@@ -11,6 +11,7 @@ from neo4j import GraphDatabase, Driver, basic_auth
 
 from . import skeleton as u_skel
 
+
 def get_neo4j_driver(
     db_uri: str,
     db_username: str,
@@ -20,6 +21,7 @@ def get_neo4j_driver(
         uri=db_uri,
         auth=basic_auth(db_username, db_password)
     )
+
 
 def get_driver(
     module_params: Dict[str, Any],
