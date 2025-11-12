@@ -8,7 +8,10 @@ PYTHONPATH=./plugins/module_utils
 cd $PYTHONPATH
 pylint argument_spec.py
 pylint cypher_query.py
-pylint schema.py
-pylint skeleton.py
-pylint shared.py
 pylint cypher.py
+pylint driver
+pylint input.py
+pylint properties.py
+pylint schema.py
+pylint shared.py
+pylint skeleton.py
