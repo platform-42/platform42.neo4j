@@ -120,12 +120,6 @@ def edge(
         unique_key
     )
 
- # validate unique key against set of property keys
-#        normalized_property_keys = [key.strip().lower() for key in properties.keys()]
-#        if unique_key.strip().lower() not in normalized_property_keys:
-#            diagnostics = {u_skel.JsonTKN.ERROR_MSG: f"unique_key '{unique_key}' not found in properties"}
-##            return False, diagnostics
- #   return True, {}
 
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
@@ -142,6 +136,12 @@ def main() -> None:
          ],
         module.params
         )
+    if not result:
+        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+    result, diagnostics = u_input.validate_unique_key(
+        module.params[u_skel.JsonTKN.UNIQUE_KEY.value],
+        module.params[u_skel.JsonTKN.PROPERTIES.value]
+    )
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     result, casted_properties, diagnostics =  u_prop.type_casted_properties(
@@ -186,6 +186,7 @@ def main() -> None:
         payload_key=module_name,
         payload=payload)
         )
+
 
 if __name__ == '__main__':
     main()

@@ -51,22 +51,30 @@ def validate_cypher_inputs(
     return True, validated
 
 
-def _validate_type(value: str) -> ValidationResult:
+def _validate_type(
+    value: str
+) -> ValidationResult:
     result, diagnostics = u_schema.validate_patterns(u_schema.IdentifierPattern.NEO4J_IDENTIFIER, value)
     return (True, value) if result else (False, diagnostics)
 
 
-def _validate_label(value: str) -> ValidationResult:
+def _validate_label(
+    value: str
+) -> ValidationResult:
     result, diagnostics = u_schema.validate_patterns(u_schema.IdentifierPattern.NEO4J_IDENTIFIER, value)
     return (True, value) if result else (False, diagnostics)
 
 
-def _validate_entity_name(value: str) -> ValidationResult:
+def _validate_entity_name(
+    value: str
+) -> ValidationResult:
     result, diagnostics = u_schema.validate_patterns(u_schema.IdentifierPattern.UNICODE_NAME, value)
     return (True, value) if result else (False, diagnostics)
 
 
-def _validate_from(value: Dict[str, Any]) -> ValidationResult:
+def _validate_from(
+    value: Dict[str, Any]
+) -> ValidationResult:
     label = value.get(u_skel.JsonTKN.LABEL.value)
     if not label:
         return False, {u_skel.JsonTKN.ERROR_MSG: "Missing FROM.LABEL"}
@@ -84,7 +92,9 @@ def _validate_from(value: Dict[str, Any]) -> ValidationResult:
     return True, {u_skel.JsonTKN.LABEL.value: label, u_skel.JsonTKN.ENTITY_NAME.value: entity}
 
 
-def _validate_to(value: Dict[str, Any]) -> ValidationResult:
+def _validate_to(
+    value: Dict[str, Any]
+) -> ValidationResult:
     label = value.get(u_skel.JsonTKN.LABEL.value)
     if not label:
         return False, {u_skel.JsonTKN.ERROR_MSG: "Missing TO.LABEL"}
@@ -102,7 +112,9 @@ def _validate_to(value: Dict[str, Any]) -> ValidationResult:
     return True, {u_skel.JsonTKN.LABEL.value: label, u_skel.JsonTKN.ENTITY_NAME.value: entity}
 
 
-def _validate_keys(value: Dict[str, Any]) -> ValidationResult:
+def _validate_keys(
+    value: Dict[str, Any]
+) -> ValidationResult:
     validated = {}
     for key, val in value.items():
         result, diagnostics = u_schema.validate_patterns(u_schema.IdentifierPattern.NEO4J_IDENTIFIER, key)
@@ -112,6 +124,18 @@ def _validate_keys(value: Dict[str, Any]) -> ValidationResult:
     return True, validated
 
 
-def _validate_key(value: str) -> ValidationResult:
+def _validate_key(
+    value: str
+) -> ValidationResult:
     result, diagnostics = u_schema.validate_patterns(u_schema.IdentifierPattern.NEO4J_IDENTIFIER, value)
     return (True, value) if result else (False, diagnostics)
+
+
+def validate_unique_key(
+    value: str,
+    properties: Dict[str, Any]
+) -> ValidationResult:
+    normalized_property_keys = [key.strip().lower() for key in properties.keys()]
+    if value.strip().lower() not in normalized_property_keys:
+        return False, {u_skel.JsonTKN.ERROR_MSG: f"unique_key '{value}' not found in properties"}    
+    return True, {}
