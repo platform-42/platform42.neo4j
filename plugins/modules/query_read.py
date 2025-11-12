@@ -16,7 +16,6 @@ from ansible.module_utils.basic import AnsibleModule
 import ansible_collections.platform42.neo4j.plugins.module_utils.argument_spec as u_args
 import ansible_collections.platform42.neo4j.plugins.module_utils.skeleton as u_skel
 import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cypher
-import ansible_collections.platform42.neo4j.plugins.module_utils.schema as u_schema
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
 import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
 import ansible_collections.platform42.neo4j.plugins.module_utils.input as u_input
