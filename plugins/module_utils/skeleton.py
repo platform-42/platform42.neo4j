@@ -51,14 +51,10 @@ class JsonTKN(StrEnum):
     DIAGNOSTICS = "diagnostics"
     ELEMENT_TYPE = "element_type"
     ENTITY_NAME = "entity_name"
-    ENTITY_NAME_FROM = "entity_name_from"
-    ENTITY_NAME_TO = "entity_name_to"
     ERROR_MSG = "error_msg"
     FROM = "from"
     JSON_KEYS = "json_keys"
     LABEL = "label"
-    LABEL_FROM = "label_from"
-    LABEL_TO = "label_to"
     LABELS = "labels"
     LABELS_ADDED = "labels_added"
     LABELS_REMOVED = "labels_removed"
@@ -87,8 +83,8 @@ class JsonTKN(StrEnum):
     UNIQUE_KEY = "unique_key"
     USERNAME = "username"
     VALUE = "value"
-    WRITE_ACCESS = "write_access"
     VERTEX_FILE = "vertex_file"
+    WRITE_ACCESS = "write_access"
 
 
 def state_present(
