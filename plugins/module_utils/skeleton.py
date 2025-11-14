@@ -85,7 +85,9 @@ class JsonTKN(StrEnum):
     VALUE = "value"
     VERTEX_FILE = "vertex_file"
     WRITE_ACCESS = "write_access"
-
+    ENTITY_NAME_FROM = "entity_name_from"
+    ENTITY_NAME_TO = "entity_name_to"
+    
 
 def state_present(
     state: str
