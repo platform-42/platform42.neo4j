@@ -19,6 +19,7 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cyp
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
 import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
 import ansible_collections.platform42.neo4j.plugins.module_utils.input as u_input
+import ansible_collections.platform42.neo4j.plugins.module_utils.properties as u_prop
 
 from neo4j import Driver
 from neo4j.exceptions import Neo4jError
@@ -99,12 +100,16 @@ def main() -> None:
         )
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+    result, casted_parameters, diagnostics = u_prop.type_casted_properties(
+        module.params[u_skel.JsonTKN.PARAMETERS.value]
+        )
+    if not result:
+        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)
     query: str = module.params[u_skel.JsonTKN.QUERY.value]
-    parameters: Dict[str, Any] = module.params[u_skel.JsonTKN.PARAMETERS.value]
     query_read_result: Tuple[str, Dict[str, Any], str] = u_cypher.query_read(
         query,
-        parameters
+        casted_parameters
         )
     cypher_query, cypher_params, cypher_query_inline = query_read_result
     payload: Dict[str, Any]
