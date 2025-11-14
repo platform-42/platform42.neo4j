@@ -88,7 +88,7 @@ EXAMPLES = r'''
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
-        argument_spec=u_args.argument_spec_neo4j() | u_args.argument_query_read(),
+        argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_query_read(),
         supports_check_mode=False
         )
     result: bool
