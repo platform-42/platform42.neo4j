@@ -52,7 +52,7 @@ def argument_spec_constraint() -> Dict[str, Any]:
         }
     }
 
-def argument_spec_query_read() -> Dict[str, Any]:
+def argument_spec_query() -> Dict[str, Any]:
     return {
         u_skel.JsonTKN.QUERY.value: {
             u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-    Filename: ./modules/query_read.py
+    Filename: ./modules/query.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-05
     Version: 4.0.0
@@ -26,7 +26,7 @@ from neo4j.exceptions import Neo4jError
 
 DOCUMENTATION = r'''
 ---
-module: ./modules/query_read
+module: ./modules/query
 short_description: Execute a read-only Cypher query in Neo4j and return results
 version_added: "1.4.0"
 author:
@@ -58,23 +58,23 @@ notes:
 EXAMPLES = r'''
 # Read all Person nodes from Neo4j localhost
 - name: Get all persons
-  platform42.neo4j.query_read:
+  platform42.neo4j.query:
     neo4j_uri: "neo4j://127.0.0.1:7687"
     database: "neo4j"
     username: "neo4j"
     password: "*****"
-    cypher_query: |
+    query: |
       MATCH (p:Person) 
       RETURN p;
 
 # Read filtered data with parameters from Neo4j Aura
 - name: "Find a specific person by name"
-  platform42.neo4j.query_read:
+  platform42.neo4j.query:
     neo4j_uri: "neo4j+s://<AURA_INSTANCEID>.databases.neo4j.io"
     database: "neo4j"
     username: "neo4j"
     password: "*****"
-    cypher_query: | 
+    cypher: | 
       MATCH (p:Person {entity_name: $name}) 
       RETURN 
         p.entity_name AS name
@@ -89,7 +89,7 @@ EXAMPLES = r'''
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
-        argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_query_read(),
+        argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_query(),
         supports_check_mode=False
         )
     result: bool
@@ -107,7 +107,7 @@ def main() -> None:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)
     query: str = module.params[u_skel.JsonTKN.QUERY.value]
-    query_read_result: Tuple[str, Dict[str, Any], str] = u_cypher.query_read(
+    query_read_result: Tuple[str, Dict[str, Any], str] = u_cypher.query(
         query,
         casted_parameters
         )

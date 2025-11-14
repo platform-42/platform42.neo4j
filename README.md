@@ -56,7 +56,7 @@ MERGE (a)-[r:`TRANSACTION` {transction_date: "2025-10-31T15:00:00.000" }]->(b)
 - **Edge management (`edge` module)**  
   Create relationships between vertices with configurable direction, type, and properties. Also uses `MERGE` for idempotent updates.
 
-- **Query execution (`query_read` and `query_write` modules)**  
+- **Query execution (`` and `query_write` modules)**  
   Run read-only or write Cypher queries against the graph. Supports parameterized queries and returns JSON-serializable results including summary statistics.
 
 - **Database cleanup (`graph_reset`)**  
