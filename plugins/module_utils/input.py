@@ -2,7 +2,7 @@
     Filename: ./module_utils/input.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-26
-    Version: 4.0.0
+    Version: 4.1.0
     Description: 
         Validation of Cypher inputs acquired via YAML
 """

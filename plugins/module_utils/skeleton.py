@@ -2,7 +2,7 @@
     Filename: ./module_utils/skeleton.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-26
-    Version: 4.0.0
+    Version: 4.1.0
     Description: 
         Ansible core skeleton functions
 """
@@ -87,7 +87,7 @@ class JsonTKN(StrEnum):
     WRITE_ACCESS = "write_access"
     ENTITY_NAME_FROM = "entity_name_from"
     ENTITY_NAME_TO = "entity_name_to"
-    
+
 
 def state_present(
     state: str
