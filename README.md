@@ -2,8 +2,14 @@
 
 Ansible collection for managing **Neo4j graph databases**: create and update vertices (nodes), edges (relationships), constraints, execute queries, and clean up the database. This collection provides a declarative, idempotent interface to Neo4j, allowing automation of graph data management in a consistent and reliable way.
 
-## release 4.0.0 notes
-- Implemented property driven relationships.
+## release 4.1.0 notes
+- renamed `platform42.neo4j.query_read` to `platform.neo4j.query`
+- added typecasting for query `parameters`
+- added `write_access` parameter for `platform42.neo4j.query_read`. Default `False`, which implies: non distructive readonly queries on graph database
+
+---
+
+## special behavior 
 
 A relationship is defined as a path between 2 nodes (n)-[r]->(n).
 In most cases, merging identical relationships makes sense.
@@ -56,7 +62,7 @@ MERGE (a)-[r:`TRANSACTION` {transction_date: "2025-10-31T15:00:00.000" }]->(b)
 - **Edge management (`edge` module)**  
   Create relationships between vertices with configurable direction, type, and properties. Also uses `MERGE` for idempotent updates.
 
-- **Query execution (`` and `query_write` modules)**  
+- **Query execution (`query` module)**  
   Run read-only or write Cypher queries against the graph. Supports parameterized queries and returns JSON-serializable results including summary statistics.
 
 - **Database cleanup (`graph_reset`)**  
@@ -131,7 +137,6 @@ NEO4J_DATABASE: <project>|defaults to neo4j
     label: Station
     entity_name: "Pankow"
     state: PRESENT
-    singleton: True
   register: station
 
 # create relationship between 2 nodes
@@ -210,7 +215,7 @@ NEO4J_DATABASE: <project>|defaults to neo4j
 
 ---
 
-## Neo4j properties
+## Neo4j properties (and parameters)
 
 Neo4j properties are additional attributes that can be stored with a vertex or edge 
 By default, Ansible translate all properties to string data type resulting in loss of type conext.
@@ -242,4 +247,33 @@ properties:
   timestamp:
     value: "2025-10-02T09:00:00Z"
     type: datetime
+
+#
+# cypher query example 
+#   - usage of bindings to transfer values to query $entity_name = parameters.entity_name
+#   - typed parameters: casted value = type(value)
+#   - write_access: True -> query will update graph
+#
+- name: "initial value for Cell:{{ item.entity_name }}"
+  platform42.neo4j.query:
+    neo4j_uri: "{{ NEO4J_URI }}"
+    database: "{{ NEO4J_DATABASE }}"
+    username: "{{ NEO4J_USERNAME }}"
+    password: "{{ NEO4J_PASSWORD }}"
+    query: |
+      MATCH (c:Cell {entity_name: $entity_name})
+      SET c.color = $color, c.domain = [$color]
+      WITH c, $color AS color
+      MATCH (c)-[:SEES]->(n:Cell)
+      WHERE n.color = 0
+      SET n.domain = [x IN n.domain WHERE x <> color]
+      RETURN c, n
+    write_access: True
+    parameters:
+      entity_name: 
+        value: "{{ item.entity_name }}"
+        type: str
+      color: 
+        value:  "{{ item.color }}"
+        type: int
 ```
