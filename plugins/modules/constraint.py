@@ -87,13 +87,14 @@ def main() -> None:
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_constraint(),
         supports_check_mode=True
         )
-    result, diagnostics = u_input.validate_inputs(
+    input_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_input.validate_inputs(
         [u_skel.JsonTKN.LABEL.value,
          u_skel.JsonTKN.PROPERTY_KEY.value
          ],
         module.params,
         False
         )
+    result, _, diagnostics = input_result
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)

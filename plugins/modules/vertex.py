@@ -111,9 +111,7 @@ def main() -> None:
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_vertex(),
         supports_check_mode=True
         )
-    result: bool
-    diagnostics: Dict[str, Any]
-    result, diagnostics = u_input.validate_inputs(
+    input_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_input.validate_inputs(
         [u_skel.JsonTKN.LABEL.value,
          u_skel.JsonTKN.ENTITY_NAME.value,
          u_skel.JsonTKN.PROPERTIES.value
@@ -121,11 +119,7 @@ def main() -> None:
         module.params,
         False
         )
-    if not result:
-        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-    result, casted_properties, diagnostics = u_input.type_casted_properties(
-        module.params[u_skel.JsonTKN.PROPERTIES.value]
-        )
+    result, casted_properties, diagnostics = input_result
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)

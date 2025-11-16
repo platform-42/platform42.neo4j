@@ -165,7 +165,7 @@ def validate_inputs(
     cypher_input_list: List[str],
     module_params: Dict[str, Any],
     supports_unique_key: Optional[bool] = False
-) -> Tuple[bool, Dict[str, Any]]:
+) -> Tuple[bool, Dict[str, Any], Dict[str, Any]]:
     result, diagnostics = validate_cypher_inputs(
         cypher_input_list,
         module_params
@@ -173,13 +173,14 @@ def validate_inputs(
     if not result:
         return False, diagnostics
     if supports_unique_key:
-        result, diagnostics = validate_unique_key(
+        result, {}, diagnostics = validate_unique_key(
             module_params[u_skel.JsonTKN.UNIQUE_KEY.value],
             module_params[u_skel.JsonTKN.PROPERTIES.value]
         )
         if not result:
-            return False, diagnostics
-    return True, {}
+            return False, {}, diagnostics
+    casted_properties: Dict[str, Any] = {}
+    return True, casted_properties, {}
 
 #
 #   typecasting for properties
