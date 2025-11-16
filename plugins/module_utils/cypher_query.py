@@ -149,10 +149,12 @@ def set_clause(
 ) -> str:
     return f"SET {relation_type} += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
 
+
 def set_relation_predicate(
     unique_key: Optional[str]
 ) -> str:
     return f"{{{unique_key}: ${unique_key}}}" if unique_key else ""
+
 
 def set_constraint_name(
     label: str,
@@ -160,12 +162,14 @@ def set_constraint_name(
 ) -> str:
     return f"constraint_{label.lower()}_{property_key.lower()}_unique"
 
+
 def cypher_graph_reset(
     check_mode: bool
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
     return str(CypherQuery.GRAPH_RESET.value)
+
 
 def cypher_vertex_del(
     check_mode: bool,
@@ -177,6 +181,7 @@ def cypher_vertex_del(
         label=label
         )
     )
+
 
 def cypher_vertex_add(
     check_mode: bool,
@@ -198,6 +203,7 @@ def cypher_vertex_add(
         )
     )
 
+
 def cypher_edge_del(
     check_mode: bool,
     label_from: str,
@@ -215,6 +221,7 @@ def cypher_edge_del(
         )
     )
 
+
 def cypher_edge_del_bi(
     check_mode: bool,
     label_from: str,
@@ -231,6 +238,7 @@ def cypher_edge_del_bi(
         relation_predicate=set_relation_predicate(unique_key)
         )
     )
+
 
 def cypher_edge_add(
     check_mode: bool,
@@ -250,6 +258,7 @@ def cypher_edge_add(
         set_clause=set_clause(RelationType.RELATION.value, properties)
         )
     )
+
 
 def cypher_edge_add_bi(
     check_mode: bool,
@@ -271,6 +280,7 @@ def cypher_edge_add_bi(
         )
     )
 
+
 def cypher_constraint_del(
     check_mode: bool,
     label: str,
@@ -285,6 +295,7 @@ def cypher_constraint_del(
             )
         )
     )
+
 
 def cypher_constraint_add(
     check_mode: bool,
@@ -303,6 +314,7 @@ def cypher_constraint_add(
         )
     )
 
+
 def cypher_label_del(
     check_mode: bool,
     base_label: str,
@@ -315,6 +327,7 @@ def cypher_label_del(
         label_to_remove=label_to_remove
         )
     )
+
 
 def cypher_label_add(
     check_mode: bool,

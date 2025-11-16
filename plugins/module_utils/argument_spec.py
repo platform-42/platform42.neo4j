@@ -11,6 +11,7 @@ from typing import Dict, Any
 
 from . import skeleton as u_skel
 
+
 def argument_spec_neo4j() -> Dict[str, Any]:
     return {
         u_skel.JsonTKN.NEO4J_URI.value: {
@@ -32,8 +33,10 @@ def argument_spec_neo4j() -> Dict[str, Any]:
         }
     }
 
+
 def argument_spec_graph_reset() -> Dict[str, Any]:
     return {}
+
 
 def argument_spec_constraint() -> Dict[str, Any]:
     return {
@@ -70,6 +73,7 @@ def argument_spec_query() -> Dict[str, Any]:
         }
     }
 
+
 def argument_spec_vertex() -> Dict[str, Any]:
     return {
         u_skel.JsonTKN.LABEL.value: {
@@ -96,6 +100,7 @@ def argument_spec_vertex() -> Dict[str, Any]:
             u_skel.YamlATTR.DEFAULT.value: True
         }
     }
+
 
 def argument_spec_edge() -> Dict[str, Any]:
     return {
@@ -152,6 +157,7 @@ def argument_spec_edge() -> Dict[str, Any]:
             u_skel.YamlATTR.DEFAULT.value: None
         }
     }
+
 
 def argument_spec_label() -> Dict[str, Any]:
     return {

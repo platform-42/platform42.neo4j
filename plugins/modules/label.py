@@ -61,6 +61,7 @@ EXAMPLES = r'''
     state: ABSENT
 '''
 
+
 def label(
     check_mode: bool,
     module_params: Dict[str, Any]
@@ -82,6 +83,7 @@ def label(
         label,
         entity_name
         )
+
 
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
@@ -136,6 +138,7 @@ def main() -> None:
         payload_key=module_name,
         payload=payload)
         )
+
 
 if __name__ == '__main__':
     main()

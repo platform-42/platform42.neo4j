@@ -45,6 +45,7 @@ def serialize_neo4j(
         return {k: serialize_neo4j(v) for k, v in value.items()}
     return value
 
+
 def validate_vertex_file(
     vertices: List[Dict[str, Any]],
     vertex_spec: Dict[str, Dict[str, Any]]

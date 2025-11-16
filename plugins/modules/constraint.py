@@ -62,6 +62,7 @@ EXAMPLES = r'''
     state: ABSENT
 '''
 
+
 def constraint(
     check_mode: bool,
     module_params: Dict[str, Any]
@@ -80,6 +81,7 @@ def constraint(
         label=label,
         property_key=property_key
         )
+
 
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
@@ -133,6 +135,7 @@ def main() -> None:
         payload_key=module_name,
         payload=payload)
         )
+
 
 if __name__ == '__main__':
     main()

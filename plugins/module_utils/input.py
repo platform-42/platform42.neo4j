@@ -164,7 +164,8 @@ def validate_unique_key(
 def validate_inputs(
     cypher_input_list: List[str],
     module_params: Dict[str, Any],
-    supports_unique_key: Optional[bool] = False
+    supports_unique_key: Optional[bool] = False,
+    supports_casting: Optional[bool] = False,
 ) -> Tuple[bool, Dict[str, Any], Dict[str, Any]]:
     result, diagnostics = validate_cypher_inputs(
         cypher_input_list,
@@ -180,6 +181,8 @@ def validate_inputs(
         if not result:
             return False, {}, diagnostics
     casted_properties: Dict[str, Any] = {}
+    if supports_casting:
+        casted_properties: Dict[str, Any] = {}
     return True, casted_properties, {}
 
 #

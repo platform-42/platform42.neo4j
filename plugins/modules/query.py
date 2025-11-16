@@ -85,6 +85,7 @@ EXAMPLES = r'''
         type: str
 '''
 
+
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
@@ -140,6 +141,7 @@ def main() -> None:
         payload_key=module_name,
         payload=payload)
         )
+
 
 if __name__ == '__main__':
     main()
