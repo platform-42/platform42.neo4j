@@ -93,18 +93,16 @@ def main() -> None:
         supports_check_mode=False
         )
     input_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_input.validate_inputs(
-        [u_skel.JsonTKN.PARAMETERS.value],
-        module.params,
-        False
+        cypher_input_list=[
+            u_skel.JsonTKN.PARAMETERS.value
+            ],
+        module_params=module.params,
+        supports_unique_key=False,
+        supports_casting=True
         )
     result, casted_parameters, diagnostics = input_result
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-#    result, casted_parameters, diagnostics = u_input.type_casted_properties(
-#        module.params[u_skel.JsonTKN.PARAMETERS.value]
-#        )
-#    if not result:
-#        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)
     query: str = module.params[u_skel.JsonTKN.QUERY.value]
     query_read_result: Tuple[str, Dict[str, Any], str] = u_cypher.query(

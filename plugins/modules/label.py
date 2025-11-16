@@ -92,12 +92,14 @@ def main() -> None:
         supports_check_mode=True
         )
     input_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_input.validate_inputs(
-        [u_skel.JsonTKN.BASE_LABEL.value,
-         u_skel.JsonTKN.LABEL.value,
-         u_skel.JsonTKN.ENTITY_NAME.value
-         ],
-        module.params,
-        False
+        cypher_input_list=[
+            u_skel.JsonTKN.BASE_LABEL.value,
+            u_skel.JsonTKN.LABEL.value,
+            u_skel.JsonTKN.ENTITY_NAME.value
+            ],
+        module_params=module.params,
+        supports_unique_key=False,
+        supports_casting=False
         )
     result, _, diagnostics = input_result
     if not result:

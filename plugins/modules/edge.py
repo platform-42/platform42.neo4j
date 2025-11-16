@@ -127,14 +127,16 @@ def main() -> None:
         supports_check_mode=True
         )
     input_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_input.validate_inputs(
-        [u_skel.JsonTKN.TYPE.value,
-         u_skel.JsonTKN.FROM.value,
-         u_skel.JsonTKN.TO.value,
-         u_skel.JsonTKN.PROPERTIES.value,
-         u_skel.JsonTKN.UNIQUE_KEY.value
-         ],
-        module.params,
-        True
+        cypher_input_list=[
+            u_skel.JsonTKN.TYPE.value,
+            u_skel.JsonTKN.FROM.value,
+            u_skel.JsonTKN.TO.value,
+            u_skel.JsonTKN.PROPERTIES.value,
+            u_skel.JsonTKN.UNIQUE_KEY.value
+            ],
+        module_params=module.params,
+        supports_unique_key=True,
+        supports_casting=True
         )
     result, casted_properties, diagnostics = input_result
     if not result:

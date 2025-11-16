@@ -172,18 +172,29 @@ def validate_inputs(
         module_params
         )
     if not result:
-        return False, diagnostics
+        return False, {}, diagnostics
     if supports_unique_key:
-        result, {}, diagnostics = validate_unique_key(
+        result, diagnostics = validate_unique_key(
             module_params[u_skel.JsonTKN.UNIQUE_KEY.value],
             module_params[u_skel.JsonTKN.PROPERTIES.value]
         )
         if not result:
             return False, {}, diagnostics
-    casted_properties: Dict[str, Any] = {}
+    casted_values: Dict[str, Any] = {}
     if supports_casting:
-        casted_properties: Dict[str, Any] = {}
-    return True, casted_properties, {}
+        if u_skel.JsonTKN.PROPERTIES.value in module_params:
+            result, casted_values, diagnostics = type_casted_properties(
+                module_params[u_skel.JsonTKN.PROPERTIES.value]
+                )
+            if not result:
+                return False, {}, diagnostics
+        if u_skel.JsonTKN.PARAMETERS.value in module_params:
+            result, casted_values, diagnostics = type_casted_properties(
+                module_params[u_skel.JsonTKN.PARAMETERS.value]
+                )
+            if not result:
+                return False, {}, diagnostics
+    return True, casted_values, {}
 
 #
 #   typecasting for properties
