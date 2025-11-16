@@ -89,7 +89,7 @@ def main() -> None:
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_constraint(),
         supports_check_mode=True
         )
-    input_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_input.validate_inputs(
+    validate_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_input.validate_inputs(
         cypher_input_list=[
             u_skel.JsonTKN.LABEL.value,
             u_skel.JsonTKN.PROPERTY_KEY.value
@@ -98,7 +98,7 @@ def main() -> None:
         supports_unique_key=False,
         supports_casting=False
         )
-    result, _, diagnostics = input_result
+    result, _, diagnostics = validate_result
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)
