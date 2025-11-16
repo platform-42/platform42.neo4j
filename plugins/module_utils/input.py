@@ -151,7 +151,7 @@ def validate_unique_key(
         return True, {}
     normalized_property_keys = [key.strip().lower() for key in properties.keys()]
     if value.strip().lower() not in normalized_property_keys:
-        return False, {u_skel.JsonTKN.ERROR_MSG: f"unique_key '{value}' not found in properties"}    
+        return False, {u_skel.JsonTKN.ERROR_MSG: f"unique_key '{value}' not found in properties"}
     return True, {}
 
 #

@@ -364,7 +364,7 @@ def edge_add(
 #       cypher_query_inline -> cypher query with value substitution
 #
 def query(
-    query: str,
+    cypher_query: str,
     parameters: Optional[Dict[str, Any]] = None
 ) -> Tuple[str, Dict[str, Any], str]:
     # optionals
@@ -378,7 +378,6 @@ def query(
     cypher_params: Dict[str, Any] = {
         **normalised_parameters
     }
-    cypher_query: str = query
     return query_build(cypher_query, cypher_params)
 
 #
