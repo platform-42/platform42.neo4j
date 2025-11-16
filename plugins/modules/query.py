@@ -19,7 +19,6 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cyp
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
 import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
 import ansible_collections.platform42.neo4j.plugins.module_utils.input as u_input
-import ansible_collections.platform42.neo4j.plugins.module_utils.properties as u_prop
 
 from neo4j import Driver
 from neo4j.exceptions import Neo4jError
@@ -74,7 +73,7 @@ EXAMPLES = r'''
     database: "neo4j"
     username: "neo4j"
     password: "*****"
-    cypher: | 
+    query: | 
       MATCH (p:Person {entity_name: $name}) 
       RETURN 
         p.entity_name AS name
@@ -101,7 +100,7 @@ def main() -> None:
         )
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-    result, casted_parameters, diagnostics = u_prop.type_casted_properties(
+    result, casted_parameters, diagnostics = u_input.type_casted_properties(
         module.params[u_skel.JsonTKN.PARAMETERS.value]
         )
     if not result:

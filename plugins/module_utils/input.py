@@ -6,14 +6,20 @@
     Description: 
         Validation of Cypher inputs acquired via YAML
 """
-from typing import Dict, Any, Tuple, List, cast, Optional
+from typing import Dict, Any, Tuple, List, cast, Optional, Callable
+
+from datetime import datetime
 
 from . import skeleton as u_skel
 from . import schema as u_schema
 
 ValidationResult = Tuple[bool, Any]
 
-
+#
+#   validate_cypher_inputs:
+#       check whether YAML tokens (valid JSON) are also valid NEO4J tokens
+#       NEO4J implements additional contraints
+#
 def validate_cypher_inputs(
     cypher_input_list: List[str],
     module_params: Dict[str, Any]
@@ -131,7 +137,12 @@ def _validate_key(
     result, diagnostics = u_schema.validate_patterns(u_schema.IdentifierPattern.NEO4J_IDENTIFIER, value)
     return (True, value) if result else (False, diagnostics)
 
-
+#
+#   validate_unique_key:
+#       a unique_key is a reference to an existing property key
+#       so it mandates existence of properties and an instance of unique_key
+#       as part of properies.keys()
+#
 def validate_unique_key(
     value: str,
     properties: Dict[str, Any]
@@ -143,6 +154,13 @@ def validate_unique_key(
         return False, {u_skel.JsonTKN.ERROR_MSG: f"unique_key '{value}' not found in properties"}    
     return True, {}
 
+#
+#   validate_inputs:
+#       overarching function to implements 3 functions
+#       - validate_cypher_inputs -> valid NEO4J identifiers
+#       - validate_unique_key -> integrity check with properties
+#       - casted_properties -> typecasted properties
+#
 def validate_inputs(
     cypher_input_list: List[str],
     module_params: Dict[str, Any],
@@ -162,3 +180,106 @@ def validate_inputs(
         if not result:
             return False, diagnostics
     return True, {}
+
+#
+#   typecasting for properties
+#
+def type_casted_properties(
+    properties: Dict[str, Any]
+) -> Tuple[bool, Dict[str, Any], Dict[str, Any]]:
+    result, casted_properties, diagnostics = type_casting(properties)
+    if not result:
+        return False, {}, diagnostics
+    return True, casted_properties, {}
+
+
+def parse_datetime(val: str) -> datetime:
+    return datetime.fromisoformat(val.replace("Z", "+00:00"))
+
+
+def parse_bool(val: Any) -> bool:
+    if isinstance(val, bool):
+        return val
+    return str(val).lower() in ("true", "1", "yes", "y")
+
+
+TYPE_HANDLERS: Dict[str, Callable[[Any], Any]] = {
+    u_skel.YamlATTR.TYPE_INT.value: int,
+    u_skel.YamlATTR.TYPE_FLOAT.value: float,
+    u_skel.YamlATTR.TYPE_BOOL.value: parse_bool,
+    u_skel.YamlATTR.TYPE_STR.value: str,
+    u_skel.YamlATTR.TYPE_DATETIME.value: parse_datetime,
+}
+
+
+def parse_list(
+    element_value: Any,
+    element_type: str
+) -> Tuple[bool, List[Any], Dict[str, Any]]:
+    if not isinstance(element_value, list):
+        return False, [], {
+            u_skel.JsonTKN.ERROR_MSG.value:
+                f"Expected list for 'list' type, got {type(element_value).__name__}"
+        }
+
+    handler = TYPE_HANDLERS.get(element_type)
+    if handler is None:
+        return False, [], {
+            u_skel.JsonTKN.ERROR_MSG.value:
+                f"Unsupported element type for list: {element_type}"
+        }
+
+    try:
+        return True, [handler(v) for v in element_value], {}
+    except Exception as e:
+        return False, [], {
+            u_skel.JsonTKN.ERROR_MSG.value:
+                f"Failed to cast list elements to '{element_type}': {repr(e)}"
+        }
+
+
+def type_casting(
+    properties: Dict[str, Dict[str, Any]]
+) -> Tuple[bool, Dict[str, Any], Dict[str, Any]]:
+    casted_properties: Dict[str, Any] = {}
+
+    for key, prop in properties.items():
+        if not isinstance(prop, dict):
+            return False, {}, {
+                u_skel.JsonTKN.ERROR_MSG.value:
+                    f"Property '{key}' must be a dict with 'value' and optional 'type', "
+                    f"got {type(prop).__name__}"
+            }
+
+        if u_skel.JsonTKN.VALUE.value not in prop:
+            return False, {}, {
+                u_skel.JsonTKN.ERROR_MSG.value:
+                    f"Property '{key}' is missing required '{u_skel.JsonTKN.VALUE.value}' field"
+            }
+
+        raw_value = prop[u_skel.JsonTKN.VALUE.value]
+        data_type = prop.get(u_skel.JsonTKN.TYPE.value, u_skel.YamlATTR.TYPE_STR.value)
+
+        # Handle list types explicitly
+        if data_type == u_skel.YamlATTR.TYPE_LIST.value:
+            element_type = prop.get(
+                u_skel.JsonTKN.ELEMENT_TYPE.value,
+                u_skel.YamlATTR.TYPE_STR.value
+            )
+            result, casted_list, diag = parse_list(raw_value, element_type)
+            if not result:
+                return False, {}, diag
+            casted_properties[key] = casted_list
+        else:
+            handler = TYPE_HANDLERS.get(data_type, str)
+            try:
+                casted_value = handler(raw_value)
+                casted_properties[key] = casted_value
+            except Exception as e:
+                return False, {}, {
+                    u_skel.JsonTKN.ERROR_MSG.value:
+                        f"Failed to cast property '{key}' with value '{raw_value}' "
+                        f"to type '{data_type}': {repr(e)}"
+                }
+
+    return True, casted_properties, {}
