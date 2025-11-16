@@ -82,7 +82,7 @@ EXAMPLES = r'''
         element_type: str
 '''
 
-def vertex(
+def vertex_module(
     check_mode: bool,
     module_params: Dict[str, Any],
     properties: Dict[str, Any]
@@ -127,7 +127,7 @@ def main() -> None:
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)
-    vertex_result: Tuple[str, Dict[str, Any], str] = vertex(
+    vertex_result: Tuple[str, Dict[str, Any], str] = vertex_module(
         module.check_mode,
         module.params,
         casted_properties

@@ -63,7 +63,7 @@ EXAMPLES = r'''
 '''
 
 
-def constraint(
+def constraint_module(
     check_mode: bool,
     module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
@@ -103,7 +103,7 @@ def main() -> None:
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)
-    constraint_result: Tuple[str, Dict[str, Any], str] = constraint(
+    constraint_result: Tuple[str, Dict[str, Any], str] = constraint_module(
         module.check_mode,
         module.params
         )

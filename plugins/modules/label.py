@@ -62,7 +62,7 @@ EXAMPLES = r'''
 '''
 
 
-def label(
+def label_module(
     check_mode: bool,
     module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
@@ -106,7 +106,7 @@ def main() -> None:
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)
-    label_result: Tuple[str, Dict[str, Any], str] = label(
+    label_result: Tuple[str, Dict[str, Any], str] = label_module(
         module.check_mode,
         module.params
         )

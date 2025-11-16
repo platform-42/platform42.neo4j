@@ -83,7 +83,7 @@ EXAMPLES = r'''
       entity_name: "widget-123"
 '''
 
-def edge(
+def edge_module(
     check_mode: bool,
     module_params: Dict[str, Any],
     properties: Dict[str, Any]
@@ -143,7 +143,7 @@ def main() -> None:
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)
-    edge_result: Tuple[str, Dict[str, Any], str] = edge(
+    edge_result: Tuple[str, Dict[str, Any], str] = edge_module(
         module.check_mode,
         module.params,
         casted_properties
