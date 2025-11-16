@@ -89,11 +89,12 @@ def main() -> None:
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_constraint(),
         supports_check_mode=True
         )
+    input_list: List[str] = [
+        u_skel.JsonTKN.LABEL.value,
+        u_skel.JsonTKN.PROPERTY_KEY.value
+        ]
     validate_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_input.validate_inputs(
-        cypher_input_list=[
-            u_skel.JsonTKN.LABEL.value,
-            u_skel.JsonTKN.PROPERTY_KEY.value
-            ],
+        cypher_input_list=input_list,
         module_params=module.params,
         supports_unique_key=False,
         supports_casting=False

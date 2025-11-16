@@ -23,6 +23,7 @@ from . import cypher_query as u_cyph_q
 #              cypher_query: str -> NEO4J query with only bindings
 #             cypher_params: Dict[str, Any] -> NEO4J values for bindings
 #       cypher_query_inline: str -> NEO4J query with substituted values for debugging in NEO4J console
+#   - properties and parameters must be type-casted before usage
 #
 
 def query_build(

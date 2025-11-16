@@ -126,19 +126,20 @@ def main() -> None:
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_edge(),
         supports_check_mode=True
         )
-    validate_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_input.validate_inputs(
-        cypher_input_list=[
-            u_skel.JsonTKN.TYPE.value,
-            u_skel.JsonTKN.FROM.value,
-            u_skel.JsonTKN.TO.value,
-            u_skel.JsonTKN.PROPERTIES.value,
-            u_skel.JsonTKN.UNIQUE_KEY.value
-            ],
+    input_list: List[str] = [
+        u_skel.JsonTKN.TYPE.value,
+        u_skel.JsonTKN.FROM.value,
+        u_skel.JsonTKN.TO.value,
+        u_skel.JsonTKN.PROPERTIES.value,
+        u_skel.JsonTKN.UNIQUE_KEY.value
+        ]
+    input_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_input.validate_inputs(
+        cypher_input_list=input_list,
         module_params=module.params,
-        supports_unique_key=True,
+        supports_unique_key=False,
         supports_casting=True
         )
-    result, casted_properties, diagnostics = validate_result
+    result, casted_properties, diagnostics = input_result
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     driver: Driver = u_driver.get_driver(module.params)
