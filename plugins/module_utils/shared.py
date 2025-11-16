@@ -25,7 +25,7 @@ def load_yaml_file(
     with open(path, "r", encoding="utf-8") as f:
         try:
             data = yaml.safe_load(f)
-        except yaml.YAMLError as e:
+        except yaml.YAMLError as e: # pylint: disable=broad-exception-caught
             raise ValueError(f"Failed to parse YAML file {path}: {e}")
 
     if not isinstance(data, list):

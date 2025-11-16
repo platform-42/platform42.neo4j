@@ -246,7 +246,7 @@ def parse_list(
 
     try:
         return True, [handler(v) for v in element_value], {}
-    except Exception as e:
+    except Exception as e: # pylint: disable=broad-exception-caught
         return False, [], {
             u_skel.JsonTKN.ERROR_MSG.value:
                 f"Failed to cast list elements to '{element_type}': {repr(e)}"
@@ -290,7 +290,7 @@ def type_casting(
             try:
                 casted_value = handler(raw_value)
                 casted_properties[key] = casted_value
-            except Exception as e:
+            except Exception as e: # pylint: disable=broad-exception-caught
                 return False, {}, {
                     u_skel.JsonTKN.ERROR_MSG.value:
                         f"Failed to cast property '{key}' with value '{raw_value}' "
