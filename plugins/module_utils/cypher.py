@@ -372,7 +372,7 @@ def query(
         parameters = {}
 
     # normalise - no lowercase from raw-cypher, keep contract as is
-    normalised_parameters: Dict[str, Any] = {key: value for key, value in parameters.items()}
+    normalised_parameters: Dict[str, Any] = dict(parameters.items())
 
     # cypher construction - values for bindings
     cypher_params: Dict[str, Any] = {
