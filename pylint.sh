@@ -1,8 +1,11 @@
 
 pylint plugins/modules/graph_reset.py
-pylint plugins/modules/.py
+pylint plugins/modules/query.py
 pylint plugins/modules/vertex.py
 pylint plugins/modules/edge.py
+pylint plugins/modules/label.py
+pylint plugins/modules/constraint.py
+
 
 PYTHONPATH=./plugins/module_utils
 
