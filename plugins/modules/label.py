@@ -89,12 +89,13 @@ def main() -> None:
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_label(),
         supports_check_mode=True
         )
-    result, diagnostics = u_input.validate_cypher_inputs(
+    result, diagnostics = u_input.validate_inputs(
         [u_skel.JsonTKN.BASE_LABEL.value,
          u_skel.JsonTKN.LABEL.value,
          u_skel.JsonTKN.ENTITY_NAME.value
          ],
-        module.params
+        module.params,
+        False
         )
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))

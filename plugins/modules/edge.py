@@ -127,21 +127,16 @@ def main() -> None:
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_edge(),
         supports_check_mode=True
         )
-    result, diagnostics = u_input.validate_cypher_inputs(
+    result, diagnostics = u_input.validate_inputs(
         [u_skel.JsonTKN.TYPE.value,
          u_skel.JsonTKN.FROM.value,
          u_skel.JsonTKN.TO.value,
          u_skel.JsonTKN.PROPERTIES.value,
          u_skel.JsonTKN.UNIQUE_KEY.value
          ],
-        module.params
+        module.params,
+        True
         )
-    if not result:
-        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-    result, diagnostics = u_input.validate_unique_key(
-        module.params[u_skel.JsonTKN.UNIQUE_KEY.value],
-        module.params[u_skel.JsonTKN.PROPERTIES.value]
-    )
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     result, casted_properties, diagnostics =  u_prop.type_casted_properties(

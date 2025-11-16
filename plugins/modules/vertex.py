@@ -114,12 +114,13 @@ def main() -> None:
         )
     result: bool
     diagnostics: Dict[str, Any]
-    result, diagnostics = u_input.validate_cypher_inputs(
+    result, diagnostics = u_input.validate_inputs(
         [u_skel.JsonTKN.LABEL.value,
          u_skel.JsonTKN.ENTITY_NAME.value,
          u_skel.JsonTKN.PROPERTIES.value
          ],
-        module.params
+        module.params,
+        False
         )
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))

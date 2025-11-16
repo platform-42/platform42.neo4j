@@ -6,12 +6,13 @@
     Description: 
         Validation of Cypher inputs acquired via YAML
 """
-from typing import Dict, Any, Tuple, List, cast
+from typing import Dict, Any, Tuple, List, cast, Optional
 
 from . import skeleton as u_skel
 from . import schema as u_schema
 
 ValidationResult = Tuple[bool, Any]
+
 
 def validate_cypher_inputs(
     cypher_input_list: List[str],
@@ -140,4 +141,24 @@ def validate_unique_key(
     normalized_property_keys = [key.strip().lower() for key in properties.keys()]
     if value.strip().lower() not in normalized_property_keys:
         return False, {u_skel.JsonTKN.ERROR_MSG: f"unique_key '{value}' not found in properties"}    
+    return True, {}
+
+def validate_inputs(
+    cypher_input_list: List[str],
+    module_params: Dict[str, Any],
+    supports_unique_key: Optional[bool] = False
+) -> Tuple[bool, Dict[str, Any]]:
+    result, diagnostics = validate_cypher_inputs(
+        cypher_input_list,
+        module_params
+        )
+    if not result:
+        return False, diagnostics
+    if supports_unique_key:
+        result, diagnostics = validate_unique_key(
+            module_params[u_skel.JsonTKN.UNIQUE_KEY.value],
+            module_params[u_skel.JsonTKN.PROPERTIES.value]
+        )
+        if not result:
+            return False, diagnostics
     return True, {}
