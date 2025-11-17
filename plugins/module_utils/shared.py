@@ -60,7 +60,11 @@ def load_yaml_file(
         return False, None, {u_skel.JsonTKN.ERROR_MSG.value: f"Top-level key '{anchor}' must contain a list"}
 
     # --- Success --------------------------------------------------------------
-    return True, payload, {u_skel.JsonTKN.VERTEX_ANCHOR.value: anchor, u_skel.JsonTKN.COUNT.value: len(payload)}
+    diagnostics: Dict[str, Any] = {
+        u_skel.JsonTKN.VERTEX_ANCHOR.value: anchor,
+        u_skel.JsonTKN.COUNT.value: len(payload)
+    }
+    return True, payload, diagnostics
 
 
 def serialize_neo4j(
