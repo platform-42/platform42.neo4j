@@ -66,7 +66,7 @@ EXAMPLES = r'''
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
-        argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_vertex() | u_args.argument_spec_vertex_bulk(),
+        argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_vertex_bulk(),
         supports_check_mode=True
         )
     vertex_result: Tuple[bool, List[Dict[str, Any]], Dict[str, Any]] = u_shared.load_yaml_file(
