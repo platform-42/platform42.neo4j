@@ -21,16 +21,17 @@ import yaml
 from typing import Any, Dict, List, Tuple, Optional
 
 def load_yaml_file(
-    path: str
+    vertex_file: str,
+    vertex_anchor: str
 ) -> Tuple[bool, Optional[List[Dict[str, Any]]], Dict[str, Any]]:
 
     # Check file existence
-    if not os.path.exists(path):
-        return False, None, {u_skel.JsonTKN.ERROR_MSG: f"Vertex file not found: {path}"}
+    if not os.path.exists(vertex_file):
+        return False, None, {u_skel.JsonTKN.ERROR_MSG: f"Vertex file not found: {vertex_file}"}
 
     # Attempt load
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(vertex_file, "r", encoding="utf-8") as f:
             payload = yaml.safe_load(f)
     except yaml.YAMLError as e:
         return False, None, {u_skel.JsonTKN.ERROR_MSG: f"Failed to parse YAML file: {e}"}
