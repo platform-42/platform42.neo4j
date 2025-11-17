@@ -106,6 +106,10 @@ def argument_spec_vertex_bulk() -> Dict[str, Any]:
         u_skel.JsonTKN.VERTEX_FILE.value: {
             u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
             u_skel.YamlATTR.REQUIRED.value: True
+        },
+        u_skel.JsonTKN.VERTEX_ANCHOR.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: True
         }
     }
 
