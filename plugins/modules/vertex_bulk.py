@@ -72,18 +72,18 @@ def main() -> None:
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_vertex_bulk(),
         supports_check_mode=True
         )
-    vertex_result: Tuple[bool, List[Dict[str, Any]], Dict[str, Any]] = u_shared.load_yaml_file(
+    vertex_load_result: Tuple[bool, List[Dict[str, Any]], Dict[str, Any]] = u_shared.load_yaml_file(
         module.params[u_skel.JsonTKN.VERTEX_FILE.value],
         module.params[u_skel.JsonTKN.VERTEX_ANCHOR.value]
         )
-    result, vertices, diagnostics = vertex_result
+    result, vertices, diagnostics = vertex_load_result
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-    validate_result: Tuple[bool, Dict[str, Any]] = u_shared.validate_vertex_file(
+    vertex_result: Tuple[bool, Dict[str, Any]] = u_shared.validate_vertex_file(
         vertices, 
         u_args.argument_spec_vertex()
         )
-    result, diagnostics = validate_result
+    result, diagnostics = vertex_result
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     #
