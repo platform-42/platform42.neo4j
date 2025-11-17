@@ -18,7 +18,10 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.skeleton as u_s
 # import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cypher
 # import ansible_collections.platform42.neo4j.plugins.module_utils.schema as u_schema
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
-# import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
+import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
+
+from neo4j import Driver, ResultSummary, Result, SummaryCounters
+from neo4j.exceptions import Neo4jError
 
 DOCUMENTATION = r'''
 ---
@@ -76,9 +79,31 @@ def main() -> None:
     result, vertices, diagnostics = vertex_result
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-        
-    u_shared.validate_vertex_file(vertices, u_args.argument_spec_vertex())
-    
+    validate_result: Tuple[bool, Dict[str, Any]] = u_shared.validate_vertex_file(
+        vertices, 
+        u_args.argument_spec_vertex()
+        )
+    result, diagnostics = validate_result
+    if not result:
+        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+    #
+    # to do connect to neo4j, process vertices one-by-one
+    #
+#    for idx, vertex in enumerate(vertices):
+#        driver: Driver = u_driver.get_driver(module.params)
+#        try:
+#            with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
+#                response: Result = session.run(cypher_query, cypher_params)
+#                cypher_response: List[Dict[str, Any]] = [record.data() for record in list(response)]
+#                summary: ResultSummary = response.consume()
+#        except Neo4jError as e:
+#            payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e)
+#            module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
+#        except Exception as e: # pylint: disable=broad-exception-caught
+#            payload = u_skel.payload_abend(cypher_query_inline, e)
+#            module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
+#        finally:
+#            driver.close()
     module.exit_json(**u_skel.ansible_exit(
         changed=True,
         payload_key=module_name,
