@@ -81,7 +81,7 @@ def main() -> None:
     module.exit_json(**u_skel.ansible_exit(
         changed=True,
         payload_key=module_name,
-        payload="hoeren"
+        payload={"msg": "rubbish"}
         )
     )
     
