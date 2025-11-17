@@ -16,22 +16,34 @@ from neo4j.time import DateTime, Date, Time
 from . import skeleton as u_skel
 
 
+import os
+import yaml
+from typing import Any, Dict, List, Tuple, Optional
+
 def load_yaml_file(
     path: str
-) -> List[Dict[str, Any]]:
+) -> Tuple[bool, Optional[List[Dict[str, Any]]], Dict[str, Any]]:
+
+    # Check file existence
     if not os.path.exists(path):
-        raise FileNotFoundError(f"Vertex file not found: {path}")
+        return False, None, {u_skel.JsonTKN.ERROR_MSG: f"Vertex file not found: {path}"}
 
-    with open(path, "r", encoding="utf-8") as f:
-        try:
-            data = yaml.safe_load(f)
-        except yaml.YAMLError as e: # pylint: disable=broad-exception-caught
-            raise ValueError(f"Failed to parse YAML file {path}: {e}")
+    # Attempt load
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            payload = yaml.safe_load(f)
+    except yaml.YAMLError as e:
+        return False, None, {u_skel.JsonTKN.ERROR_MSG: f"Failed to parse YAML file: {e}"}
+    except Exception as e:
+        return False, None, {u_skel.JsonTKN.ERROR_MSG: f"Failed to read file: {e}"}
 
-    if not isinstance(data, list):
-        raise ValueError(f"Vertex file {path} must contain a list of vertex definitions")
+    # Validate top-level structure
+    if not isinstance(payload, list):
+        return False, None, {u_skel.JsonTKN.ERROR_MSG: "YAML must contain a list of vertex definitions"}
 
-    return data
+    # Success
+    return True, payload, {}
+
 
 
 def serialize_neo4j(

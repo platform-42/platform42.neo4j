@@ -15,10 +15,10 @@ from ansible.module_utils.basic import AnsibleModule
 
 import ansible_collections.platform42.neo4j.plugins.module_utils.argument_spec as u_args
 import ansible_collections.platform42.neo4j.plugins.module_utils.skeleton as u_skel
-import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cypher
-import ansible_collections.platform42.neo4j.plugins.module_utils.schema as u_schema
+# import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cypher
+# import ansible_collections.platform42.neo4j.plugins.module_utils.schema as u_schema
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
-import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
+# import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
 
 DOCUMENTATION = r'''
 ---
@@ -69,8 +69,21 @@ def main() -> None:
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_vertex() | u_args.argument_spec_vertex_bulk(),
         supports_check_mode=True
         )
-#    vertices: List[Dict[str, Any]] = load_yaml_file(module.params[u_skel.JsonTKN.VERTEX_FILE.value])
+    vertex_result: Tuple[bool, List[Dict[str, Any]], Dict[str, Any]] = u_shared.load_yaml_file(
+        module.params[u_skel.JsonTKN.VERTEX_FILE.value]
+        )
+    result, payload, diagnostics = vertex_result
+    if not result:
+        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+        
 #    u_shared.validate_vertex_file(vertices, u_args.argument_spec_vertex_bulk())
-
+    
+    module.exit_json(**u_skel.ansible_exit(
+        changed=True,
+        payload_key=module_name,
+        payload=payload
+        )
+    )
+    
 if __name__ == '__main__':
     main()
