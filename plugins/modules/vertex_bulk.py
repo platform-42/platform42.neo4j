@@ -73,16 +73,16 @@ def main() -> None:
         module.params[u_skel.JsonTKN.VERTEX_FILE.value],
         module.params[u_skel.JsonTKN.VERTEX_ANCHOR.value]
         )
-    result, payload, diagnostics = vertex_result
+    result, vertices, diagnostics = vertex_result
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
         
-#    u_shared.validate_vertex_file(vertices, u_args.argument_spec_vertex_bulk())
+    u_shared.validate_vertex_file(vertices, u_args.argument_spec_vertex())
     
     module.exit_json(**u_skel.ansible_exit(
         changed=True,
         payload_key=module_name,
-        payload=payload
+        payload=vertices
         )
     )
     
