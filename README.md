@@ -277,3 +277,8 @@ properties:
         value:  "{{ item.color }}"
         type: int
 ```
+
+
+
+####
+I'm thinking to enforce rigidity by asking for name of the vertex_list (vertex_anchor) at YAML level. Keep in mind that normally we call the task per node, providing the same root-element as the loop parameter. Now we defer the loop to the vertex_bulk, but by specifying the vertex_anchor, we keep things rigid and semantically the same: the loop needs the anchor to start

@@ -51,6 +51,8 @@ class JsonTKN(StrEnum):
     DIAGNOSTICS = "diagnostics"
     ELEMENT_TYPE = "element_type"
     ENTITY_NAME = "entity_name"
+    ENTITY_NAME_FROM = "entity_name_from"
+    ENTITY_NAME_TO = "entity_name_to"
     ERROR_MSG = "error_msg"
     FROM = "from"
     JSON_KEYS = "json_keys"
@@ -83,10 +85,9 @@ class JsonTKN(StrEnum):
     UNIQUE_KEY = "unique_key"
     USERNAME = "username"
     VALUE = "value"
+    VERTEX_ANCHOR = "vertex_anchor"
     VERTEX_FILE = "vertex_file"
     WRITE_ACCESS = "write_access"
-    ENTITY_NAME_FROM = "entity_name_from"
-    ENTITY_NAME_TO = "entity_name_to"
 
 
 def state_present(

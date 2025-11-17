@@ -70,7 +70,8 @@ def main() -> None:
         supports_check_mode=True
         )
     vertex_result: Tuple[bool, List[Dict[str, Any]], Dict[str, Any]] = u_shared.load_yaml_file(
-        module.params[u_skel.JsonTKN.VERTEX_FILE.value]
+        module.params[u_skel.JsonTKN.VERTEX_FILE.value],
+        module.params[u_skel.JsonTKN.VERTEX_ANCHOR.value]
         )
     result, payload, diagnostics = vertex_result
     if not result:
