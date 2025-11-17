@@ -15,7 +15,7 @@ from ansible.module_utils.basic import AnsibleModule
 
 import ansible_collections.platform42.neo4j.plugins.module_utils.argument_spec as u_args
 import ansible_collections.platform42.neo4j.plugins.module_utils.skeleton as u_skel
-# import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cypher
+import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cypher
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
 import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
 import ansible_collections.platform42.neo4j.plugins.module_utils.input as u_input
@@ -66,6 +66,29 @@ EXAMPLES = r'''
     batch_size: 500
 '''
 
+def vertex_module(
+    check_mode: bool,
+    module_params: Dict[str, Any],
+    properties: Dict[str, Any]
+) -> Tuple[str, Dict[str, Any], str]:
+    label: str = module_params[u_skel.JsonTKN.LABEL.value]
+    entity_name: str =module_params[u_skel.JsonTKN.ENTITY_NAME.value]
+    state: str = module_params[u_skel.JsonTKN.STATE.value]
+    singleton: bool = module_params[u_skel.JsonTKN.SINGLETON.value]
+    if u_skel.state_present(state):
+        return u_cypher.vertex_add(
+            check_mode,
+            singleton,
+            label,
+            entity_name,
+            properties
+            )
+    return u_cypher.vertex_del(
+        check_mode,
+        label,
+        entity_name
+        )
+
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
@@ -79,11 +102,14 @@ def main() -> None:
     result, vertices, diagnostics = vertex_load_result
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-    vertex_result: Tuple[bool, Dict[str, Any]] = u_shared.validate_vertex_file(
+    #
+    #   equivalent to argument_spec validation
+    #
+    vertex_file_result: Tuple[bool, Dict[str, Any]] = u_shared.validate_vertex_file(
         vertices, 
         u_args.argument_spec_vertex()
         )
-    result, diagnostics = vertex_result
+    result, diagnostics = vertex_file_result
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
     #
@@ -102,20 +128,28 @@ def main() -> None:
             supports_casting=True
             )
         result, casted_properties, diagnostics = validate_result
-#        driver: Driver = u_driver.get_driver(module.params)
-#        try:
-#            with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
-#                response: Result = session.run(cypher_query, cypher_params)
-#                cypher_response: List[Dict[str, Any]] = [record.data() for record in list(response)]
-#                summary: ResultSummary = response.consume()
-#        except Neo4jError as e:
-#            payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e)
-#            module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
-#        except Exception as e: # pylint: disable=broad-exception-caught
-#            payload = u_skel.payload_abend(cypher_query_inline, e)
-#            module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
-#        finally:
-#            driver.close()
+        if not result:
+            module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+        vertex_result: Tuple[str, Dict[str, Any], str] = vertex_module(
+            module.check_mode,
+            vertex,
+            casted_properties
+            )
+        cypher_query, cypher_params, cypher_query_inline = vertex_result
+        driver: Driver = u_driver.get_driver(module.params)
+        try:
+            with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
+                response: Result = session.run(cypher_query, cypher_params)
+                cypher_response: List[Dict[str, Any]] = [record.data() for record in list(response)]
+                summary: ResultSummary = response.consume()
+        except Neo4jError as e:
+            payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e)
+            module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
+        except Exception as e: # pylint: disable=broad-exception-caught
+            payload = u_skel.payload_abend(cypher_query_inline, e)
+            module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
+        finally:
+            driver.close()
     module.exit_json(**u_skel.ansible_exit(
         changed=True,
         payload_key=module_name,
