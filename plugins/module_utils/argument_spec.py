@@ -101,6 +101,13 @@ def argument_spec_vertex() -> Dict[str, Any]:
         }
     }
 
+def argument_spec_vertex_bulk() -> Dict[str, Any]:
+    return {
+        u_skel.JsonTKN.VERTEX_FILE.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: True
+        }
+    }
 
 def argument_spec_edge() -> Dict[str, Any]:
     return {
