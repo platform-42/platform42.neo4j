@@ -16,9 +16,9 @@ from ansible.module_utils.basic import AnsibleModule
 import ansible_collections.platform42.neo4j.plugins.module_utils.argument_spec as u_args
 import ansible_collections.platform42.neo4j.plugins.module_utils.skeleton as u_skel
 # import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cypher
-# import ansible_collections.platform42.neo4j.plugins.module_utils.schema as u_schema
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
 import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
+import ansible_collections.platform42.neo4j.plugins.module_utils.input as u_input
 
 from neo4j import Driver, ResultSummary, Result, SummaryCounters
 from neo4j.exceptions import Neo4jError
@@ -89,7 +89,19 @@ def main() -> None:
     #
     # to do connect to neo4j, process vertices one-by-one
     #
-#    for idx, vertex in enumerate(vertices):
+    for idx, vertex in enumerate(vertices):
+        input_list: List[str] = [
+            u_skel.JsonTKN.LABEL.value,
+            u_skel.JsonTKN.ENTITY_NAME.value,
+            u_skel.JsonTKN.PROPERTIES.value
+            ]
+        validate_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_input.validate_inputs(
+            cypher_input_list=input_list,
+            module_params=vertex,
+            supports_unique_key=False,
+            supports_casting=True
+            )
+        result, casted_properties, diagnostics = validate_result
 #        driver: Driver = u_driver.get_driver(module.params)
 #        try:
 #            with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
@@ -107,7 +119,7 @@ def main() -> None:
     module.exit_json(**u_skel.ansible_exit(
         changed=True,
         payload_key=module_name,
-        payload=vertices
+        payload=diagnostics
         )
     )
     
