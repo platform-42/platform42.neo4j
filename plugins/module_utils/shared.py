@@ -21,30 +21,46 @@ import yaml
 from typing import Any, Dict, List, Tuple, Optional
 
 def load_yaml_file(
-    vertex_file: str,
-    vertex_anchor: str
+    vertex_path: str,
+    vertex_anchor: str,
 ) -> Tuple[bool, Optional[List[Dict[str, Any]]], Dict[str, Any]]:
 
-    # Check file existence
-    if not os.path.exists(vertex_file):
-        return False, None, {u_skel.JsonTKN.ERROR_MSG: f"Vertex file not found: {vertex_file}"}
+    # check file existence
+    if not os.path.exists(vertex_path):
+        return False, None, {u_skel.JsonTKN.ERROR_MSG.value: f"YAML file not found: {vertex_path}"}
 
-    # Attempt load
+    # load yaml into payload
     try:
-        with open(vertex_file, "r", encoding="utf-8") as f:
-            payload = yaml.safe_load(f)
+        with open(vertex_path, "r", encoding="utf-8") as f:
+            extract = yaml.safe_load(f)
     except yaml.YAMLError as e:
-        return False, None, {u_skel.JsonTKN.ERROR_MSG: f"Failed to parse YAML file: {e}"}
+        return False, None, {u_skel.JsonTKN.ERROR_MSG.value: f"Failed to parse YAML file: {e}"}
     except Exception as e:
-        return False, None, {u_skel.JsonTKN.ERROR_MSG: f"Failed to read file: {e}"}
+        return False, None, {u_skel.JsonTKN.ERROR_MSG.value: f"Failed to read fYAML file: {e}"}
 
-    # Validate top-level structure
-#    if not isinstance(payload, list):
-#        return False, None, {u_skel.JsonTKN.ERROR_MSG: "YAML must contain a list of vertex definitions"}
+    # examine structure of payload
+    if not isinstance(extract, dict):
+        return False, None, {u_skel.JsonTKN.ERROR_MSG.value: "YAML must have one top-level key"}
 
-    # Success
-    return True, payload, {}
+    keys = list(extract.keys())
 
+    # must have 1 top key
+    if len(keys) != 1:
+        return False, None, {u_skel.JsonTKN.ERROR_MSG.value: f"YAML must have top-level key named '{vertex_anchor}'"}
+
+    anchor = keys[0]
+    # anchor must match exactly
+    if anchor != vertex_anchor:
+        return False, None, {u_skel.JsonTKN.ERROR_MSG.value: f"Top-level key '{anchor}' does not match '{vertex_anchor}'"}
+
+    payload = extract[anchor]
+
+    # --- List validation ------------------------------------------------------
+    if not isinstance(payload, list):
+        return False, None, {u_skel.JsonTKN.ERROR_MSG.value: f"Top-level key '{anchor}' must contain a list"}
+
+    # --- Success --------------------------------------------------------------
+    return True, payload, {u_skel.JsonTKN.VERTEX_ANCHOR.value: anchor, u_skel.JsonTKN.COUNT.value: len(payload)}
 
 
 def serialize_neo4j(
@@ -66,10 +82,10 @@ def validate_vertex_file(
     for i, vertex in enumerate(vertices):
         for key, rules in vertex_spec.items():
             if rules.get(u_skel.YamlATTR.REQUIRED.value, False) and key not in vertex:
-                return False, {u_skel.JsonTKN.ERROR_MSG: f"Vertex {i}: Missing required field '{key}'"}
+                return False, {u_skel.JsonTKN.ERROR_MSG.value: f"Vertex {i}: Missing required field '{key}'"}
             # Optional: type checks
             expected_type = rules.get(u_skel.YamlATTR.TYPE.value)
             if expected_type and key in vertex:
                 if expected_type == u_skel.YamlATTR.TYPE_STR.value and not isinstance(vertex[key], str):
-                    return False, {u_skel.JsonTKN.ERROR_MSG: f"Vertex {i}: Field '{key}' must be a string"}
+                    return False, {u_skel.JsonTKN.ERROR_MSG.value: f"Vertex {i}: Field '{key}' must be a string"}
     return True, {}

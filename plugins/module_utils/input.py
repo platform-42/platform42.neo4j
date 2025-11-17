@@ -91,7 +91,7 @@ def _validate_from(
 
     entity = value.get(u_skel.JsonTKN.ENTITY_NAME.value)
     if not entity:
-        return False, {u_skel.JsonTKN.ERROR_MSG: "Missing FROM.ENTITY_NAME"}
+        return False, {u_skel.JsonTKN.ERROR_MSG.value: "Missing FROM.ENTITY_NAME"}
     result, diagnostics = u_schema.validate_patterns(u_schema.IdentifierPattern.UNICODE_NAME, entity)
     if not result:
         return False, diagnostics
@@ -104,14 +104,14 @@ def _validate_to(
 ) -> ValidationResult:
     label = value.get(u_skel.JsonTKN.LABEL.value)
     if not label:
-        return False, {u_skel.JsonTKN.ERROR_MSG: "Missing TO.LABEL"}
+        return False, {u_skel.JsonTKN.ERROR_MSG.value: "Missing TO.LABEL"}
     result, diagnostics = u_schema.validate_patterns(u_schema.IdentifierPattern.NEO4J_IDENTIFIER, label)
     if not result:
         return False, diagnostics
 
     entity = value.get(u_skel.JsonTKN.ENTITY_NAME.value)
     if not entity:
-        return False, {u_skel.JsonTKN.ERROR_MSG: "Missing TO.ENTITY_NAME"}
+        return False, {u_skel.JsonTKN.ERROR_MSG.value: "Missing TO.ENTITY_NAME"}
     result, diagnostics = u_schema.validate_patterns(u_schema.IdentifierPattern.UNICODE_NAME, entity)
     if not result:
         return False, diagnostics
@@ -151,7 +151,7 @@ def validate_unique_key(
         return True, {}
     normalized_property_keys = [key.strip().lower() for key in properties.keys()]
     if value.strip().lower() not in normalized_property_keys:
-        return False, {u_skel.JsonTKN.ERROR_MSG: f"unique_key '{value}' not found in properties"}
+        return False, {u_skel.JsonTKN.ERROR_MSG.value: f"unique_key '{value}' not found in properties"}
     return True, {}
 
 #

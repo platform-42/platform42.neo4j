@@ -88,6 +88,7 @@ class JsonTKN(StrEnum):
     VERTEX_ANCHOR = "vertex_anchor"
     VERTEX_FILE = "vertex_file"
     WRITE_ACCESS = "write_access"
+    COUNT = "count"
 
 
 def state_present(
