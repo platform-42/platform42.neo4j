@@ -38,8 +38,8 @@ def load_yaml_file(
         return False, None, {u_skel.JsonTKN.ERROR_MSG: f"Failed to read file: {e}"}
 
     # Validate top-level structure
-#    if not isinstance(payload, list):
-#        return False, None, {u_skel.JsonTKN.ERROR_MSG: "YAML must contain a list of vertex definitions"}
+    if not isinstance(payload, list):
+        return False, None, {u_skel.JsonTKN.ERROR_MSG: "YAML must contain a list of vertex definitions"}
 
     # Success
     return True, payload, {}
