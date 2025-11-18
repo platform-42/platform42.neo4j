@@ -44,9 +44,11 @@ EXAMPLES = r'''
 #
 # Create bulk of vertices
 # existing vertex properties move to a bulk-input file
-# pratical once number of vertices exceeds 100
-# batch_size specifies number of vertices within a transaction  
+# practical once number of vertices exceeds 100
+# batch_size specifies number of vertices within a transaction
+# root is defined by a vertex_anchor. In example below: "vertices"  
 #
+# vertices:
 # - label: "Person"
 #   state: PRESENT
 #   entity_name: "Ada"
@@ -63,7 +65,7 @@ EXAMPLES = r'''
     username: "neo4j"
     password: "*****"
     vertex_file: "./vars/vertex.yml"
-    batch_size: 500
+    vertex_anchor: "vertices"
 '''
 
 def vertex_module(

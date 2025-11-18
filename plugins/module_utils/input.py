@@ -167,12 +167,17 @@ def validate_inputs(
     supports_unique_key: Optional[bool] = False,
     supports_casting: Optional[bool] = False,
 ) -> Tuple[bool, Dict[str, Any], Dict[str, Any]]:
+    
+    # validate vertex/edge properties type, label, base_label and entity_name
+    # validate properties and parameter keys
     result, diagnostics = validate_cypher_inputs(
         cypher_input_list,
         module_params
         )
     if not result:
         return False, {}, diagnostics
+    
+    # validate whether unique_key value is a valid property
     if supports_unique_key:
         result, diagnostics = validate_unique_key(
             module_params[u_skel.JsonTKN.UNIQUE_KEY.value],
@@ -180,6 +185,8 @@ def validate_inputs(
         )
         if not result:
             return False, {}, diagnostics
+
+    # cast (dynamic) properties and (dynamic) parameters via type/value definition
     casted_values: Dict[str, Any] = {}
     if supports_casting:
         if u_skel.JsonTKN.PROPERTIES.value in module_params:
