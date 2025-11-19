@@ -118,12 +118,12 @@ def main() -> None:
     summary = u_stats.EdgeSummary(total=len(edges))
     for edge in enumerate(edges):
         edge_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_model_from_file(
-            edge, 
+            edge,
             u_args.argument_spec_edge()
             )
         result, validated_edge, diagnostics = edge_from_file_result
         if not result:
-            module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))    
+            module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
         input_list: List[str] = [
             u_skel.JsonTKN.TYPE.value,
             u_skel.JsonTKN.FROM.value,
@@ -154,7 +154,7 @@ def main() -> None:
                 result_summary: ResultSummary = response.consume()
             summary.processed += 1
             summary.relationships_created += result_summary.counters.relationships_created
-            summary.relationships_deleted += result_summary.counters.relationships_deleted                
+            summary.relationships_deleted += result_summary.counters.relationships_deleted
         except Neo4jError as e:
             payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e)
             module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
