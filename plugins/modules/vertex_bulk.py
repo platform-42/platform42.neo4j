@@ -111,7 +111,7 @@ def main() -> None:
         #
         #   equivalent to argument_spec validation
         #
-        vertex_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_vertex_from_file(
+        vertex_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_model_from_file(
             vertex, 
             u_args.argument_spec_vertex()
             )

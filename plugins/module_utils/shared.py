@@ -75,7 +75,7 @@ def serialize_neo4j(
     return value
 
 
-def validate_vertex_from_file(
+def validate_model_from_file(
     vertex: Dict[str, Any],
     vertex_spec: Dict[str, Dict[str, Any]]
 ) -> Tuple[bool, Dict[str, Any], Dict[str, Any]]:
