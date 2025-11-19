@@ -129,7 +129,7 @@ def main() -> None:
 
     summary = u_stats.EntitySummary(total=len(edges))
     for idx, edge in enumerate(edges):
-        # check YAML-file for completeness
+        # check YAML-edge for completeness
         edge_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_entity_from_file(
             edge,
             u_args.argument_spec_edge()
