@@ -25,9 +25,43 @@ from neo4j import Driver, ResultSummary, Result
 from neo4j.exceptions import Neo4jError
 
 DOCUMENTATION = r'''
+---
+module: edge
+short_description: Create or update a relationship (edge) between two vertices in Neo4j via bulk load
+version_added: "4.2.0"
+author:
+  - Diederick de Buck (diederick.de.buck@gmail.com)
+description:
+  - This module creates a relationship (edge) between two existing vertices (nodes) in a Neo4j graph database.
+  - It uses the official Neo4j Python driver and supports Aura (neo4j+s://) and self-hosted instances.
+  - Both source and target nodes must already exist in the graph; the module will fail if either node cannot be found.
+  - Relationship direction is always from C(source) → C(target).
+notes:
+  - The module uses a Cypher MERGE statement to ensure the relationship is created once between existing vertices.
+  - For idempotent behavior, ensure source and target vertices are uniquely identifiable.
+  - Relationship creation will fail if source or target nodes are missing.
+  - edge-type follows uppercase naming style.
+  - check_mode will validate all input parameters and returns version of Neo4j as proof that connection is established.
+  - properties must be specified as a value/type pair, since Ansible turns everything into a string
+  - bulk interface expects all relationship attributes in a YAML inputfile
 '''
 
 EXAMPLES = r'''
+#
+# Create bulk of vertices
+# existing vertex properties move to a bulk-input file
+# practical once number of vertices exceeds 100
+# batch_size specifies number of vertices within a transaction
+# root is defined by a vertex_anchor. In example below: "vertices"  
+#
+- name: "create edges via input YAML"
+  platform42.neo4j.edge_bulk:
+    neo4j_uri: "neo4j://127.0.0.1:7687"
+    database: "neo4j"
+    username: "neo4j"
+    password: "*****"
+    edge_file: "./vars/edges/u1_tracks.yml"
+    edge_anchor: "u1_tracks"
 '''
 
 def edge_module(
@@ -82,7 +116,7 @@ def main() -> None:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
 
     summary = u_stats.EdgeSummary(total=len(edges))
-    for idx, edge in enumerate(edges):
+    for edge in enumerate(edges):
         edge_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_model_from_file(
             edge, 
             u_args.argument_spec_edge()

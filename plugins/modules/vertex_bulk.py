@@ -49,24 +49,20 @@ EXAMPLES = r'''
 # batch_size specifies number of vertices within a transaction
 # root is defined by a vertex_anchor. In example below: "vertices"  
 #
-# vertices:
-# - label: "Person"
+# u1_stations:
+# - label: "Station"
 #   state: PRESENT
-#   entity_name: "Ada"
+#   entity_name: "Krumme Lanke"
 #   singleton: True
-#   properties:
-#     age: 
-#       value: 30
-#       type: int
 #
-- name: "create bulk set of vertices"
+- name: "create vertices via input YAML"
   platform42.neo4j.vertex_bulk:
     neo4j_uri: "neo4j://127.0.0.1:7687"
     database: "neo4j"
     username: "neo4j"
     password: "*****"
-    vertex_file: "./vars/vertex.yml"
-    vertex_anchor: "vertices"
+    vertex_file: "./vars/vertices/u1_stations.yml"
+    vertex_anchor: "u1_stations"
 '''
 
 def vertex_module(
@@ -107,10 +103,7 @@ def main() -> None:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
 
     summary = u_stats.VertexSummary(total=len(vertices))
-    for idx, vertex in enumerate(vertices):
-        #
-        #   equivalent to argument_spec validation
-        #
+    for vertex in enumerate(vertices):
         vertex_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_model_from_file(
             vertex, 
             u_args.argument_spec_vertex()
