@@ -43,12 +43,9 @@ notes:
 
 EXAMPLES = r'''
 #
-# Create bulk of vertices
-# existing vertex properties move to a bulk-input file
-# practical once number of vertices exceeds 100
-# batch_size specifies number of vertices within a transaction
-# root is defined by a vertex_anchor. In example below: "vertices"  
-#
+# Only attributes of a NEO4J vertex are moved vertex YAML-file
+# u1_stations: is the vertex_anchor (start marker) in the vertex YAML-file
+# 
 # u1_stations:
 # - label: "Station"
 #   state: PRESENT
@@ -94,6 +91,8 @@ def main() -> None:
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_vertex_bulk(),
         supports_check_mode=True
         )
+    
+    # load vertices from YAML-file
     vertex_load_result: Tuple[bool, List[Dict[str, Any]], Dict[str, Any]] = u_shared.load_yaml_file(
         module.params[u_skel.JsonTKN.VERTEX_FILE.value],
         module.params[u_skel.JsonTKN.VERTEX_ANCHOR.value]
@@ -104,13 +103,15 @@ def main() -> None:
 
     summary = u_stats.EntitySummary(total=len(vertices))
     for idx, vertex in enumerate(vertices):
-        vertex_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_model_from_file(
+        # check YAML-file for completeness
+        vertex_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_entity_from_file(
             vertex,
             u_args.argument_spec_vertex()
             )
         result, validated_vertex, diagnostics = vertex_from_file_result
         if not result:
             module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+        # validate YAML against NEO4J constraints, typecast dynamic properties
         input_list: List[str] = [
             u_skel.JsonTKN.LABEL.value,
             u_skel.JsonTKN.ENTITY_NAME.value,
@@ -125,6 +126,7 @@ def main() -> None:
         result, casted_properties, diagnostics = validate_result
         if not result:
             module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+        # generate cypher query for vertex operation (create/delete)
         vertex_result: Tuple[str, Dict[str, Any], str] = vertex_module(
             module.check_mode,
             validated_vertex,
@@ -133,9 +135,10 @@ def main() -> None:
         cypher_query, cypher_params, cypher_query_inline = vertex_result
         driver: Driver = u_driver.get_driver(module.params)
         try:
+            # execute cypher query
             with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
                 response: Result = session.run(cypher_query, cypher_params)
-                cypher_response: List[Dict[str, Any]] = [record.data() for record in list(response)]
+#               cypher_response: List[Dict[str, Any]] = [record.data() for record in list(response)]
                 result_summary: ResultSummary = response.consume()
             summary.processed += 1
             summary.nodes_created += result_summary.counters.nodes_created

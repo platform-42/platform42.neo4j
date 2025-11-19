@@ -48,11 +48,22 @@ notes:
 
 EXAMPLES = r'''
 #
-# Create bulk of vertices
-# existing vertex properties move to a bulk-input file
-# practical once number of vertices exceeds 100
-# batch_size specifies number of vertices within a transaction
-# root is defined by a vertex_anchor. In example below: "vertices"  
+# Only attributes of a NEO4J edge are moved edge YAML-file
+# u1_tracks: is the edge_anchor (start marker) in the edge YAML-file
+#
+# u1_tracks:
+# - properties:
+#     distance:
+#       value: 1.2
+#       type: float
+#   from:
+#     entity_name: "Kurfürstenstraße"
+#     label: Station
+#   to:
+#     entity_name: "Hallerstraße"
+#     label: Station
+#   type: Track
+#   bi_directional: True
 #
 - name: "create edges via input YAML"
   platform42.neo4j.edge_bulk:
@@ -107,6 +118,7 @@ def main() -> None:
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_edge_bulk(),
         supports_check_mode=True
         )
+    # load edges from YAML-file
     edge_load_result: Tuple[bool, List[Dict[str, Any]], Dict[str, Any]] = u_shared.load_yaml_file(
         module.params[u_skel.JsonTKN.EDGE_FILE.value],
         module.params[u_skel.JsonTKN.EDGE_ANCHOR.value]
@@ -117,13 +129,15 @@ def main() -> None:
 
     summary = u_stats.EntitySummary(total=len(edges))
     for idx, edge in enumerate(edges):
-        edge_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_model_from_file(
+        # check YAML-file for completeness
+        edge_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_entity_from_file(
             edge,
             u_args.argument_spec_edge()
             )
         result, validated_edge, diagnostics = edge_from_file_result
         if not result:
             module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+        # validate YAML against NEO4J constraints, typecast dynamic properties
         input_list: List[str] = [
             u_skel.JsonTKN.TYPE.value,
             u_skel.JsonTKN.FROM.value,
@@ -140,6 +154,7 @@ def main() -> None:
         result, casted_properties, diagnostics = validate_result
         if not result:
             module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+        # generate cypher query for edge operation (create/delete)
         edge_result: Tuple[str, Dict[str, Any], str] = edge_module(
             module.check_mode,
             validated_edge,
@@ -148,9 +163,10 @@ def main() -> None:
         cypher_query, cypher_params, cypher_query_inline = edge_result
         driver: Driver = u_driver.get_driver(module.params)
         try:
+            # execute cypher query
             with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
                 response: Result = session.run(cypher_query, cypher_params)
-                cypher_response: List[Dict[str, Any]] = [record.data() for record in list(response)]
+#               cypher_response: List[Dict[str, Any]] = [record.data() for record in list(response)]
                 result_summary: ResultSummary = response.consume()
             summary.processed += 1
             summary.relationships_created += result_summary.counters.relationships_created
