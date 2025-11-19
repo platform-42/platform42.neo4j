@@ -6,7 +6,7 @@
     Description: 
         Shared utility functions
 """
-from typing import Dict, Any, Tuple, List
+from typing import Dict, Any, Tuple, List, Optional
 
 import os
 import yaml
@@ -15,10 +15,6 @@ from neo4j.time import DateTime, Date, Time
 
 from . import skeleton as u_skel
 
-
-import os
-import yaml
-from typing import Any, Dict, List, Tuple, Optional
 
 def load_yaml_file(
     vertex_path: str,
