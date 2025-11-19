@@ -145,8 +145,8 @@ def main() -> None:
                 cypher_response: List[Dict[str, Any]] = [record.data() for record in list(response)]
                 result_summary: ResultSummary = response.consume()
             summary.processed += 1
-            summary.created += result_summary.counters.nodes_created
-            summary.deleted += result_summary.counters.nodes_deleted                
+            summary.nodes_created += result_summary.counters.nodes_created
+            summary.nodes_deleted += result_summary.counters.nodes_deleted                
         except Neo4jError as e:
             payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e)
             module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
@@ -155,7 +155,7 @@ def main() -> None:
             module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
         finally:
             driver.close()
-    nodes_changed: bool = (summary.created > 0 or summary.deleted > 0)
+    nodes_changed: bool = (summary.nodes_created > 0 or summary.nodes_deleted > 0)
     module.exit_json(**u_skel.ansible_exit(
         changed=nodes_changed,
         payload_key=module_name,

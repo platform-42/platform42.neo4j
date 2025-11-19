@@ -13,8 +13,8 @@ from typing import List, Dict, Any, Optional
 class VertexSummary:
     total: int = 0
     processed: int = 0
-    created: int = 0
-    deleted: int = 0
+    nodes_created: int = 0
+    nodes_deleted: int = 0
     errors: int = 0
     diagnostics: Optional[List[Dict[str, Any]]] = None
 
@@ -29,8 +29,8 @@ class VertexSummary:
 class EdgeSummary:
     total: int = 0
     processed: int = 0
-    created: int = 0
-    deleted: int = 0
+    relationships_created: int = 0
+    relationships_deleted: int = 0
     errors: int = 0
     diagnostics: Optional[List[Dict[str, Any]]] = None
 
