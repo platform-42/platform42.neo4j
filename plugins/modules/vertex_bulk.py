@@ -142,6 +142,7 @@ def main() -> None:
             summary.nodes_deleted += result_summary.counters.nodes_deleted
             summary.labels_added += result_summary.counters.labels_added
             summary.labels_removed += result_summary.counters.labels_removed
+            summary.properties_set += result_summary.counters.properties_set
         except Neo4jError as e:
             payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e)
             module.fail_json(**u_skel.ansible_fail(diagnostics=payload))

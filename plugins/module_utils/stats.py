@@ -19,6 +19,7 @@ class EntitySummary:
     relationships_deleted: int = 0
     labels_added: int = 0
     labels_removed: int = 0
+    properties_set: int = 0
     errors: int = 0
     diagnostics: Optional[List[Dict[str, Any]]] = None
 
