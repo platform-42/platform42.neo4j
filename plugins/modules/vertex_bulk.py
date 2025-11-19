@@ -102,7 +102,7 @@ def main() -> None:
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
 
-    summary = u_stats.VertexSummary(total=len(vertices))
+    summary = u_stats.EntitySummary(total=len(vertices))
     for vertex in enumerate(vertices):
         vertex_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_model_from_file(
             vertex,
