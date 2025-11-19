@@ -19,6 +19,7 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cyp
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
 import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
 import ansible_collections.platform42.neo4j.plugins.module_utils.input as u_input
+import ansible_collections.platform42.neo4j.plugins.module_utils.stats as u_stats
 
 from neo4j import Driver, ResultSummary, Result, SummaryCounters
 from neo4j.exceptions import Neo4jError
@@ -105,6 +106,8 @@ def main() -> None:
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
 
+    summary = u_stats.VertexSummary(total=len(vertices))
+
     for idx, vertex in enumerate(vertices):
         #
         #   equivalent to argument_spec validation
@@ -141,7 +144,10 @@ def main() -> None:
             with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
                 response: Result = session.run(cypher_query, cypher_params)
                 cypher_response: List[Dict[str, Any]] = [record.data() for record in list(response)]
-                summary: ResultSummary = response.consume()
+                result_summary: ResultSummary = response.consume()
+            summary.processed += 1
+            summary.created += result_summary.counters.nodes_created
+            summary.deleted += result_summary.counters.nodes_deleted                
         except Neo4jError as e:
             payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e)
             module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
@@ -150,8 +156,9 @@ def main() -> None:
             module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
         finally:
             driver.close()
+    nodes_changed: int = (summary.created > 0 or summary.deleted > 0)
     module.exit_json(**u_skel.ansible_exit(
-        changed=True,
+        changed=nodes_changed,
         payload_key=module_name,
         payload=module.params
         )

@@ -113,7 +113,7 @@ def main() -> None:
         with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
             response: Result = session.run(cypher_query, cypher_params)
             cypher_response: List[Dict[str, Any]] = [record.data() for record in list(response)]
-            summary: ResultSummary = response.consume()
+            result_summary: ResultSummary = response.consume()
     except Neo4jError as e:
         payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e)
         module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
@@ -127,10 +127,10 @@ def main() -> None:
         cypher_params,
         cypher_query_inline,
         u_shared.serialize_neo4j(cypher_response),
-        u_cypher.cypher_stats(summary)
+        u_cypher.cypher_stats(result_summary)
         )
     state: str = module.params[u_skel.JsonTKN.STATE.value]
-    counters: SummaryCounters = summary.counters
+    counters: SummaryCounters = result_summary.counters
     constraints_changed: int = counters.constraints_added if u_skel.state_present(state) else counters.constraints_removed
     changed: bool = constraints_changed > 0
     module.exit_json(**u_skel.ansible_exit(

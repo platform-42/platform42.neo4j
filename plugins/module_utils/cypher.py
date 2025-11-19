@@ -395,21 +395,21 @@ def query_tx(
 ) -> Tuple[List[Dict[str, Any]], ResultSummary]:
     response: Result = tx.run(cypher_query, cypher_params)
     data: List[Dict[str, Any]] = response.data()
-    summary: ResultSummary = response.consume()
-    return (data, summary)
+    result_summary: ResultSummary = response.consume()
+    return (data, result_summary)
 
 def cypher_stats(
-    summary: ResultSummary
+    result_summary: ResultSummary
 ) -> Dict[str, Any]:
     return {
-        u_skel.JsonTKN.NODES_CREATED.value: summary.counters.nodes_created,
-        u_skel.JsonTKN.NODES_DELETED.value: summary.counters.nodes_deleted,
-        u_skel.JsonTKN.RELATIONSHIPS_CREATED.value: summary.counters.relationships_created,
-        u_skel.JsonTKN.RELATIONSHIPS_DELETED.value: summary.counters.relationships_deleted,
-        u_skel.JsonTKN.LABELS_ADDED.value: summary.counters.labels_added,
-        u_skel.JsonTKN.LABELS_REMOVED.value: summary.counters.labels_removed,
-        u_skel.JsonTKN.QUERY_TYPE.value: summary.query_type,
-        u_skel.JsonTKN.PROPERTIES_SET.value: summary.counters.properties_set,
-        u_skel.JsonTKN.CONSTRAINTS_ADDED.value: summary.counters.constraints_added,
-        u_skel.JsonTKN.CONSTRAINTS_REMOVED.value: summary.counters.constraints_removed,
+        u_skel.JsonTKN.NODES_CREATED.value: result_summary.counters.nodes_created,
+        u_skel.JsonTKN.NODES_DELETED.value: result_summary.counters.nodes_deleted,
+        u_skel.JsonTKN.RELATIONSHIPS_CREATED.value: result_summary.counters.relationships_created,
+        u_skel.JsonTKN.RELATIONSHIPS_DELETED.value: result_summary.counters.relationships_deleted,
+        u_skel.JsonTKN.LABELS_ADDED.value: result_summary.counters.labels_added,
+        u_skel.JsonTKN.LABELS_REMOVED.value: result_summary.counters.labels_removed,
+        u_skel.JsonTKN.QUERY_TYPE.value: result_summary.query_type,
+        u_skel.JsonTKN.PROPERTIES_SET.value: result_summary.counters.properties_set,
+        u_skel.JsonTKN.CONSTRAINTS_ADDED.value: result_summary.counters.constraints_added,
+        u_skel.JsonTKN.CONSTRAINTS_REMOVED.value: result_summary.counters.constraints_removed,
         }

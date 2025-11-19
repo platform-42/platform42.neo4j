@@ -119,7 +119,7 @@ def main() -> None:
                 [Callable[[Any, Any, Any], Any], str, Dict[str, Any]],
                 Tuple[Any, Any]
                 ] = session.execute_write if write_access else session.execute_read
-            cypher_response, summary = executor(u_cypher.query_tx, cypher_query, cypher_params)
+            cypher_response, result_summary = executor(u_cypher.query_tx, cypher_query, cypher_params)
     except Neo4jError as e:
         payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e)
         module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
@@ -133,7 +133,7 @@ def main() -> None:
         cypher_params,
         repr(cypher_query_inline),
         u_shared.serialize_neo4j(cypher_response),
-        u_cypher.cypher_stats(summary),
+        u_cypher.cypher_stats(result_summary),
         )
     module.exit_json(**u_skel.ansible_exit(
         changed=False,
