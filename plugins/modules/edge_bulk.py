@@ -30,6 +30,43 @@ DOCUMENTATION = r'''
 EXAMPLES = r'''
 '''
 
+def edge_module(
+    check_mode: bool,
+    module_params: Dict[str, Any],
+    properties: Dict[str, Any]
+) -> Tuple[str, Dict[str, Any], str]:
+    relation_type: str = module_params[u_skel.JsonTKN.TYPE.value]
+    label_from: str = module_params[u_skel.JsonTKN.FROM.value][u_skel.JsonTKN.LABEL.value]
+    entity_name_from: str = module_params[u_skel.JsonTKN.FROM.value][u_skel.JsonTKN.ENTITY_NAME.value]
+    label_to: str = module_params[u_skel.JsonTKN.TO.value][u_skel.JsonTKN.LABEL.value]
+    entity_name_to: str = module_params[u_skel.JsonTKN.TO.value][u_skel.JsonTKN.ENTITY_NAME.value]
+    bi_directional: bool = module_params[u_skel.JsonTKN.BI_DIRECTIONAL.value]
+    state: str = module_params[u_skel.JsonTKN.STATE.value]
+    unique_key: str = module_params[u_skel.JsonTKN.UNIQUE_KEY.value]
+    if u_skel.state_present(state):
+        return u_cypher.edge_add(
+            check_mode,
+            relation_type,
+            label_from,
+            entity_name_from,
+            label_to,
+            entity_name_to,
+            properties,
+            bi_directional,
+            unique_key
+        )
+    return u_cypher.edge_del(
+        check_mode,
+        relation_type,
+        label_from,
+        entity_name_from,
+        label_to,
+        entity_name_to,
+        bi_directional,
+        unique_key
+    )
+
+
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
@@ -60,6 +97,38 @@ def main() -> None:
             u_skel.JsonTKN.PROPERTIES.value,
             u_skel.JsonTKN.UNIQUE_KEY.value
             ]
+        validate_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_input.validate_inputs(
+            cypher_input_list=input_list,
+            module_params=validated_edge,
+            supports_unique_key=False,
+            supports_casting=True
+            )
+        result, casted_properties, diagnostics = validate_result
+        if not result:
+            module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+        edge_result: Tuple[str, Dict[str, Any], str] = edge_module(
+            module.check_mode,
+            validated_edge,
+            casted_properties
+            )
+        cypher_query, cypher_params, cypher_query_inline = edge_result
+        driver: Driver = u_driver.get_driver(module.params)
+        try:
+            with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
+                response: Result = session.run(cypher_query, cypher_params)
+                cypher_response: List[Dict[str, Any]] = [record.data() for record in list(response)]
+                result_summary: ResultSummary = response.consume()
+            summary.processed += 1
+            summary.created += result_summary.counters.nodes_created
+            summary.deleted += result_summary.counters.nodes_deleted                
+        except Neo4jError as e:
+            payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e)
+            module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
+        except Exception as e: # pylint: disable=broad-exception-caught
+            payload = u_skel.payload_abend(cypher_query_inline, e)
+            module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
+        finally:
+            driver.close()
     nodes_changed: bool = (summary.created > 0 or summary.deleted > 0)
     module.exit_json(**u_skel.ansible_exit(
         changed=nodes_changed,
