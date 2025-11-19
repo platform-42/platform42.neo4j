@@ -104,20 +104,18 @@ def main() -> None:
     result, vertices, diagnostics = vertex_load_result
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-    #
-    #   equivalent to argument_spec validation
-    #
-    vertex_file_result: Tuple[bool, Dict[str, Any]] = u_shared.validate_vertex_file(
-        vertices, 
-        u_args.argument_spec_vertex()
-        )
-    result, diagnostics = vertex_file_result
-    if not result:
-        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-    #
-    # to do connect to neo4j, process vertices one-by-one
-    #
+
     for idx, vertex in enumerate(vertices):
+        #
+        #   equivalent to argument_spec validation
+        #
+        vertex_file_result: Tuple[bool, Dict[str, Any]] = u_shared.validate_vertex_from_file(
+            vertices, 
+            u_args.argument_spec_vertex()
+            )
+        result, validated_vertex, diagnostics = vertex_file_result
+        if not result:
+            module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
         input_list: List[str] = [
             u_skel.JsonTKN.LABEL.value,
             u_skel.JsonTKN.ENTITY_NAME.value,
@@ -125,7 +123,7 @@ def main() -> None:
             ]
         validate_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_input.validate_inputs(
             cypher_input_list=input_list,
-            module_params=vertex,
+            module_params=validated_vertex,
             supports_unique_key=False,
             supports_casting=True
             )
@@ -134,7 +132,7 @@ def main() -> None:
             module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
         vertex_result: Tuple[str, Dict[str, Any], str] = vertex_module(
             module.check_mode,
-            vertex,
+            validated_vertex,
             casted_properties
             )
         cypher_query, cypher_params, cypher_query_inline = vertex_result
