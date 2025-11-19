@@ -13,15 +13,24 @@ OBJECT="plugins/modules/constraint.py"
 echo "linting ${OBJECT}"; pylint ${OBJECT}
 
 
-
 PYTHONPATH=./plugins/module_utils
-
 cd ${PYTHONPATH}
-pylint argument_spec.py
-pylint cypher_query.py
-pylint cypher.py
-pylint driver
-pylint input.py
-pylint schema.py
-pylint shared.py
-pylint skeleton.py
+
+echo "--- module_utils ---"
+OBJECT="argument_spec.py"
+echo "linting ${OBJECT}"; pylint ${OBJECT}
+OBJECT="cypher_query.py"
+echo "linting ${OBJECT}"; pylint ${OBJECT}
+OBJECT="cypher.py"
+echo "linting ${OBJECT}"; pylint ${OBJECT}
+OBJECT="driver"
+echo "linting ${OBJECT}"; pylint ${OBJECT}
+OBJECT="input.py"
+echo "linting ${OBJECT}"; pylint ${OBJECT}
+OBJECT="schema.py"
+echo "linting ${OBJECT}"; pylint ${OBJECT}
+OBJECT="shared.py"
+echo "linting ${OBJECT}"; pylint ${OBJECT}
+OBJECT="skeleton.py"
+echo "linting ${OBJECT}"; pylint ${OBJECT}
+
