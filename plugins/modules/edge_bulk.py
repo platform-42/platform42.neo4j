@@ -40,6 +40,18 @@ def main() -> None:
         module.params[u_skel.JsonTKN.EDGE_FILE.value],
         module.params[u_skel.JsonTKN.EDGE_ANCHOR.value]
         )
-    
+    result, edges, diagnostics = edge_load_result
+    if not result:
+        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+
+    summary = u_stats.EdgeSummary(total=len(edges))
+    nodes_changed: int = (summary.created > 0 or summary.deleted > 0)
+    module.exit_json(**u_skel.ansible_exit(
+        changed=nodes_changed,
+        payload_key=module_name,
+        payload=summary.as_payload()
+        )
+    )
+
 if __name__ == '__main__':
     main()

@@ -170,6 +170,19 @@ def argument_spec_edge() -> Dict[str, Any]:
     }
 
 
+def argument_spec_edge_bulk() -> Dict[str, Any]:
+    return {
+        u_skel.JsonTKN.EDGE_FILE.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: True
+        },
+        u_skel.JsonTKN.EDGE_ANCHOR.value: {
+            u_skel.YamlATTR.TYPE.value: u_skel.YamlATTR.TYPE_STR.value,
+            u_skel.YamlATTR.REQUIRED.value: True
+        }
+    }
+
+
 def argument_spec_label() -> Dict[str, Any]:
     return {
         u_skel.JsonTKN.BASE_LABEL.value: {

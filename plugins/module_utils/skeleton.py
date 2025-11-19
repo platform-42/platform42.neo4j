@@ -43,12 +43,15 @@ class JsonTKN(StrEnum):
     CHANGED = "changed"
     CONSTRAINTS_ADDED = "constraints_added"
     CONSTRAINTS_REMOVED = "constraints_removed"
+    COUNT = "count"
     CYPHER_PARAMS = "cypher_params"
     CYPHER_QUERY = "cypher_query"
     CYPHER_QUERY_INLINE = "cypher_query_inline"
     CYPHER_RESPONSE = "cypher_response"
     DATABASE = "database"
     DIAGNOSTICS = "diagnostics"
+    EDGE_ANCHOR = "edge_anchor"
+    EDGE_FILE = "edge_file"
     ELEMENT_TYPE = "element_type"
     ENTITY_NAME = "entity_name"
     ENTITY_NAME_FROM = "entity_name_from"
@@ -88,7 +91,6 @@ class JsonTKN(StrEnum):
     VERTEX_ANCHOR = "vertex_anchor"
     VERTEX_FILE = "vertex_file"
     WRITE_ACCESS = "write_access"
-    COUNT = "count"
 
 
 def state_present(
