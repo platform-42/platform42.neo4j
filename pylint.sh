@@ -11,7 +11,10 @@ OBJECT="plugins/modules/label.py"
 echo "linting ${OBJECT}"; pylint ${OBJECT}
 OBJECT="plugins/modules/constraint.py"
 echo "linting ${OBJECT}"; pylint ${OBJECT}
-
+OBJECT="plugins/modules/edge_bulk.py"
+echo "linting ${OBJECT}"; pylint ${OBJECT}
+OBJECT="plugins/modules/vertex_bulk.py"
+echo "linting ${OBJECT}"; pylint ${OBJECT}
 
 PYTHONPATH=./plugins/module_utils
 cd ${PYTHONPATH}
@@ -33,4 +36,7 @@ OBJECT="shared.py"
 echo "linting ${OBJECT}"; pylint ${OBJECT}
 OBJECT="skeleton.py"
 echo "linting ${OBJECT}"; pylint ${OBJECT}
+OBJECT="stats.py"
+echo "linting ${OBJECT}"; pylint ${OBJECT}
+
 
