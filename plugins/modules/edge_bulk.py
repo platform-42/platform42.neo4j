@@ -45,11 +45,20 @@ def main() -> None:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
 
     summary = u_stats.EdgeSummary(total=len(edges))
-    nodes_changed: int = (summary.created > 0 or summary.deleted > 0)
+    for idx, edge in enumerate(edges):
+        edge_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_vertex_from_file(
+            edge, 
+            u_args.argument_spec_edge()
+            )
+        result, validated_edge, diagnostics = edge_from_file_result
+        if not result:
+            module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))    
+
+    nodes_changed: bool = (summary.created > 0 or summary.deleted > 0)
     module.exit_json(**u_skel.ansible_exit(
         changed=nodes_changed,
         payload_key=module_name,
-        payload=summary.as_payload()
+        payload=validated_edge
         )
     )
 
