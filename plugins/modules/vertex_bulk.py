@@ -107,7 +107,6 @@ def main() -> None:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
 
     summary = u_stats.VertexSummary(total=len(vertices))
-
     for idx, vertex in enumerate(vertices):
         #
         #   equivalent to argument_spec validation
