@@ -1,6 +1,15 @@
-# platform42.neo4j - release 4.1.0
+# platform42.neo4j - release 4.2.0
 
 Ansible collection for managing **Neo4j graph databases**: create and update vertices (nodes), edges (relationships), constraints, execute queries, and clean up the database. This collection provides a declarative, idempotent interface to Neo4j, allowing automation of graph data management in a consistent and reliable way.
+
+## release 4.2.0 notes
+- function results are now returend as tuples consisting: result, payload and diagnostics
+- implemented `platform.neo4j.vertex_bulk` primitve
+- splitted `argument_spec` into 3 parts:
+  `argument_spec_neo4j` -> connection spec
+  `argument_spec_xxx` -> spec related to neo4j primitives
+  `argument_spec_xxx_bulk` -> additional spec related for bulk processing (input-file)
+- dedupped input validations
 
 ## release 4.1.0 notes
 - renamed `platform42.neo4j.query_read` to `platform.neo4j.query`
@@ -56,10 +65,10 @@ MERGE (a)-[r:`TRANSACTION` {transction_date: "2025-10-31T15:00:00.000" }]->(b)
 
 ## Features
 
-- **Vertex management (`vertex` module)**  
+- **Vertex management (`vertex` and `vertex_bulk` module)**  
   Create or update nodes in the graph with specified labels and properties. Supports idempotent operations using Cypher `MERGE`.
 
-- **Edge management (`edge` module)**  
+- **Edge management (`edge` and `vertex_bulk` module)**  
   Create relationships between vertices with configurable direction, type, and properties. Also uses `MERGE` for idempotent updates.
 
 - **Query execution (`query` module)**  

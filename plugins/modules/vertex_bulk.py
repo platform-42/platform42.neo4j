@@ -6,7 +6,7 @@
     Date: 2025-10-05
     Version: 4.1.0
     Description: 
-        Ansible module to create graph node (vertex)
+        Ansible module to create graph nodes (vertex) as a bulk
 """
 
 # pylint: disable=import-error
