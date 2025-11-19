@@ -21,7 +21,7 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_dri
 import ansible_collections.platform42.neo4j.plugins.module_utils.input as u_input
 import ansible_collections.platform42.neo4j.plugins.module_utils.stats as u_stats
 
-from neo4j import Driver, ResultSummary, Result, SummaryCounters
+from neo4j import Driver, ResultSummary, Result
 from neo4j.exceptions import Neo4jError
 
 DOCUMENTATION = r'''
