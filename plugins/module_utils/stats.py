@@ -25,3 +25,18 @@ class VertexSummary:
     def as_payload(self) -> Dict[str, Any]:
         return asdict(self)
     
+@dataclass
+class EdgeSummary:
+    total: int = 0
+    processed: int = 0
+    created: int = 0
+    deleted: int = 0
+    errors: int = 0
+    diagnostics: Optional[List[Dict[str, Any]]] = None
+
+    def __post_init__(self):
+        if self.diagnostics is None:
+            self.diagnostics = []
+
+    def as_payload(self) -> Dict[str, Any]:
+        return asdict(self)
