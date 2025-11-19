@@ -110,7 +110,6 @@ def main() -> None:
             )
         result, validated_vertex, diagnostics = vertex_from_file_result
         if not result:
-            diagnostics["kut"] = vertex
             module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
         input_list: List[str] = [
             u_skel.JsonTKN.LABEL.value,

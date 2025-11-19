@@ -116,7 +116,7 @@ def main() -> None:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
 
     summary = u_stats.EntitySummary(total=len(edges))
-    for edge in enumerate(edges):
+    for idx, edge in enumerate(edges):
         edge_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_model_from_file(
             edge,
             u_args.argument_spec_edge()
