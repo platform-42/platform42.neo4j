@@ -105,7 +105,7 @@ def main() -> None:
     summary = u_stats.VertexSummary(total=len(vertices))
     for vertex in enumerate(vertices):
         vertex_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_model_from_file(
-            vertex, 
+            vertex,
             u_args.argument_spec_vertex()
             )
         result, validated_vertex, diagnostics = vertex_from_file_result
@@ -139,7 +139,7 @@ def main() -> None:
                 result_summary: ResultSummary = response.consume()
             summary.processed += 1
             summary.nodes_created += result_summary.counters.nodes_created
-            summary.nodes_deleted += result_summary.counters.nodes_deleted                
+            summary.nodes_deleted += result_summary.counters.nodes_deleted
         except Neo4jError as e:
             payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e)
             module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
@@ -155,6 +155,7 @@ def main() -> None:
         payload=summary.as_payload()
         )
     )
-    
+
+
 if __name__ == '__main__':
     main()
