@@ -25,5 +25,5 @@ def validate_patterns(
     value: str
 ) -> Tuple[bool, Dict[str, Any]]:
     if not regex.match(pattern.value, value):
-        return False, {u_skel.JsonTKN.ERROR_MSG.value: f"value {value} must match pattern {pattern}"}
-    return True, {}
+        return (False, {u_skel.JsonTKN.ERROR_MSG.value: f"value {value} must match pattern {pattern}"})
+    return (True, {})

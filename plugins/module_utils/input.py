@@ -55,7 +55,7 @@ def validate_cypher_inputs(
             return False, response
         validated[token] = response
 
-    return True, validated
+    return (True, validated)
 
 
 def _validate_type(
@@ -84,19 +84,19 @@ def _validate_from(
 ) -> ValidationResult:
     label = value.get(u_skel.JsonTKN.LABEL.value)
     if not label:
-        return False, {u_skel.JsonTKN.ERROR_MSG: "Missing FROM.LABEL"}
+        return (False, {u_skel.JsonTKN.ERROR_MSG: "Missing FROM.LABEL"})
     result, diagnostics = u_schema.validate_patterns(u_schema.IdentifierPattern.NEO4J_IDENTIFIER, label)
     if not result:
-        return False, diagnostics
+        return (False, diagnostics)
 
     entity = value.get(u_skel.JsonTKN.ENTITY_NAME.value)
     if not entity:
-        return False, {u_skel.JsonTKN.ERROR_MSG.value: "Missing FROM.ENTITY_NAME"}
+        return (False, {u_skel.JsonTKN.ERROR_MSG.value: "Missing FROM.ENTITY_NAME"})
     result, diagnostics = u_schema.validate_patterns(u_schema.IdentifierPattern.UNICODE_NAME, entity)
     if not result:
-        return False, diagnostics
+        return (False, diagnostics)
 
-    return True, {u_skel.JsonTKN.LABEL.value: label, u_skel.JsonTKN.ENTITY_NAME.value: entity}
+    return (True, {u_skel.JsonTKN.LABEL.value: label, u_skel.JsonTKN.ENTITY_NAME.value: entity})
 
 
 def _validate_to(
@@ -104,19 +104,19 @@ def _validate_to(
 ) -> ValidationResult:
     label = value.get(u_skel.JsonTKN.LABEL.value)
     if not label:
-        return False, {u_skel.JsonTKN.ERROR_MSG.value: "Missing TO.LABEL"}
+        return (False, {u_skel.JsonTKN.ERROR_MSG.value: "Missing TO.LABEL"})
     result, diagnostics = u_schema.validate_patterns(u_schema.IdentifierPattern.NEO4J_IDENTIFIER, label)
     if not result:
-        return False, diagnostics
+        return (False, diagnostics)
 
     entity = value.get(u_skel.JsonTKN.ENTITY_NAME.value)
     if not entity:
-        return False, {u_skel.JsonTKN.ERROR_MSG.value: "Missing TO.ENTITY_NAME"}
+        return (False, {u_skel.JsonTKN.ERROR_MSG.value: "Missing TO.ENTITY_NAME"})
     result, diagnostics = u_schema.validate_patterns(u_schema.IdentifierPattern.UNICODE_NAME, entity)
     if not result:
-        return False, diagnostics
+        return (False, diagnostics)
 
-    return True, {u_skel.JsonTKN.LABEL.value: label, u_skel.JsonTKN.ENTITY_NAME.value: entity}
+    return (True, {u_skel.JsonTKN.LABEL.value: label, u_skel.JsonTKN.ENTITY_NAME.value: entity})
 
 
 def _validate_keys(
@@ -126,9 +126,9 @@ def _validate_keys(
     for key, val in value.items():
         result, diagnostics = u_schema.validate_patterns(u_schema.IdentifierPattern.NEO4J_IDENTIFIER, key)
         if not result:
-            return False, diagnostics
+            return (False, diagnostics)
         validated[key] = val
-    return True, validated
+    return (True, validated)
 
 
 def _validate_key(
@@ -148,11 +148,11 @@ def validate_unique_key(
     properties: Dict[str, Any]
 ) -> ValidationResult:
     if value is None:
-        return True, {}
+        return (True, {})
     normalized_property_keys = [key.strip().lower() for key in properties.keys()]
     if value.strip().lower() not in normalized_property_keys:
-        return False, {u_skel.JsonTKN.ERROR_MSG.value: f"unique_key '{value}' not found in properties"}
-    return True, {}
+        return (False, {u_skel.JsonTKN.ERROR_MSG.value: f"unique_key '{value}' not found in properties"})
+    return (True, {})
 
 #
 #   validate_inputs:
@@ -175,7 +175,7 @@ def validate_inputs(
         module_params
         )
     if not result:
-        return False, {}, diagnostics
+        return (False, {}, diagnostics)
     
     # validate whether unique_key value is a valid property
     if supports_unique_key:
@@ -184,7 +184,7 @@ def validate_inputs(
             module_params[u_skel.JsonTKN.PROPERTIES.value]
         )
         if not result:
-            return False, {}, diagnostics
+            return (False, {}, diagnostics)
 
     # cast (dynamic) properties and (dynamic) parameters via type/value definition
     casted_values: Dict[str, Any] = {}
@@ -194,14 +194,14 @@ def validate_inputs(
                 module_params[u_skel.JsonTKN.PROPERTIES.value]
                 )
             if not result:
-                return False, {}, diagnostics
+                return (False, {}, diagnostics)
         if u_skel.JsonTKN.PARAMETERS.value in module_params:
             result, casted_values, diagnostics = type_casted_properties(
                 module_params[u_skel.JsonTKN.PARAMETERS.value]
                 )
             if not result:
-                return False, {}, diagnostics
-    return True, casted_values, {}
+                return (False, {}, diagnostics)
+    return (True, casted_values, {})
 
 #
 #   typecasting for properties
@@ -211,8 +211,8 @@ def type_casted_properties(
 ) -> Tuple[bool, Dict[str, Any], Dict[str, Any]]:
     result, casted_properties, diagnostics = type_casting(properties)
     if not result:
-        return False, {}, diagnostics
-    return True, casted_properties, {}
+        return (False, {}, diagnostics)
+    return (True, casted_properties, {})
 
 
 def parse_datetime(val: str) -> datetime:
@@ -239,25 +239,25 @@ def parse_list(
     element_type: str
 ) -> Tuple[bool, List[Any], Dict[str, Any]]:
     if not isinstance(element_value, list):
-        return False, [], {
+        return (False, [], {
             u_skel.JsonTKN.ERROR_MSG.value:
                 f"Expected list for 'list' type, got {type(element_value).__name__}"
-        }
+        })
 
     handler = TYPE_HANDLERS.get(element_type)
     if handler is None:
-        return False, [], {
+        return (False, [], {
             u_skel.JsonTKN.ERROR_MSG.value:
                 f"Unsupported element type for list: {element_type}"
-        }
+        })
 
     try:
-        return True, [handler(v) for v in element_value], {}
+        return (True, [handler(v) for v in element_value], {})
     except Exception as e: # pylint: disable=broad-exception-caught
-        return False, [], {
+        return (False, [], {
             u_skel.JsonTKN.ERROR_MSG.value:
                 f"Failed to cast list elements to '{element_type}': {repr(e)}"
-        }
+        })
 
 
 def type_casting(
@@ -267,17 +267,17 @@ def type_casting(
 
     for key, prop in properties.items():
         if not isinstance(prop, dict):
-            return False, {}, {
+            return (False, {}, {
                 u_skel.JsonTKN.ERROR_MSG.value:
                     f"Property '{key}' must be a dict with 'value' and optional 'type', "
                     f"got {type(prop).__name__}"
-            }
+            })
 
         if u_skel.JsonTKN.VALUE.value not in prop:
-            return False, {}, {
+            return (False, {}, {
                 u_skel.JsonTKN.ERROR_MSG.value:
                     f"Property '{key}' is missing required '{u_skel.JsonTKN.VALUE.value}' field"
-            }
+            })
 
         raw_value = prop[u_skel.JsonTKN.VALUE.value]
         data_type = prop.get(u_skel.JsonTKN.TYPE.value, u_skel.YamlATTR.TYPE_STR.value)
@@ -290,7 +290,7 @@ def type_casting(
             )
             result, casted_list, diag = parse_list(raw_value, element_type)
             if not result:
-                return False, {}, diag
+                return (False, {}, diag)
             casted_properties[key] = casted_list
         else:
             handler = TYPE_HANDLERS.get(data_type, str)
@@ -298,10 +298,10 @@ def type_casting(
                 casted_value = handler(raw_value)
                 casted_properties[key] = casted_value
             except Exception as e: # pylint: disable=broad-exception-caught
-                return False, {}, {
+                return (False, {}, {
                     u_skel.JsonTKN.ERROR_MSG.value:
                         f"Failed to cast property '{key}' with value '{raw_value}' "
                         f"to type '{data_type}': {repr(e)}"
-                }
+                })
 
-    return True, casted_properties, {}
+    return (True, casted_properties, {})

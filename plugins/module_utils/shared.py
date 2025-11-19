@@ -64,7 +64,7 @@ def load_yaml_file(
         u_skel.JsonTKN.VERTEX_ANCHOR.value: anchor,
         u_skel.JsonTKN.COUNT.value: len(payload)
     }
-    return True, payload, diagnostics
+    return (True, payload, diagnostics)
 
 
 def serialize_neo4j(
@@ -80,16 +80,34 @@ def serialize_neo4j(
 
 
 def validate_vertex_file(
-    vertices: List[Dict[str, Any]],
+    vertex: Dict[str, Any],
     vertex_spec: Dict[str, Dict[str, Any]]
-) -> Tuple[bool, Dict[str, Any]]:
-    for i, vertex in enumerate(vertices):
-        for key, rules in vertex_spec.items():
-            if rules.get(u_skel.YamlATTR.REQUIRED.value, False) and key not in vertex:
-                return False, {u_skel.JsonTKN.ERROR_MSG.value: f"Vertex {i}: Missing required field '{key}'"}
-            # Optional: type checks
-            expected_type = rules.get(u_skel.YamlATTR.TYPE.value)
-            if expected_type and key in vertex:
-                if expected_type == u_skel.YamlATTR.TYPE_STR.value and not isinstance(vertex[key], str):
-                    return False, {u_skel.JsonTKN.ERROR_MSG.value: f"Vertex {i}: Field '{key}' must be a string"}
-    return True, {}
+) -> Tuple[bool, Dict[str, Any], Dict[str, Any]]:
+
+    validated = {}
+    for key, rules in vertex_spec.items():
+        is_required = rules.get(u_skel.YamlATTR.REQUIRED.value, False)
+        default_val = rules.get(u_skel.YamlATTR.DEFAULT.value, None)
+        expected_type = rules.get(u_skel.YamlATTR.TYPE.value)
+
+        # Required field missing
+        if is_required and key not in vertex:
+            return (
+                False,
+                {},
+                {u_skel.JsonTKN.ERROR_MSG.value: f"Missing required field '{key}'"}
+            )
+
+        # Value chosen: from vertex or from default
+        validated[key] =  vertex[key] if key in vertex else default_val
+
+        # Type checking (only when value is present)
+        if expected_type and validated[key] is not None:
+            if expected_type == u_skel.YamlATTR.TYPE_STR.value and not isinstance(validated[key], str):
+                return (
+                    False,
+                    {},
+                    {u_skel.JsonTKN.ERROR_MSG.value: f"Field '{key}' must be a string"}
+                )
+
+    return (True, validated, {})

@@ -33,7 +33,7 @@ def query_build(
     cypher_query_inline: str = cypher_query
     for key, value in cypher_params.items():
         cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
-    return cypher_query, cypher_params, cypher_query_inline
+    return (cypher_query, cypher_params, cypher_query_inline)
 
 #
 #   graph_reset:
@@ -120,7 +120,7 @@ def label_del(
     base_label: str,
     label: str,
     entity_name: str
-) -> Tuple[str, Dict[str, Any], str]:
+) -> str, Dict[str, Any], str]:
 
     # normalise
     normalised_base_label: str = base_label.capitalize()
@@ -396,7 +396,7 @@ def query_tx(
     response: Result = tx.run(cypher_query, cypher_params)
     data: List[Dict[str, Any]] = response.data()
     summary: ResultSummary = response.consume()
-    return data, summary
+    return (data, summary)
 
 def cypher_stats(
     summary: ResultSummary
