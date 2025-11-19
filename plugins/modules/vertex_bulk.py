@@ -109,11 +109,11 @@ def main() -> None:
         #
         #   equivalent to argument_spec validation
         #
-        vertex_file_result: Tuple[bool, Dict[str, Any]] = u_shared.validate_vertex_from_file(
-            vertices, 
+        vertex_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_vertex_from_file(
+            vertex, 
             u_args.argument_spec_vertex()
             )
-        result, validated_vertex, diagnostics = vertex_file_result
+        result, validated_vertex, diagnostics = vertex_from_file_result
         if not result:
             module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
         input_list: List[str] = [
