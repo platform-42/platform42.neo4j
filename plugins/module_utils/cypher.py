@@ -120,7 +120,7 @@ def label_del(
     base_label: str,
     label: str,
     entity_name: str
-) -> str, Dict[str, Any], str]:
+) -> Tuple[str, Dict[str, Any], str]:
 
     # normalise
     normalised_base_label: str = base_label.capitalize()
