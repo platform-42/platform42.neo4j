@@ -160,7 +160,7 @@ def main() -> None:
     module.exit_json(**u_skel.ansible_exit(
         changed=nodes_changed,
         payload_key=module_name,
-        payload=module.params
+        payload=summary.as_payload()
         )
     )
     
