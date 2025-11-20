@@ -99,7 +99,7 @@ def edge_module(
             entity_name_to=entity_name_to,
             properties=properties,
             bi_directional=bi_directional,
-            unique_unique_key
+            unique_key=unique_key
         )
     return u_cypher.edge_del(
         check_mode,

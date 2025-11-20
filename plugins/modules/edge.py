@@ -99,7 +99,7 @@ def edge_module(
     if u_skel.state_present(state):
         return u_cypher.edge_add(
             check_mode=check_mode,
-            is_bulk=True,
+            is_bulk=False,
             relation_type=relation_type,
             label_from=label_from,
             entity_name_from=entity_name_from,
@@ -107,7 +107,7 @@ def edge_module(
             entity_name_to=entity_name_to,
             properties=properties,
             bi_directional=bi_directional,
-            unique_unique_key
+            unique_key=unique_key
         )
     return u_cypher.edge_del(
         check_mode,
