@@ -81,9 +81,9 @@ def vertex_module(
             properties=properties
             )
     return u_cypher.vertex_del(
-        check_mode,
-        label,
-        entity_name
+        check_mode=check_mode,
+        label=label,
+        entity_name=entity_name
         )
 
 def main() -> None:
