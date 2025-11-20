@@ -269,8 +269,7 @@ def type_casting(
         if not isinstance(prop, dict):
             return (False, {}, {
                 u_skel.JsonTKN.ERROR_MSG.value:
-                    f"Property '{key}' must be a dict with 'value' and optional 'type', "
-                    f"got {type(prop).__name__}"
+                    f"Property '{key}' must be a dict with 'value' and optional 'type'"
             })
 
         if u_skel.JsonTKN.VALUE.value not in prop:
@@ -282,26 +281,52 @@ def type_casting(
         raw_value = prop[u_skel.JsonTKN.VALUE.value]
         data_type = prop.get(u_skel.JsonTKN.TYPE.value, u_skel.YamlATTR.TYPE_STR.value)
 
-        # Handle list types explicitly
+        # --- STRICT LIST HANDLING ---
         if data_type == u_skel.YamlATTR.TYPE_LIST.value:
-            element_type = prop.get(
-                u_skel.JsonTKN.ELEMENT_TYPE.value,
-                u_skel.YamlATTR.TYPE_STR.value
-            )
+
+            # element_type must exist
+            if u_skel.JsonTKN.ELEMENT_TYPE.value not in prop:
+                return (False, {}, {
+                    u_skel.JsonTKN.ERROR_MSG.value:
+                        f"Property '{key}' of type LIST is missing required "
+                        f"'{u_skel.JsonTKN.ELEMENT_TYPE.value}' field"
+                })
+
+            element_type = prop[u_skel.JsonTKN.ELEMENT_TYPE.value]
+
+            # element_type must be supported
+            if element_type not in TYPE_HANDLERS:
+                return (False, {}, {
+                    u_skel.JsonTKN.ERROR_MSG.value:
+                        f"Property '{key}' has unsupported element_type '{element_type}'. "
+                        f"Supported: {list(TYPE_HANDLERS.keys())}"
+                })
+
+            # Now parse using the validated element_type
             result, casted_list, diag = parse_list(raw_value, element_type)
             if not result:
                 return (False, {}, diag)
+
             casted_properties[key] = casted_list
-        else:
-            handler = TYPE_HANDLERS.get(data_type, str)
-            try:
-                casted_value = handler(raw_value)
-                casted_properties[key] = casted_value
-            except Exception as e: # pylint: disable=broad-exception-caught
-                return (False, {}, {
-                    u_skel.JsonTKN.ERROR_MSG.value:
-                        f"Failed to cast property '{key}' with value '{raw_value}' "
-                        f"to type '{data_type}': {repr(e)}"
-                })
+            continue
+
+        # --- NON-LIST TYPES ---
+        handler = TYPE_HANDLERS.get(data_type)
+        if handler is None:
+            return (False, {}, {
+                u_skel.JsonTKN.ERROR_MSG.value:
+                    f"Property '{key}' has unsupported type '{data_type}'. "
+                    f"Supported: {list(TYPE_HANDLERS.keys())}"
+            })
+
+        try:
+            casted_value = handler(raw_value)
+            casted_properties[key] = casted_value
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            return (False, {}, {
+                u_skel.JsonTKN.ERROR_MSG.value:
+                    f"Failed to cast property '{key}' with value '{raw_value}' "
+                    f"to type '{data_type}': {repr(e)}"
+            })
 
     return (True, casted_properties, {})
