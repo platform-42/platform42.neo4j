@@ -210,7 +210,7 @@ def vertex_add(
     singleton: bool,
     label: str,
     entity_name: str,
-    properties: Optional[Dict[str, Any]] = None,
+    properties: Optional[Dict[str, Any]] = None
 ) -> Tuple[str, Dict[str, Any], str]:
 
     # optionals
