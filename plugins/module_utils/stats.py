@@ -8,6 +8,26 @@
 """
 from dataclasses import dataclass, asdict
 from typing import List, Dict, Any, Optional
+from neo4j import ResultSummary
+
+from . import skeleton as u_skel
+
+def cypher_stats(
+    result_summary: ResultSummary
+) -> Dict[str, Any]:
+    return {
+        u_skel.JsonTKN.NODES_CREATED.value: result_summary.counters.nodes_created,
+        u_skel.JsonTKN.NODES_DELETED.value: result_summary.counters.nodes_deleted,
+        u_skel.JsonTKN.RELATIONSHIPS_CREATED.value: result_summary.counters.relationships_created,
+        u_skel.JsonTKN.RELATIONSHIPS_DELETED.value: result_summary.counters.relationships_deleted,
+        u_skel.JsonTKN.LABELS_ADDED.value: result_summary.counters.labels_added,
+        u_skel.JsonTKN.LABELS_REMOVED.value: result_summary.counters.labels_removed,
+        u_skel.JsonTKN.QUERY_TYPE.value: result_summary.query_type,
+        u_skel.JsonTKN.PROPERTIES_SET.value: result_summary.counters.properties_set,
+        u_skel.JsonTKN.CONSTRAINTS_ADDED.value: result_summary.counters.constraints_added,
+        u_skel.JsonTKN.CONSTRAINTS_REMOVED.value: result_summary.counters.constraints_removed,
+        }
+
 
 @dataclass
 class EntitySummary:

@@ -19,6 +19,7 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cyp
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
 import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
 import ansible_collections.platform42.neo4j.plugins.module_utils.input as u_input
+import ansible_collections.platform42.neo4j.plugins.module_utils.stats as u_stats
 
 from neo4j import Driver, ResultSummary, Result, SummaryCounters
 from neo4j.exceptions import Neo4jError
@@ -130,7 +131,7 @@ def main() -> None:
         cypher_params,
         cypher_query_inline,
         u_shared.serialize_neo4j(cypher_response),
-        u_cypher.cypher_stats(result_summary)
+        u_stats.cypher_stats(result_summary)
         )
     state: str = module.params[u_skel.JsonTKN.STATE.value]
     counters: SummaryCounters = result_summary.counters

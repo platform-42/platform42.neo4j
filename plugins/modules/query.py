@@ -19,6 +19,7 @@ import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cyp
 import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
 import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
 import ansible_collections.platform42.neo4j.plugins.module_utils.input as u_input
+import ansible_collections.platform42.neo4j.plugins.module_utils.stats as u_stats
 
 from neo4j import Driver
 from neo4j.exceptions import Neo4jError
@@ -133,7 +134,7 @@ def main() -> None:
         cypher_params,
         repr(cypher_query_inline),
         u_shared.serialize_neo4j(cypher_response),
-        u_cypher.cypher_stats(result_summary),
+        u_stats.cypher_stats(result_summary),
         )
     module.exit_json(**u_skel.ansible_exit(
         changed=False,
