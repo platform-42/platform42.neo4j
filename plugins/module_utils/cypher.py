@@ -207,6 +207,7 @@ def vertex_del(
 #
 def vertex_add(
     check_mode: bool,
+    is_bulk: bool,
     singleton: bool,
     label: str,
     entity_name: str,
@@ -228,6 +229,7 @@ def vertex_add(
     }
     cypher_query: str = u_cyph_q.cypher_vertex_add(
         check_mode=check_mode,
+        is_bulk=is_bulk,
         singleton=singleton,
         label=normalised_label,
         properties=normalised_properties
@@ -297,6 +299,7 @@ def edge_del(
 #
 def edge_add(
     check_mode: bool,
+    is_bulk: bool,
     relation_type: str,
     label_from: str,
     entity_name_from: str,
@@ -330,6 +333,7 @@ def edge_add(
     if bi_directional:
         cypher_query = u_cyph_q.cypher_edge_add_bi(
             check_mode=check_mode,
+            is_bulk=is_bulk,
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,
@@ -339,6 +343,7 @@ def edge_add(
     else:
         cypher_query = u_cyph_q.cypher_edge_add(
             check_mode=check_mode,
+            is_bulk=is_bulk,
             label_from=normalised_label_from,
             label_to=normalised_label_to,
             relation_type=normalised_relation_type,

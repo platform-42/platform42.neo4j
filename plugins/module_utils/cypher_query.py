@@ -185,6 +185,7 @@ def cypher_vertex_del(
 
 def cypher_vertex_add(
     check_mode: bool,
+    is_bulk: bool,
     singleton: bool,
     label: str,
     properties: Dict[str, Any]
@@ -242,6 +243,7 @@ def cypher_edge_del_bi(
 
 def cypher_edge_add(
     check_mode: bool,
+    is_bulk: bool,
     label_from: str,
     label_to: str,
     relation_type: str,
@@ -262,6 +264,7 @@ def cypher_edge_add(
 
 def cypher_edge_add_bi(
     check_mode: bool,
+    is_bulk: bool,
     label_from: str,
     label_to: str,
     relation_type: str,
