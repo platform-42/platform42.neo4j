@@ -233,7 +233,9 @@ TYPE_HANDLERS: Dict[str, Callable[[Any], Any]] = {
     u_skel.YamlATTR.TYPE_DATETIME.value: parse_datetime,
 }
 
-
+#
+#   parse_list:
+#
 def parse_list(
     element_value: Any,
     element_type: str
@@ -259,7 +261,14 @@ def parse_list(
                 f"Failed to cast list elements to '{element_type}': {repr(e)}"
         })
 
-
+#
+#   type_casting:
+#       converts ansible string based properties back to original type
+#   
+#       2 patterns:
+#       - primitve data types -> value and type (int|float|bool|str|datetime) provide input for casting
+#       - list of primitive types -> value, type (list) and element_type (int|float|bool|str|datetime) provide input for casting
+#
 def type_casting(
     properties: Dict[str, Dict[str, Any]]
 ) -> Tuple[bool, Dict[str, Any], Dict[str, Any]]:
