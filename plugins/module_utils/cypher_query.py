@@ -115,6 +115,13 @@ class CypherQuery(StrEnum):
             b.entity_name AS entity_name_to
         ;
         """
+    EDGE_BULK_ADD = """
+        MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
+        MATCH (b:`{label_to}` {{entity_name: $entity_name_to}})
+        MERGE (a)-[r:`{relation_type}` {relation_predicate}]->(b)
+        {set_clause}
+        ;
+        """
     EDGE_ADD_BI = """
         MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
         MATCH (b:`{label_to}` {{entity_name: $entity_name_to}})
@@ -126,6 +133,15 @@ class CypherQuery(StrEnum):
             type(r1) AS relation_type,
             a.entity_name AS entity_name_from,
             b.entity_name AS entity_name_to
+        ;
+        """
+    EDGE_BULK_ADD_BI = """
+        MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
+        MATCH (b:`{label_to}` {{entity_name: $entity_name_to}})
+        MERGE (a)-[r1:`{relation_type}` {relation_predicate}]->(b)
+        {set_clause_r1}
+        MERGE (b)-[r2:`{relation_type}` {relation_predicate}]->(a)
+        {set_clause_r2}
         ;
         """
     CONSTRAINT_DEL = """
@@ -274,6 +290,15 @@ def cypher_edge_add(
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
+    if is_bulk:
+        return str(CypherQuery.EDGE_BULK_ADD.value.format(
+            label_from=label_from,
+            label_to=label_to,
+            relation_type=relation_type,
+            relation_predicate=set_relation_predicate(unique_key),
+            set_clause=set_clause(RelationType.RELATION.value, properties)
+            )
+        )
     return str(CypherQuery.EDGE_ADD.value.format(
         label_from=label_from,
         label_to=label_to,
@@ -282,7 +307,6 @@ def cypher_edge_add(
         set_clause=set_clause(RelationType.RELATION.value, properties)
         )
     )
-
 
 def cypher_edge_add_bi(
     check_mode: bool,
@@ -295,6 +319,16 @@ def cypher_edge_add_bi(
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
+    if is_bulk:
+        return str(CypherQuery.EDGE_BULK_ADD_BI.value.format(
+            label_from=label_from,
+            label_to=label_to,
+            relation_type=relation_type,
+            set_clause_r1=set_clause(RelationType.RELATION_BI_1.value, properties),
+            set_clause_r2=set_clause(RelationType.RELATION_BI_2.value, properties),
+            relation_predicate=set_relation_predicate(unique_key)
+            )
+        )
     return str(CypherQuery.EDGE_ADD_BI.value.format(
         label_from=label_from,
         label_to=label_to,
