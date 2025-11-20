@@ -71,6 +71,11 @@ class CypherQuery(StrEnum):
             n.entity_name AS entity_name
         ;
         """
+    VERTEX_BULK_ADD_SINGLETON = """
+        MERGE (n:`{label}` {{entity_name: $entity_name}})
+        {set_clause} 
+        ;
+        """
     VERTEX_ADD = """
         CREATE (n:`{label}` {{entity_name: $entity_name}})
         {set_clause} 
@@ -78,6 +83,11 @@ class CypherQuery(StrEnum):
             id(n) AS node_id, 
             labels(n) AS labels, 
             n.entity_name AS entity_name
+        ;
+        """
+    VERTEX_BULK_ADD = """
+        CREATE (n:`{label}` {{entity_name: $entity_name}})
+        {set_clause} 
         ;
         """
     EDGE_DEL = """
@@ -193,7 +203,19 @@ def cypher_vertex_add(
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
     if singleton:
+        if is_bulk:
+            return str(CypherQuery.VERTEX_BULK_ADD_SINGLETON.value.format(
+                label=label,
+                set_clause=set_clause(RelationType.NODE.value, properties)
+                )
+            )
         return str(CypherQuery.VERTEX_ADD_SINGLETON.value.format(
+            label=label,
+            set_clause=set_clause(RelationType.NODE.value, properties)
+            )
+        )
+    if is_bulk:
+        return str(CypherQuery.VERTEX_BULK_ADD.value.format(
             label=label,
             set_clause=set_clause(RelationType.NODE.value, properties)
             )
