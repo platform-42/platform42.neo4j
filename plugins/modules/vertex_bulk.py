@@ -68,7 +68,7 @@ def vertex_module(
     properties: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
     label: str = module_params[u_skel.JsonTKN.LABEL.value]
-    entity_name: str =module_params[u_skel.JsonTKN.ENTITY_NAME.value]
+    entity_name: str = module_params[u_skel.JsonTKN.ENTITY_NAME.value]
     state: str = module_params[u_skel.JsonTKN.STATE.value]
     singleton: bool = module_params[u_skel.JsonTKN.SINGLETON.value]
     if u_skel.state_present(state):

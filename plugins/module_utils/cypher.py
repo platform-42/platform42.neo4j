@@ -29,7 +29,7 @@ from . import cypher_query as u_cyph_q
 def query_build(
     cypher_query: str,
     cypher_params: Dict[str, Any]
-)-> Tuple[str, Dict[str, Any], str]:
+) -> Tuple[str, Dict[str, Any], str]:
     cypher_query_inline: str = cypher_query
     for key, value in cypher_params.items():
         cypher_query_inline = cypher_query_inline.replace(f"${key}", repr(value))
@@ -47,7 +47,7 @@ def query_build(
 #
 def graph_reset(
     check_mode: bool
-)-> Tuple[str, Dict[str, Any], str]:
+) -> Tuple[str, Dict[str, Any], str]:
     cypher_query: str = u_cyph_q.cypher_graph_reset(check_mode)
     cypher_params: Dict[str, Any] = {}
     return query_build(cypher_query, cypher_params)
