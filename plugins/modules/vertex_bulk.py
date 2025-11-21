@@ -101,59 +101,54 @@ def main() -> None:
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
 
+    BATCH_SIZE = 100
     summary = u_stats.EntitySummary(total=len(vertices))
     driver: Driver = u_driver.get_driver(module.params)
-
     try:
-        # Process vertices in batches of 100
-        BATCH_SIZE = 100
-        for batch_start in range(0, len(vertices), BATCH_SIZE):
-            batch_vertices = vertices[batch_start:batch_start + BATCH_SIZE]
-            cypher_statements: List[str] = []
-            batch_params: Dict[str, Any] = {}
+        with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
 
-            # Validate and typecast each vertex in the batch
-            for idx, vertex in enumerate(batch_vertices):
-                result, validated_vertex, diagnostics = u_shared.validate_entity_from_file(
-                    vertex, u_args.argument_spec_vertex()
-                )
-                if not result:
-                    module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+            for batch_start in range(0, len(vertices), BATCH_SIZE):
+                batch_vertices = vertices[batch_start : batch_start + BATCH_SIZE]
 
-                # validate YAML against NEO4J constraints, typecast dynamic properties
-                input_list: List[str] = [
-                    u_skel.JsonTKN.LABEL.value,
-                    u_skel.JsonTKN.ENTITY_NAME.value,
-                    u_skel.JsonTKN.PROPERTIES.value
-                ]
-                result, casted_properties, diagnostics = u_input.validate_inputs(
-                    cypher_input_list=input_list,
-                    module_params=validated_vertex,
-                    supports_unique_key=False,
-                    supports_casting=True
-                )
-                if not result:
-                    module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+                batch_params: List[Dict[str, Any]] = []
 
-                # generate cypher query for vertex operation
-                cypher_query, cypher_params, _ = vertex_module(
-                    module.check_mode,
-                    validated_vertex,
-                    casted_properties
-                )
+                # prepare batch parameters and validate/cast each vertex
+                for idx, vertex in enumerate(batch_vertices):
+                    result, validated_vertex, diagnostics = u_shared.validate_entity_from_file(
+                        vertex, u_args.argument_spec_vertex()
+                    )
+                    if not result:
+                        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
 
-                cypher_statements.append(cypher_query)
-                # Ensure unique parameter names per vertex in the batch
-                for k, v in cypher_params.items():
-                    batch_params[f"{k}_{idx}"] = v
+                    input_list = [
+                        u_skel.JsonTKN.LABEL.value,
+                        u_skel.JsonTKN.ENTITY_NAME.value,
+                        u_skel.JsonTKN.PROPERTIES.value
+                    ]
+                    result, casted_properties, diagnostics = u_input.validate_inputs(
+                        cypher_input_list=input_list,
+                        module_params=validated_vertex,
+                        supports_unique_key=False,
+                        supports_casting=True
+                    )
+                    if not result:
+                        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
 
-            # Combine all batch queries into a single transaction
-            batch_cypher = "\n".join(cypher_statements)
+                    # merge vertex data and casted properties into batch param
+                    vertex_param = dict(validated_vertex)  # includes entity_name, label, etc.
+                    vertex_param.update(casted_properties)  # adds dynamic properties like row, column, domain, color
+                    batch_params.append(vertex_param)
 
-            # Execute the batch
-            with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
+                # generate UNWIND query using your templated MERGE/SET
+                # we just replace direct params with 'v.' access inside UNWIND
+                batch_query = f"""
+                    UNWIND $batch AS v
+                    MERGE (n:`Cell` {{entity_name: v.entity_name}})
+                    SET n += {{row: v.row, column: v.column, domain: v.domain, color: v.color}}
+                    """
+
                 try:
-                    response: Result = session.run(batch_cypher, batch_params)
+                    response: Result = session.run(batch_query, {"batch": batch_params})
                     result_summary: ResultSummary = response.consume()
                     summary.processed += len(batch_vertices)
                     summary.nodes_created += result_summary.counters.nodes_created
@@ -162,10 +157,10 @@ def main() -> None:
                     summary.labels_removed += result_summary.counters.labels_removed
                     summary.properties_set += result_summary.counters.properties_set
                 except Neo4jError as e:
-                    payload = u_skel.payload_fail(batch_cypher, batch_params, "BATCH", e, batch_start)
+                    payload = u_skel.payload_fail(batch_query, {"batch": batch_params}, "UNWIND_BATCH", e, batch_start)
                     module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
                 except Exception as e:  # pylint: disable=broad-exception-caught
-                    payload = u_skel.payload_abend("BATCH", e, batch_start)
+                    payload = u_skel.payload_abend("UNWIND_BATCH", e, batch_start)
                     module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
 
     finally:
