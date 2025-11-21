@@ -92,7 +92,7 @@ def main() -> None:
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_vertex_bulk(),
         supports_check_mode=True
         )
-    
+
     # load vertices from YAML-file
     vertex_load_result: Tuple[bool, List[Dict[str, Any]], Dict[str, Any]] = u_shared.load_yaml_file(
         module.params[u_skel.JsonTKN.VERTEX_FILE.value],

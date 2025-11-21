@@ -132,7 +132,7 @@ def payload_exit(
 def payload_abend(
     cypher_query_inline: str,
     e: BaseException,
-    idx: Optional[int] = None 
+    idx: Optional[int] = None
 ) -> Dict[str, Any]:
     diagnostics: Dict[str, Any] = {
         JsonTKN.RESULT.value: "abend - failure due to system exception",
@@ -150,7 +150,7 @@ def payload_fail(
     cypher_params: Dict[str, Any],
     cypher_query_inline: str,
     e: BaseException,
-    idx: Optional[int] = None 
+    idx: Optional[int] = None
 ) -> Dict[str, Any]:
     diagnostics: Dict[str, Any] = {
         JsonTKN.CYPHER_QUERY.value: flatten_query(cypher_query),
