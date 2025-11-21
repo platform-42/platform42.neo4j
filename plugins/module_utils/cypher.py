@@ -402,4 +402,3 @@ def query_tx(
     data: List[Dict[str, Any]] = response.data()
     result_summary: ResultSummary = response.consume()
     return (data, result_summary)
-

@@ -53,4 +53,3 @@ class EntitySummary:
         self
     ) -> Dict[str, Any]:
         return asdict(self)
-

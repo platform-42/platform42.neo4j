@@ -264,7 +264,7 @@ def parse_list(
 #
 #   type_casting:
 #       converts ansible string based properties back to original type
-#   
+#
 #       2 patterns:
 #       - primitve data types -> value and type (int|float|bool|str|datetime) provide input for casting
 #       - list of primitive types -> value, type (list) and element_type (int|float|bool|str|datetime) provide input for casting
