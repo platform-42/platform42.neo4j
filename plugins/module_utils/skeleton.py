@@ -9,7 +9,7 @@
 import os
 import re
 
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from strenum import StrEnum
 
 
@@ -68,6 +68,7 @@ class JsonTKN(StrEnum):
     NEO4J_URI = "neo4j_uri"
     NODES_CREATED = "nodes_created"
     NODES_DELETED = "nodes_deleted"
+    OBJECT_INDEX = "object_index"
     PARAMETERS = "parameters"
     PASSWORD = "password"
     PATTERN = "pattern"
@@ -130,13 +131,17 @@ def payload_exit(
 # catastrophic failure - cypher buffers might be corrupted
 def payload_abend(
     cypher_query_inline: str,
-    e: BaseException
+    e: BaseException,
+    idx: Optional[int] = None 
 ) -> Dict[str, Any]:
-    return {
+    diagnostics: Dict[str, Any] = {
         JsonTKN.RESULT.value: "abend - failure due to system exception",
         JsonTKN.CYPHER_QUERY_INLINE.value: cypher_query_inline,
         JsonTKN.DIAGNOSTICS.value: ansible_diagnostics(e)
         }
+    if idx is not None:
+        diagnostics[JsonTKN.OBJECT_INDEX.value] = idx
+    return diagnostics
 
 
 # functional failure - cypher buffers have consistent state
@@ -144,14 +149,18 @@ def payload_fail(
     cypher_query: str,
     cypher_params: Dict[str, Any],
     cypher_query_inline: str,
-    e: BaseException
+    e: BaseException,
+    idx: Optional[int] = None 
 ) -> Dict[str, Any]:
-    return {
+    diagnostics: Dict[str, Any] = {
         JsonTKN.CYPHER_QUERY.value: flatten_query(cypher_query),
         JsonTKN.CYPHER_PARAMS.value: cypher_params,
         JsonTKN.CYPHER_QUERY_INLINE.value: flatten_query(cypher_query_inline),
         JsonTKN.DIAGNOSTICS.value: ansible_diagnostics(e)
         }
+    if idx is not None:
+        diagnostics[JsonTKN.OBJECT_INDEX.value] = idx
+    return diagnostics
 
 
 def ansible_diagnostics(

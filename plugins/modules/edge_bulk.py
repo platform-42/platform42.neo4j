@@ -174,10 +174,10 @@ def main() -> None:
             summary.relationships_deleted += result_summary.counters.relationships_deleted
             summary.properties_set += result_summary.counters.properties_set
         except Neo4jError as e:
-            payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e)
+            payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e, idx)
             module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
         except Exception as e: # pylint: disable=broad-exception-caught
-            payload = u_skel.payload_abend(cypher_query_inline, e)
+            payload = u_skel.payload_abend(cypher_query_inline, e, idx)
             module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
         finally:
             driver.close()
