@@ -1,7 +1,24 @@
 [tool.mypy]
+python_version = "3.11"
+warn_unused_configs = true
+warn_return_any = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+namespace_packages = true
+explicit_package_bases = true
+packages = [
+    "ansible_collections.platform42.neo4j"
+]
+
+# Ignore Ansible-provided module_utils (global)
+[[tool.mypy.overrides]]
+module = "ansible.*"
 ignore_missing_imports = true
-mypy_path = ["ansible_collections/platform42/neo4j/plugins"]
-strict = true
+
+# Fully check your collection’s local module_utils and modules
+[[tool.mypy.overrides]]
+module = "ansible_collections.platform42.neo4j.*"
+ignore_missing_imports = false
 
 [tool.pylint.DESIGN]
 max-locals = 25
