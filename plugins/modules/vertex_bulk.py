@@ -91,6 +91,100 @@ def main() -> None:
     module: AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_vertex_bulk(),
         supports_check_mode=True
+    )
+
+    # load vertices from YAML-file
+    result, vertices, diagnostics = u_shared.load_yaml_file(
+        module.params[u_skel.JsonTKN.VERTEX_FILE.value],
+        module.params[u_skel.JsonTKN.VERTEX_ANCHOR.value]
+    )
+    if not result:
+        module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+
+    summary = u_stats.EntitySummary(total=len(vertices))
+    driver: Driver = u_driver.get_driver(module.params)
+
+    try:
+        # Process vertices in batches of 100
+        BATCH_SIZE = 100
+        for batch_start in range(0, len(vertices), BATCH_SIZE):
+            batch_vertices = vertices[batch_start:batch_start + BATCH_SIZE]
+            cypher_statements: List[str] = []
+            batch_params: Dict[str, Any] = {}
+
+            # Validate and typecast each vertex in the batch
+            for idx, vertex in enumerate(batch_vertices):
+                result, validated_vertex, diagnostics = u_shared.validate_entity_from_file(
+                    vertex, u_args.argument_spec_vertex()
+                )
+                if not result:
+                    module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+
+                # validate YAML against NEO4J constraints, typecast dynamic properties
+                input_list: List[str] = [
+                    u_skel.JsonTKN.LABEL.value,
+                    u_skel.JsonTKN.ENTITY_NAME.value,
+                    u_skel.JsonTKN.PROPERTIES.value
+                ]
+                result, casted_properties, diagnostics = u_input.validate_inputs(
+                    cypher_input_list=input_list,
+                    module_params=validated_vertex,
+                    supports_unique_key=False,
+                    supports_casting=True
+                )
+                if not result:
+                    module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+
+                # generate cypher query for vertex operation
+                cypher_query, cypher_params, _ = vertex_module(
+                    module.check_mode,
+                    validated_vertex,
+                    casted_properties
+                )
+
+                cypher_statements.append(cypher_query)
+                # Ensure unique parameter names per vertex in the batch
+                for k, v in cypher_params.items():
+                    batch_params[f"{k}_{idx}"] = v
+
+            # Combine all batch queries into a single transaction
+            batch_cypher = "\n".join(cypher_statements)
+
+            # Execute the batch
+            with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
+                try:
+                    response: Result = session.run(batch_cypher, batch_params)
+                    result_summary: ResultSummary = response.consume()
+                    summary.processed += len(batch_vertices)
+                    summary.nodes_created += result_summary.counters.nodes_created
+                    summary.nodes_deleted += result_summary.counters.nodes_deleted
+                    summary.labels_added += result_summary.counters.labels_added
+                    summary.labels_removed += result_summary.counters.labels_removed
+                    summary.properties_set += result_summary.counters.properties_set
+                except Neo4jError as e:
+                    payload = u_skel.payload_fail(batch_cypher, batch_params, "BATCH", e, batch_start)
+                    module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
+                except Exception as e:  # pylint: disable=broad-exception-caught
+                    payload = u_skel.payload_abend("BATCH", e, batch_start)
+                    module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
+
+    finally:
+        driver.close()
+
+    nodes_changed: bool = (summary.nodes_created > 0 or summary.nodes_deleted > 0)
+    module.exit_json(**u_skel.ansible_exit(
+        changed=nodes_changed,
+        payload_key=module_name,
+        payload=summary.as_payload()
+        )
+    )
+
+
+def main_old() -> None:
+    module_name: str = u_skel.file_splitext(__file__)
+    module: AnsibleModule = AnsibleModule(
+        argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_vertex_bulk(),
+        supports_check_mode=True
         )
 
     # load vertices from YAML-file
