@@ -46,6 +46,19 @@ class RelationType(StrEnum):
     RELATION_BI_2 = "r2"
 
 class CypherQuery(StrEnum):
+    BULK = """
+        CALL {
+            WITH $batch AS batch
+            UNWIND batch AS row
+            CALL {
+                WITH row
+                {primitive_query}
+            }
+            RETURN 1
+        }
+        RETURN 1
+        ;
+    """
     SIMULATION = """
         CALL dbms.components() YIELD versions 
         RETURN 
