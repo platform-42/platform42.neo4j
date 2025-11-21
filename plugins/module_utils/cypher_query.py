@@ -58,7 +58,7 @@ class CypherQuery(StrEnum):
         }
         RETURN 1
         ;
-    """
+        """
     SIMULATION = """
         CALL dbms.components() YIELD versions 
         RETURN 
