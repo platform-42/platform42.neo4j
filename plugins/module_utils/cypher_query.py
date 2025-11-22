@@ -202,6 +202,10 @@ def set_constraint_name(
     return f"constraint_{label.lower()}_{property_key.lower()}_unique"
 
 
+def cypher_bulk(  
+) -> None:
+    pass
+
 def cypher_graph_reset(
     check_mode: bool
 ) -> str:
