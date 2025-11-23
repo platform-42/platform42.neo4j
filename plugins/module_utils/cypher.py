@@ -236,6 +236,63 @@ def vertex_add(
     )
     return query_build(cypher_query, cypher_params)
 
+def vertex_bulk_add(
+    vertex_results: list[tuple[str, dict[str, Any], str]],
+    batch_size: Optional[int] = 100
+) -> list[tuple[str, dict[str, Any]]]:
+    """
+    Transform individual vertex_add results into bulk UNWIND operations.
+
+    Args:
+        vertex_results: List of 3-tuples from vertex_add:
+            (cypher_query, cypher_params, cypher_query_inline)
+        batch_size: Max number of vertices per bulk transaction.
+
+    Returns:
+        List of tuples: (bulk_cypher_query, batch_bindings)
+        where bulk_cypher_query is the UNWIND template with rewritten queries
+        and batch_bindings is a list of dicts holding the parameters per vertex.
+    """
+    BULK_TEMPLATE = """
+    CALL {{
+        WITH $batch AS batch
+        UNWIND batch AS row
+        CALL {{
+            WITH row
+            {primitive_query}
+        }}
+        RETURN 1
+    }}
+    RETURN 1
+    ;
+    """
+
+    bulk_operations = []
+
+    # accumulate queries and bindings per batch
+    for batch_start in range(0, len(vertex_results), batch_size):
+        batch_slice = vertex_results[batch_start:batch_start + batch_size]
+        batch_bindings = []
+
+        # assume primitive_query comes from cypher_query in vertex_add
+        # rewrite $param -> row.param
+        for cypher_query, cypher_params, _ in batch_slice:
+            rewritten_query = cypher_query
+            for param in cypher_params.keys():
+                rewritten_query = rewritten_query.replace(f"${param}", f"row.{param}")
+
+            # store in batch_bindings (bindings per row)
+            batch_bindings.append(cypher_params)
+
+        # construct the bulk query using the first rewritten_query as primitive
+        # note: all queries are identical in template, params vary in batch
+        # if queries differ, a more complex handling per row is needed
+        primitive_query = rewritten_query
+        bulk_query = BULK_TEMPLATE.format(primitive_query=primitive_query)
+        bulk_operations.append((bulk_query, {"batch": batch_bindings}))
+
+    return bulk_operations
+
 #
 #   edge_del:
 #       removes (bi-directional) relationship if it exists

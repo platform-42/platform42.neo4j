@@ -103,39 +103,48 @@ def main() -> None:
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
 
+    BATCH_SIZE = 100
     summary = u_stats.EntitySummary(total=len(vertices))
-    for idx, vertex in enumerate(vertices):
-        # check YAML-vertex for completeness
-        vertex_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_entity_from_file(
-            vertex,
-            u_args.argument_spec_vertex()
-            )
-        result, validated_vertex, diagnostics = vertex_from_file_result
-        if not result:
-            module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-        # validate YAML against NEO4J constraints, typecast dynamic properties
-        input_list: List[str] = [
-            u_skel.JsonTKN.LABEL.value,
-            u_skel.JsonTKN.ENTITY_NAME.value,
-            u_skel.JsonTKN.PROPERTIES.value
-            ]
-        validate_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_input.validate_inputs(
-            cypher_input_list=input_list,
-            module_params=validated_vertex,
-            supports_unique_key=False,
-            supports_casting=True
-            )
-        result, casted_properties, diagnostics = validate_result
-        if not result:
-            module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-        # generate cypher query for vertex operation (create/delete)
-        vertex_result: Tuple[str, Dict[str, Any], str] = vertex_module(
-            module.check_mode,
-            validated_vertex,
-            casted_properties
-            )
-        cypher_query, cypher_params, cypher_query_inline = vertex_result
-        driver: Driver = u_driver.get_driver(module.params)
+    driver: Driver = u_driver.get_driver(module.params)
+    try:
+        for batch_start in range(0, len(vertices), BATCH_SIZE):
+            batch_vertices = vertices[batch_start:batch_start + BATCH_SIZE]
+            batch: List[Dict[str, Any]] = []
+
+        for idx, vertex in enumerate(vertices):
+            # check YAML-vertex for completeness
+            vertex_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_entity_from_file(
+                vertex,
+                u_args.argument_spec_vertex()
+                )
+            result, validated_vertex, diagnostics = vertex_from_file_result
+            if not result:
+                module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+            # validate YAML against NEO4J constraints, typecast dynamic properties
+            input_list: List[str] = [
+                u_skel.JsonTKN.LABEL.value,
+                u_skel.JsonTKN.ENTITY_NAME.value,
+                u_skel.JsonTKN.PROPERTIES.value
+                ]
+            validate_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_input.validate_inputs(
+                cypher_input_list=input_list,
+                module_params=validated_vertex,
+                supports_unique_key=False,
+                supports_casting=True
+                )
+            result, casted_properties, diagnostics = validate_result
+            if not result:
+                module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+            # generate cypher query for vertex operation (create/delete)
+            vertex_result: Tuple[str, Dict[str, Any], str] = vertex_module(
+                module.check_mode,
+                validated_vertex,
+                casted_properties
+                )
+            cypher_query, cypher_params, cypher_query_inline = vertex_result
+        batch.append({
+            **cypher_params
+        })
         try:
             # execute cypher query
             with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
@@ -154,8 +163,8 @@ def main() -> None:
         except Exception as e: # pylint: disable=broad-exception-caught
             payload = u_skel.payload_abend(cypher_query_inline, e, idx)
             module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
-        finally:
-            driver.close()
+    finally:
+        driver.close()
     nodes_changed: bool = (summary.nodes_created > 0 or summary.nodes_deleted > 0)
     module.exit_json(**u_skel.ansible_exit(
         changed=nodes_changed,
