@@ -158,7 +158,8 @@ def main() -> None:
                     response: Result = session.run(vertex_bulk_query, vertex_bulk_params)
 
                     result_summary: ResultSummary = response.consume()
-                    summary.processed += len(vertex_results)
+                    summary.processed += len(vertex_bulk_params["batch"])
+
                     summary.nodes_created += result_summary.counters.nodes_created
                     summary.nodes_deleted += result_summary.counters.nodes_deleted
                     summary.labels_added += result_summary.counters.labels_added
