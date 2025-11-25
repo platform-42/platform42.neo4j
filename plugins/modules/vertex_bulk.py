@@ -144,20 +144,19 @@ def main() -> None:
         vertex_results.append(vertex_result)
 
         # chunk vertices in groups of BATCH_SIZE - convert query to bulk paradigm
-        vertex_bulk = u_cypher.vertex_bulk_add(
-            vertex_results,
-            BATCH_SIZE
-        )
-        try:
-            # execute cypher query
-            with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
+    vertex_bulk = u_cypher.vertex_bulk_add(
+        vertex_results,
+        BATCH_SIZE
+    )
+    try:
+        # execute cypher query
+        with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
 
-                # iterate over bulk-queries
-                for vertex_bulk_query, vertex_bulk_params in vertex_bulk:
+            # iterate over bulk-queries
+            for vertex_bulk_query, vertex_bulk_params in vertex_bulk:
+                try:
                     response: Result = session.run(vertex_bulk_query, vertex_bulk_params)
 
-#                response: Result = session.run(cypher_query, cypher_params)
-#               cypher_response: List[Dict[str, Any]] = [record.data() for record in list(response)]
                     result_summary: ResultSummary = response.consume()
                     summary.processed += len(vertex_results)
                     summary.nodes_created += result_summary.counters.nodes_created
@@ -165,17 +164,17 @@ def main() -> None:
                     summary.labels_added += result_summary.counters.labels_added
                     summary.labels_removed += result_summary.counters.labels_removed
                     summary.properties_set += result_summary.counters.properties_set
-        except Neo4jError as e:
-            payload = { 
-                "kut": vertex_bulk_query
-            }
-            module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
-        except Exception as e: # pylint: disable=broad-exception-caught
-#            payload = u_skel.payload_abend(cypher_query_inline, e, idx)
-            payload = {}
-            module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
-        finally:
-            driver.close()
+                except Neo4jError as e:
+                    payload = { 
+                        "kut": vertex_bulk_query
+                    }
+                    module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
+                except Exception as e: # pylint: disable=broad-exception-caught
+#                      payload = u_skel.payload_abend(cypher_query_inline, e, idx)
+                    payload = {}
+                    module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
+    finally:
+        driver.close()
     nodes_changed: bool = (summary.nodes_created > 0 or summary.nodes_deleted > 0)
     module.exit_json(**u_skel.ansible_exit(
         changed=nodes_changed,
