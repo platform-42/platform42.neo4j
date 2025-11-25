@@ -166,7 +166,9 @@ def main() -> None:
                     summary.labels_removed += result_summary.counters.labels_removed
                     summary.properties_set += result_summary.counters.properties_set
         except Neo4jError as e:
-            payload = u_skel.payload_fail(vertex_bulk_query, vertex_bulk_params, {}, e, idx)
+            payload = { 
+                "kut": vertex_bulk_query
+            }
             module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
         except Exception as e: # pylint: disable=broad-exception-caught
 #            payload = u_skel.payload_abend(cypher_query_inline, e, idx)
