@@ -167,7 +167,9 @@ def main() -> None:
                     summary.properties_set += result_summary.counters.properties_set
                 except Neo4jError as e:
                     payload = { 
-                        "kut": vertex_bulk_query
+                        "kut": vertex_bulk_query,
+                        "par":  vertex_bulk_params["batch"]
+
                     }
                     module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
                 except Exception as e: # pylint: disable=broad-exception-caught
