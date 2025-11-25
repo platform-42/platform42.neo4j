@@ -236,45 +236,27 @@ def vertex_add(
     )
     return query_build(cypher_query, cypher_params)
 
+#
+#   vertex_bulk_add:
+#       
+#
+#   returns:
+#       List of tuples: (bulk_cypher_query, batch_bindings)
+#       where bulk_cypher_query is the UNWIND template with rewritten queries 
+#       and batch_bindings is a list of dicts holding the parameters per vertex.
+#
 def vertex_bulk_add(
     vertex_results: list[tuple[str, dict[str, Any], str]],
-    batch_size: Optional[int] = 100
+    batch_size: int
 ) -> list[tuple[str, dict[str, Any]]]:
-    """
-    Transform individual vertex_add results into bulk UNWIND operations.
-
-    Args:
-        vertex_results: List of 3-tuples from vertex_add:
-            (cypher_query, cypher_params, cypher_query_inline)
-        batch_size: Max number of vertices per bulk transaction.
-
-    Returns:
-        List of tuples: (bulk_cypher_query, batch_bindings)
-        where bulk_cypher_query is the UNWIND template with rewritten queries
-        and batch_bindings is a list of dicts holding the parameters per vertex.
-    """
-    BULK_TEMPLATE = """
-    CALL {{
-        WITH $batch AS batch
-        UNWIND batch AS row
-        CALL {{
-            WITH row
-            {primitive_query}
-        }}
-        RETURN 1
-    }}
-    RETURN 1
-    ;
-    """
-
-    bulk_operations = []
+    batch = []
 
     # accumulate queries and bindings per batch
     for batch_start in range(0, len(vertex_results), batch_size):
         batch_slice = vertex_results[batch_start:batch_start + batch_size]
         batch_bindings = []
 
-        # assume primitive_query comes from cypher_query in vertex_add
+        # primitive_query comes from cypher_query in vertex_add
         # rewrite $param -> row.param
         for cypher_query, cypher_params, _ in batch_slice:
             rewritten_query = cypher_query
@@ -288,10 +270,10 @@ def vertex_bulk_add(
         # note: all queries are identical in template, params vary in batch
         # if queries differ, a more complex handling per row is needed
         primitive_query = rewritten_query
-        bulk_query = BULK_TEMPLATE.format(primitive_query=primitive_query)
-        bulk_operations.append((bulk_query, {"batch": batch_bindings}))
+        bulk_query = u_cyph_q.CypherQuery.BULK_TEMPLATE.format(primitive_query=primitive_query)
+        batch.append((bulk_query, {"batch": batch_bindings}))
 
-    return bulk_operations
+    return batch
 
 #
 #   edge_del:
