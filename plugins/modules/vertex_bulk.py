@@ -168,7 +168,7 @@ def main() -> None:
                 except Neo4jError as e:
                     payload = { 
                         "kut": vertex_bulk_query,
-                        "par":  vertex_bulk_params["batch"]
+                        "batch":  vertex_bulk_params["batch"]
 
                     }
                     module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
