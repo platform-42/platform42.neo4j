@@ -20,6 +20,9 @@ ignore_missing_imports = true
 module = "ansible_collections.platform42.neo4j.*"
 ignore_missing_imports = false
 
+[tool.pylint.FORMAT]
+max-line-length = 120
+
 [tool.pylint.DESIGN]
 max-locals = 25
 max-line-length = 120
