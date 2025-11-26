@@ -37,6 +37,7 @@ from strenum import StrEnum
 #       so if unique_key contains "line", its binding will be "$line" and its value
 #       is a guaranteed typecasted property that exists in cypher_params.
 #       no duplication, just reuse of existing validated key
+#   - bulk templates cannot have ; as a terminator, since they don't terminate
 #
 
 class RelationType(StrEnum):
@@ -134,7 +135,6 @@ class CypherQuery(StrEnum):
         {set_clause}
         RETURN 
             1 AS _
-        ;
         """
     EDGE_ADD_BI = """
         MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
@@ -158,7 +158,6 @@ class CypherQuery(StrEnum):
         {set_clause_r2}
         RETURN 
             1 AS _
-        ;
         """
     CONSTRAINT_DEL = """
         DROP CONSTRAINT {constraint_name} IF EXISTS
