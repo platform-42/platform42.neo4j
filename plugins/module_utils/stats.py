@@ -6,7 +6,7 @@
     Description: 
         NEO4J stats functions for bulk
 """
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from typing import List, Dict, Any, Optional
 from time import perf_counter
 from neo4j import ResultSummary

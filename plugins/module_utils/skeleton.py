@@ -9,7 +9,7 @@
 import os
 import re
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from strenum import StrEnum
 
 
