@@ -30,6 +30,10 @@ def cypher_stats(
         }
 
 
+from dataclasses import dataclass, field, asdict
+from time import perf_counter
+from typing import Any, Dict, List, Optional
+
 @dataclass
 class EntitySummary:
     total: int = 0
@@ -45,22 +49,25 @@ class EntitySummary:
     errors: int = 0
     diagnostics: Optional[List[Dict[str, Any]]] = None
 
+    # internal private field for timing
+    _start_time: float = field(init=False, repr=False)
+
     def __post_init__(
         self
     ) -> None:
         if self.diagnostics is None:
             self.diagnostics = []
-        self.elapsed_time_msec = perf_counter()
+        self._start_time = perf_counter()
+
+    def stop_timer(
+        self
+    ) -> None:
+        end_time = perf_counter()
+        self.elapsed_time_msec = (end_time - self._start_time) * 1000
 
     def as_payload(
         self
     ) -> Dict[str, Any]:
+        self.stop_timer()
         return asdict(self)
 
-    def stop_timer(
-        self
-    ) -> float:
-        now: float = perf_counter()
-        elapsed_msec: float = (now - self._start_time) * 1000
-        self._start_time = now
-        return elapsed_msec
