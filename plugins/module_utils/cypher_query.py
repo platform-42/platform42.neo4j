@@ -38,7 +38,10 @@ from strenum import StrEnum
 #       is a guaranteed typecasted property that exists in cypher_params.
 #       no duplication, just reuse of existing validated key
 #   - bulk templates cannot have ; as a terminator, since they don't terminate
+#   - when BULK_TEMPLATE is used, the primitive_query is modified in a manner that bindings $<binding>
+#     are replaced by binding row.<binding> -> WITH row ...
 #
+
 
 class RelationType(StrEnum):
     NODE = "n"
