@@ -30,10 +30,6 @@ def cypher_stats(
         }
 
 
-from dataclasses import dataclass, field, asdict
-from time import perf_counter
-from typing import Any, Dict, List, Optional
-
 @dataclass
 class EntitySummary:
     total: int = 0
@@ -72,4 +68,3 @@ class EntitySummary:
         self.elapsed_time_msec = (end_time - self._start_time) * 1000
         payload = {key: value for key, value in asdict(self).items() if not key.startswith("_")}
         return payload
-
