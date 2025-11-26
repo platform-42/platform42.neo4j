@@ -410,7 +410,6 @@ def edge_bulk_add(
         batch_slice = edge_results[batch_start:batch_start + batch_size]
         batch_bindings = []
 
-        # primitive_query comes from cypher_query in edge_add
         # rewrite $param -> row.param
         for cypher_query, cypher_params, _ in batch_slice:
             rewritten_query = cypher_query
