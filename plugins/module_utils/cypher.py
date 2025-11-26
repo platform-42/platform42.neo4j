@@ -242,7 +242,7 @@ def vertex_add(
 #
 #   returns:
 #       List of tuples: (bulk_cypher_query, batch_bindings)
-#       where bulk_cypher_query is the UNWIND template with rewritten queries 
+#       where bulk_cypher_query is the UNWIND template with rewritten queries
 #       and batch_bindings is a list of dicts holding the parameters per vertex.
 #
 def vertex_bulk_add(
@@ -396,7 +396,7 @@ def edge_add(
 #
 #   returns:
 #       List of tuples: (bulk_cypher_query, batch_bindings)
-#       where bulk_cypher_query is the UNWIND template with rewritten queries 
+#       where bulk_cypher_query is the UNWIND template with rewritten queries
 #       and batch_bindings is a list of dicts holding the parameters per edge.
 #
 def edge_bulk_add(

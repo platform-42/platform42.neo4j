@@ -188,19 +188,19 @@ def set_clause(
     relation_type: str,
     properties: Dict[str, Any]
 ) -> str:
-    set_clause: str = ""
+    clause: str = ""
     if properties:
-        set_clause = f"SET {relation_type} += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
-    return set_clause
+        clause = f"SET {relation_type} += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
+    return clause
 
 
 def set_relation_predicate(
     unique_key: Optional[str]
 ) -> str:
-    set_relation_predicate: str = ""
+    relation_predicate: str = ""
     if unique_key:
-        set_relation_predicate = f"{{{unique_key}: ${unique_key}}}"
-    return set_relation_predicate
+        relation_predicate = f"{{{unique_key}: ${unique_key}}}"
+    return relation_predicate
 
 
 def set_constraint_name(
