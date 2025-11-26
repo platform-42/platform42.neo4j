@@ -11,10 +11,9 @@ from strenum import StrEnum
 
 #
 #   Notes:
-#   - cypher queries doesn't need values, they only require bindings
-#   - added backticks for identifiers label, type and entity_name to prevent collision with reserved words in cypher
-#   - cypher parameters passed on via YAML are checked in module-main to prevent injection
-#   - usage of multiple f-strings to prevent annoying \n in triple quoted string
+#   - cypher queries doesn't need values, they require bindings
+#   - added backticks for identifiers to prevent collision with reserved words in cypher
+#   - cypher parameters passed on via YAML are checked to prevent injection
 #   - delete of bi-directional relationship is subtle:
 #       (a)-[:TRACK]->(b)
 #       (b)-[:TRACK]->(a)
@@ -23,13 +22,12 @@ from strenum import StrEnum
 #   - set_clause_(r|n) translates properties into bindings
 #       set_clause_r -> relationships (edges)
 #       set_clause_n -> nodes (vertices)
-#       amount: 5000 -> binding -> {amount: $amount}
 #       cypher, maps values to binding at query execution time (session.run)
 #   - check_mode implements Ansible check_mode
 #       check_mode validates all YAML-parameters for correctness
-#       check_mode connects to Neo4j and returns version if connected
-#   - set_relation_predicate -> ability to have duplicate relationships based on property
-#       validates if the unique_key is part of a property_keys
+#       check_mode connects to Neo4j and returns version if connected (non destructive operation)
+#   - set_relation_predicate -> ability to have duplicate relationships 
+#       validates if unique_key is part of a property_keys
 #       if part, the value of the binding is already in place and therefore
 #       ${unique_key} doesn't need any conversion whatsoever. It points already to the type-casted
 #       property-value
@@ -58,23 +56,19 @@ class CypherQuery(StrEnum):
                 {primitive_query}
         }}
         RETURN 1
-        ;
     """
     SIMULATION = """
         CALL dbms.components() YIELD versions 
         RETURN 
             versions[0] AS version
-        ;
         """
     GRAPH_RESET = """
         MATCH (n) 
         DETACH DELETE n
-        ;
         """
     VERTEX_DEL = """
         MATCH (n:`{label}` {{entity_name: $entity_name}})
         DETACH DELETE n
-        ;
         """
     VERTEX_ADD_SINGLETON = """
         MERGE (n:`{label}` {{entity_name: $entity_name}})
@@ -83,7 +77,6 @@ class CypherQuery(StrEnum):
             id(n) AS node_id, 
             labels(n) AS labels, 
             n.entity_name AS entity_name
-        ;
         """
     VERTEX_BULK_ADD_SINGLETON = """
         MERGE (n:`{label}` {{entity_name: $entity_name}})
@@ -98,7 +91,6 @@ class CypherQuery(StrEnum):
             id(n) AS node_id, 
             labels(n) AS labels, 
             n.entity_name AS entity_name
-        ;
         """
     VERTEX_BULK_ADD = """
         CREATE (n:`{label}` {{entity_name: $entity_name}})
@@ -111,14 +103,12 @@ class CypherQuery(StrEnum):
         MATCH (b:`{label_to}` {{entity_name: $entity_name_to}})
         MATCH (a)-[r:`{relation_type}` {relation_predicate}]->(b)
         DELETE r
-        ;
         """
     EDGE_DEL_BI = """
         MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
         MATCH (b:`{label_to}` {{entity_name: $entity_name_to}})
         MATCH (a)-[r:`{relation_type}` {relation_predicate}]-(b)
         DELETE r
-        ;
         """
     EDGE_ADD = """
         MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
@@ -129,7 +119,6 @@ class CypherQuery(StrEnum):
             type(r) AS relation_type,
             a.entity_name AS entity_name_from, 
             b.entity_name AS entity_name_to
-        ;
         """
     EDGE_BULK_ADD = """
         MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
@@ -164,27 +153,23 @@ class CypherQuery(StrEnum):
         """
     CONSTRAINT_DEL = """
         DROP CONSTRAINT {constraint_name} IF EXISTS
-        ;
         """
     CONSTRAINT_ADD = """
         CREATE CONSTRAINT {constraint_name} IF NOT EXISTS
         FOR (n:`{label}`)
         REQUIRE n.`{property_key}` IS UNIQUE
-        ;
         """
     LABEL_DEL ="""
         MATCH (n:`{base_label}` {{entity_name: $entity_name}})
         REMOVE n:`{label_to_remove}`
         RETURN 
             labels(n) AS labels
-        ;    
         """
     LABEL_ADD ="""
         MATCH (n:`{base_label}` {{entity_name: $entity_name}})
         SET n:`{label_to_create}`
         RETURN 
             labels(n) AS labels
-        ;    
         """
 
 def set_clause(
