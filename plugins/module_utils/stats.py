@@ -68,6 +68,8 @@ class EntitySummary:
     def as_payload(
         self
     ) -> Dict[str, Any]:
-        self.stop_timer()
-        return asdict(self)
+        end_time: float = perf_counter()
+        self.elapsed_time_msec = (end_time - self._start_time) * 1000
+        payload = {key: value for key, value in asdict(self).items() if not key.startswith("_")}
+        return payload
 
