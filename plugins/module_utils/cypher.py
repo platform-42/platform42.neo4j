@@ -271,7 +271,7 @@ def vertex_bulk_add(
         # if queries differ, a more complex handling per row is needed
         primitive_query = rewritten_query
         bulk_query = u_cyph_q.CypherQuery.BULK_TEMPLATE.format(primitive_query=primitive_query)
-        batch.append((bulk_query, {"batch": batch_bindings}))
+        batch.append((bulk_query, {u_skel.JsonTKN.BATCH.value: batch_bindings}))
 
     return batch
 

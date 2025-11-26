@@ -39,6 +39,7 @@ class YamlState(StrEnum):
 class JsonTKN(StrEnum):
     ARGS = "args"
     BASE_LABEL = "base_label"
+    BATCH = "batch"
     BI_DIRECTIONAL = "bi_directional"
     CHANGED = "changed"
     CONSTRAINTS_ADDED = "constraints_added"
