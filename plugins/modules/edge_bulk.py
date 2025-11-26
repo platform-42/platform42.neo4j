@@ -186,8 +186,8 @@ def main() -> None:
                     response: Result = session.run(edge_bulk_query, edge_bulk_params)
                     result_summary: ResultSummary = response.consume()
                     summary.processed += len(edge_bulk_params[u_skel.JsonTKN.BATCH.value])
-                    summary.nodes_created += result_summary.counters.nodes_created
-                    summary.nodes_deleted += result_summary.counters.nodes_deleted
+                    summary.relationships_created += result_summary.counters.relationships_created
+                    summary.relationships_deleted += result_summary.counters.relationships_deleted
                     summary.labels_added += result_summary.counters.labels_added
                     summary.labels_removed += result_summary.counters.labels_removed
                     summary.properties_set += result_summary.counters.properties_set
