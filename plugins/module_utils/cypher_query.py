@@ -86,7 +86,8 @@ class CypherQuery(StrEnum):
         """
     VERTEX_BULK_ADD_SINGLETON = """
         MERGE (n:`{label}` {{entity_name: $entity_name}})
-        {set_clause} 
+        {set_clause}
+        RETURN 1 AS _
         ;
         """
     VERTEX_ADD = """
@@ -100,7 +101,8 @@ class CypherQuery(StrEnum):
         """
     VERTEX_BULK_ADD = """
         CREATE (n:`{label}` {{entity_name: $entity_name}})
-        {set_clause} 
+        {set_clause}
+        RETURN 1 AS _
         ;
         """
     EDGE_DEL = """
