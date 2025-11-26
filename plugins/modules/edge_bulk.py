@@ -119,6 +119,7 @@ def main() -> None:
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_edge_bulk(),
         supports_check_mode=True
         )
+    
     # load edges from YAML-file
     edge_load_result: Tuple[bool, List[Dict[str, Any]], Dict[str, Any]] = u_shared.load_yaml_file(
         module.params[u_skel.JsonTKN.EDGE_FILE.value],
@@ -128,7 +129,10 @@ def main() -> None:
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
 
+    BATCH_SIZE = 100
+    edge_results: List[Tuple[str, Dict[str, Any], str]] = []
     summary = u_stats.EntitySummary(total=len(edges))
+    driver: Driver = u_driver.get_driver(module.params)
     for idx, edge in enumerate(edges):
         # check YAML-edge for completeness
         edge_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_entity_from_file(
@@ -138,6 +142,7 @@ def main() -> None:
         result, validated_edge, diagnostics = edge_from_file_result
         if not result:
             module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+        
         # validate YAML against NEO4J constraints, typecast dynamic properties
         input_list: List[str] = [
             u_skel.JsonTKN.TYPE.value,
@@ -155,32 +160,50 @@ def main() -> None:
         result, casted_properties, diagnostics = validate_result
         if not result:
             module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
+        
         # generate cypher query for edge operation (create/delete)
         edge_result: Tuple[str, Dict[str, Any], str] = edge_module(
             module.check_mode,
             validated_edge,
             casted_properties
             )
-        cypher_query, cypher_params, cypher_query_inline = edge_result
-        driver: Driver = u_driver.get_driver(module.params)
-        try:
-            # execute cypher query
-            with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
-                response: Result = session.run(cypher_query, cypher_params)
-#               cypher_response: List[Dict[str, Any]] = [record.data() for record in list(response)]
-                result_summary: ResultSummary = response.consume()
-            summary.processed += 1
-            summary.relationships_created += result_summary.counters.relationships_created
-            summary.relationships_deleted += result_summary.counters.relationships_deleted
-            summary.properties_set += result_summary.counters.properties_set
-        except Neo4jError as e:
-            payload = u_skel.payload_fail(cypher_query, cypher_params, cypher_query_inline, e, idx)
-            module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
-        except Exception as e: # pylint: disable=broad-exception-caught
-            payload = u_skel.payload_abend(e)
-            module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
-        finally:
-            driver.close()
+        
+        # save cypher_query, cypher_params in edge_results
+        edge_results.append(edge_result)
+
+        # chunk edges in groups of BATCH_SIZE - convert query to bulk paradigm
+    edge_bulk: List[Tuple[str, Dict[str, Any]]] = u_cypher.edge_bulk_add(
+        edge_results,
+        BATCH_SIZE
+    )
+    try:
+        # execute cypher query
+        with driver.session(database=module.params[u_skel.JsonTKN.DATABASE.value]) as session:
+
+            # iterate over bulk-queries
+            for edge_bulk_query, edge_bulk_params in edge_bulk:
+                try:
+                    response: Result = session.run(edge_bulk_query, edge_bulk_params)
+                    result_summary: ResultSummary = response.consume()
+                    summary.processed += len(edge_bulk_params[u_skel.JsonTKN.BATCH.value])
+                    summary.nodes_created += result_summary.counters.nodes_created
+                    summary.nodes_deleted += result_summary.counters.nodes_deleted
+                    summary.labels_added += result_summary.counters.labels_added
+                    summary.labels_removed += result_summary.counters.labels_removed
+                    summary.properties_set += result_summary.counters.properties_set
+                except Neo4jError as e:
+                    payload = u_skel.payload_fail(
+                        edge_bulk_query, 
+                        edge_bulk_params[u_skel.JsonTKN.BATCH.value],
+                        e,
+                        summary.processed
+                        )
+                    module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
+                except Exception as e: # pylint: disable=broad-exception-caught
+                    payload = u_skel.payload_abend(e)
+                    module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
+    finally:
+        driver.close()
     nodes_changed: bool = (summary.relationships_created > 0 or summary.relationships_deleted > 0)
     module.exit_json(**u_skel.ansible_exit(
         changed=nodes_changed,

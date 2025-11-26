@@ -246,9 +246,9 @@ def vertex_add(
 #       and batch_bindings is a list of dicts holding the parameters per vertex.
 #
 def vertex_bulk_add(
-    vertex_results: list[tuple[str, dict[str, Any], str]],
+    vertex_results: List[Tuple[str, Dict[str, Any], str]],
     batch_size: int
-) -> list[tuple[str, dict[str, Any]]]:
+) -> List[Tuple[str, Dict[str, Any]]]:
     batch = []
 
     # accumulate queries and bindings per batch
