@@ -84,7 +84,8 @@ class CypherQuery(StrEnum):
     VERTEX_BULK_ADD_SINGLETON = """
         MERGE (n:`{label}` {{entity_name: $entity_name}})
         {set_clause}
-        RETURN 1 AS _
+        RETURN 
+            1 AS _
         """
     VERTEX_ADD = """
         CREATE (n:`{label}` {{entity_name: $entity_name}})
@@ -98,7 +99,8 @@ class CypherQuery(StrEnum):
     VERTEX_BULK_ADD = """
         CREATE (n:`{label}` {{entity_name: $entity_name}})
         {set_clause}
-        RETURN 1 AS _
+        RETURN 
+            1 AS _
         """
     EDGE_DEL = """
         MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
@@ -130,6 +132,8 @@ class CypherQuery(StrEnum):
         MATCH (b:`{label_to}` {{entity_name: $entity_name_to}})
         MERGE (a)-[r:`{relation_type}` {relation_predicate}]->(b)
         {set_clause}
+        RETURN 
+            1 AS _
         ;
         """
     EDGE_ADD_BI = """
@@ -152,6 +156,8 @@ class CypherQuery(StrEnum):
         {set_clause_r1}
         MERGE (b)-[r2:`{relation_type}` {relation_predicate}]->(a)
         {set_clause_r2}
+        RETURN 
+            1 AS _
         ;
         """
     CONSTRAINT_DEL = """
