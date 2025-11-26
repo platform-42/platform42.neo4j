@@ -4,7 +4,7 @@
     Filename: ./modules/vertex.py
     Author: diederick de Buck (diederick.de.buck@gmail.com)
     Date: 2025-10-05
-    Version: 4.1.0
+    Version: 4.3.0
     Description: 
         Ansible module to create graph node (vertex)
 """
