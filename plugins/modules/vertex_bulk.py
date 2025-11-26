@@ -143,7 +143,7 @@ def main() -> None:
         # save cypher_query, cypher_params in vertex_results
         vertex_results.append(vertex_result)
 
-        # chunk vertices in groups of batch_size - convert query to bulk paradigm
+    # bundle vertices in groups of batch_size - convert query to bulk paradigm
     vertex_bulk: List[Tuple[str, Dict[str, Any]]] = u_cypher.vertex_bulk_add(
         vertex_results,
         batch_size
@@ -165,10 +165,10 @@ def main() -> None:
                     summary.properties_set += result_summary.counters.properties_set
                 except Neo4jError as e:
                     payload = u_skel.payload_fail(
-                        vertex_bulk_query,
-                        vertex_bulk_params[u_skel.JsonTKN.BATCH.value],
-                        e,
-                        summary.processed
+                        cypher_query=vertex_bulk_query,
+                        cypher_params=vertex_bulk_params[u_skel.JsonTKN.BATCH.value],
+                        e=e,
+                        idx=summary.processed
                         )
                     module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
                 except Exception as e: # pylint: disable=broad-exception-caught

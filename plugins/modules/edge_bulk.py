@@ -171,7 +171,7 @@ def main() -> None:
         # save cypher_query, cypher_params in edge_results
         edge_results.append(edge_result)
 
-        # chunk edges in groups of batch_size - convert query to bulk paradigm
+    # bundle edges in groups of batch_size - convert query to bulk paradigm
     edge_bulk: List[Tuple[str, Dict[str, Any]]] = u_cypher.edge_bulk_add(
         edge_results,
         batch_size
@@ -193,10 +193,10 @@ def main() -> None:
                     summary.properties_set += result_summary.counters.properties_set
                 except Neo4jError as e:
                     payload = u_skel.payload_fail(
-                        edge_bulk_query,
-                        edge_bulk_params[u_skel.JsonTKN.BATCH.value],
-                        e,
-                        summary.processed
+                        cypher_query=edge_bulk_query,
+                        cypher_params=edge_bulk_params[u_skel.JsonTKN.BATCH.value],
+                        e=e,
+                        idx=summary.processed
                         )
                     module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
                 except Exception as e: # pylint: disable=broad-exception-caught
