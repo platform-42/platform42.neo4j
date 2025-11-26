@@ -129,7 +129,7 @@ def main() -> None:
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
 
-    batch_size = 100
+    batch_size: int = 100
     edge_results: List[Tuple[str, Dict[str, Any], str]] = []
     summary = u_stats.EntitySummary(total=len(edges))
     driver: Driver = u_driver.get_driver(module.params)
