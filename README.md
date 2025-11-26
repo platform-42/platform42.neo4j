@@ -2,6 +2,13 @@
 
 Ansible collection for managing **Neo4j graph databases**: create and update vertices (nodes), edges (relationships), constraints, execute queries, and clean up the database. This collection provides a declarative, idempotent interface to Neo4j, allowing automation of graph data management in a consistent and reliable way.
 
+## release 4.3.0 notes
+- implemented `platform.neo4j.edge_bulk` primitve
+- implemented support for empty `set_clause` and `set_relation_predicate`
+- added Cyher templates for `VERTEX_BULK_ADD`, `VERTEX_BULK_ADD_SINGLETON`, `EDGE_BULK_ADD` and `EDGE_BULK_ADD_BI`
+- new Cypher templates return a dummy value and are not terminated by a semi-colon
+- implemented responsetime measurements for bulk primitves
+
 ## release 4.2.0 notes
 - function results are now returend as tuples consisting: result, payload and diagnostics
 - implemented `platform.neo4j.vertex_bulk` primitve
@@ -287,7 +294,3 @@ properties:
         type: int
 ```
 
-
-
-####
-I'm thinking to enforce rigidity by asking for name of the vertex_list (vertex_anchor) at YAML level. Keep in mind that normally we call the task per node, providing the same root-element as the loop parameter. Now we defer the loop to the vertex_bulk, but by specifying the vertex_anchor, we keep things rigid and semantically the same: the loop needs the anchor to start
