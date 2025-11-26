@@ -26,7 +26,7 @@ from strenum import StrEnum
 #   - check_mode implements Ansible check_mode
 #       check_mode validates all YAML-parameters for correctness
 #       check_mode connects to Neo4j and returns version if connected (non destructive operation)
-#   - set_relation_predicate -> ability to have duplicate relationships 
+#   - set_relation_predicate -> ability to have duplicate relationships
 #       validates if unique_key is part of a property_keys
 #       if part, the value of the binding is already in place and therefore
 #       ${unique_key} doesn't need any conversion whatsoever. It points already to the type-casted
