@@ -134,6 +134,7 @@ def main() -> None:
     summary = u_stats.EntitySummary(total=len(edges))
     driver: Driver = u_driver.get_driver(module.params)
     for _, edge in enumerate(edges):
+
         # check YAML-edge for completeness
         edge_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_entity_from_file(
             edge,
@@ -188,8 +189,6 @@ def main() -> None:
                     summary.processed += len(edge_bulk_params[u_skel.JsonTKN.BATCH.value])
                     summary.relationships_created += result_summary.counters.relationships_created
                     summary.relationships_deleted += result_summary.counters.relationships_deleted
-                    summary.labels_added += result_summary.counters.labels_added
-                    summary.labels_removed += result_summary.counters.labels_removed
                     summary.properties_set += result_summary.counters.properties_set
                 except Neo4jError as e:
                     payload = u_skel.payload_fail(

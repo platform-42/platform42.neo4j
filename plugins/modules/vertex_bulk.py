@@ -108,6 +108,7 @@ def main() -> None:
     summary = u_stats.EntitySummary(total=len(vertices))
     driver: Driver = u_driver.get_driver(module.params)
     for _, vertex in enumerate(vertices):
+        
         # check YAML-vertex for completeness
         vertex_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_entity_from_file(
             vertex,
