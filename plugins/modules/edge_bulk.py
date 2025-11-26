@@ -119,7 +119,7 @@ def main() -> None:
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_edge_bulk(),
         supports_check_mode=True
         )
-    
+
     # load edges from YAML-file
     edge_load_result: Tuple[bool, List[Dict[str, Any]], Dict[str, Any]] = u_shared.load_yaml_file(
         module.params[u_skel.JsonTKN.EDGE_FILE.value],
@@ -142,7 +142,7 @@ def main() -> None:
         result, validated_edge, diagnostics = edge_from_file_result
         if not result:
             module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-        
+
         # validate YAML against NEO4J constraints, typecast dynamic properties
         input_list: List[str] = [
             u_skel.JsonTKN.TYPE.value,
@@ -160,14 +160,14 @@ def main() -> None:
         result, casted_properties, diagnostics = validate_result
         if not result:
             module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-        
+
         # generate cypher query for edge operation (create/delete)
         edge_result: Tuple[str, Dict[str, Any], str] = edge_module(
             module.check_mode,
             validated_edge,
             casted_properties
             )
-        
+
         # save cypher_query, cypher_params in edge_results
         edge_results.append(edge_result)
 
@@ -193,7 +193,7 @@ def main() -> None:
                     summary.properties_set += result_summary.counters.properties_set
                 except Neo4jError as e:
                     payload = u_skel.payload_fail(
-                        edge_bulk_query, 
+                        edge_bulk_query,
                         edge_bulk_params[u_skel.JsonTKN.BATCH.value],
                         e,
                         summary.processed

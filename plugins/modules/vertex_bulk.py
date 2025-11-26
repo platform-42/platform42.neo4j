@@ -93,7 +93,7 @@ def main() -> None:
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_vertex_bulk(),
         supports_check_mode=True
         )
-    
+
     # load vertices from YAML-file
     vertex_load_result: Tuple[bool, List[Dict[str, Any]], Dict[str, Any]] = u_shared.load_yaml_file(
         module.params[u_skel.JsonTKN.VERTEX_FILE.value],
@@ -116,7 +116,7 @@ def main() -> None:
         result, validated_vertex, diagnostics = vertex_from_file_result
         if not result:
             module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-        
+
         # validate YAML against NEO4J constraints, typecast dynamic properties
         input_list: List[str] = [
             u_skel.JsonTKN.LABEL.value,
@@ -132,7 +132,7 @@ def main() -> None:
         result, casted_properties, diagnostics = validate_result
         if not result:
             module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
-        
+
         # generate cypher query for vertex operation (create/delete)
         vertex_result: Tuple[str, Dict[str, Any], str] = vertex_module(
             module.check_mode,
@@ -165,7 +165,7 @@ def main() -> None:
                     summary.properties_set += result_summary.counters.properties_set
                 except Neo4jError as e:
                     payload = u_skel.payload_fail(
-                        vertex_bulk_query, 
+                        vertex_bulk_query,
                         vertex_bulk_params[u_skel.JsonTKN.BATCH.value],
                         e,
                         summary.processed
