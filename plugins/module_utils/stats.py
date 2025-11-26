@@ -55,6 +55,12 @@ class EntitySummary:
     def as_payload(
         self
     ) -> Dict[str, Any]:
-        endTime = perf_counter()
-        self.elapsed_time_msec = (endTime - self.elapsed_time_msec) * 1000
         return asdict(self)
+
+    def stop_timer(
+        self
+    ) -> float:
+        now: float = perf_counter()
+        elapsed_msec: float = (now - self._start_time) * 1000
+        self._start_time = now
+        return elapsed_msec

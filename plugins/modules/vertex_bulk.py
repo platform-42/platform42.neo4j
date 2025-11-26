@@ -176,6 +176,7 @@ def main() -> None:
                     module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
     finally:
         driver.close()
+    summary.stop_timer()
     nodes_changed: bool = (summary.nodes_created > 0 or summary.nodes_deleted > 0)
     module.exit_json(**u_skel.ansible_exit(
         changed=nodes_changed,
