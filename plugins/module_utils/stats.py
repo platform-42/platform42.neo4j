@@ -8,6 +8,7 @@
 """
 from dataclasses import dataclass, asdict
 from typing import List, Dict, Any, Optional
+from time import perf_counter
 from neo4j import ResultSummary
 
 from . import skeleton as u_skel
@@ -32,6 +33,7 @@ def cypher_stats(
 @dataclass
 class EntitySummary:
     total: int = 0
+    elapsed_time_msec: float = 0
     processed: int = 0
     nodes_created: int = 0
     nodes_deleted: int = 0
@@ -48,8 +50,11 @@ class EntitySummary:
     ) -> None:
         if self.diagnostics is None:
             self.diagnostics = []
+        self.elapsed_time_msec = perf_counter()
 
     def as_payload(
         self
     ) -> Dict[str, Any]:
+        endTime = perf_counter()
+        self.elapsed_time_msec = (endTime - self.elapsed_time_msec) * 1000
         return asdict(self)
