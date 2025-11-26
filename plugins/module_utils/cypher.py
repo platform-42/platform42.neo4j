@@ -238,7 +238,7 @@ def vertex_add(
 
 #
 #   vertex_bulk_add:
-#       
+#
 #
 #   returns:
 #       List of tuples: (bulk_cypher_query, batch_bindings)
@@ -392,9 +392,49 @@ def edge_add(
     return query_build(cypher_query, cypher_params)
 
 #
+#   edge_bulk_add:
+#
+#   returns:
+#       List of tuples: (bulk_cypher_query, batch_bindings)
+#       where bulk_cypher_query is the UNWIND template with rewritten queries 
+#       and batch_bindings is a list of dicts holding the parameters per edge.
+#
+def edge_bulk_add(
+    edge_results: List[Tuple[str, Dict[str, Any], str]],
+    batch_size: int
+) -> List[Tuple[str, Dict[str, Any]]]:
+    batch = []
+
+    # accumulate queries and bindings per batch
+    for batch_start in range(0, len(edge_results), batch_size):
+        batch_slice = edge_results[batch_start:batch_start + batch_size]
+        batch_bindings = []
+
+        # primitive_query comes from cypher_query in edge_add
+        # rewrite $param -> row.param
+        for cypher_query, cypher_params, _ in batch_slice:
+            rewritten_query = cypher_query
+            for param in cypher_params.keys():
+                rewritten_query = rewritten_query.replace(f"${param}", f"row.{param}")
+
+            # store in batch_bindings (bindings per row)
+            batch_bindings.append(cypher_params)
+
+        # construct the bulk query using the first rewritten_query as primitive
+        # note: all queries are identical in template, params vary in batch
+        # if queries differ, a more complex handling per row is needed
+        primitive_query = rewritten_query
+        bulk_query = u_cyph_q.CypherQuery.BULK_TEMPLATE.format(primitive_query=primitive_query)
+        batch.append((bulk_query, {u_skel.JsonTKN.BATCH.value: batch_bindings}))
+
+    return batch
+
+
+#
 #   query:
 #       non destructive query.
 #       protected by session.execute_read()
+#
 #   notes:
 #       query is a difficult beast
 #       - cypher is now defined outside the context of Ansible
