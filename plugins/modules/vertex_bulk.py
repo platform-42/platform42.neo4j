@@ -103,11 +103,11 @@ def main() -> None:
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
 
-    BATCH_SIZE = 100
+    batch_size = 100
     vertex_results: List[Tuple[str, Dict[str, Any], str]] = []
     summary = u_stats.EntitySummary(total=len(vertices))
     driver: Driver = u_driver.get_driver(module.params)
-    for idx, vertex in enumerate(vertices):
+    for _, vertex in enumerate(vertices):
         # check YAML-vertex for completeness
         vertex_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_entity_from_file(
             vertex,
@@ -139,14 +139,14 @@ def main() -> None:
             validated_vertex,
             casted_properties
             )
-        
+
         # save cypher_query, cypher_params in vertex_results
         vertex_results.append(vertex_result)
 
-        # chunk vertices in groups of BATCH_SIZE - convert query to bulk paradigm
+        # chunk vertices in groups of batch_size - convert query to bulk paradigm
     vertex_bulk: List[Tuple[str, Dict[str, Any]]] = u_cypher.vertex_bulk_add(
         vertex_results,
-        BATCH_SIZE
+        batch_size
     )
     try:
         # execute cypher query

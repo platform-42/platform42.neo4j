@@ -129,11 +129,11 @@ def main() -> None:
     if not result:
         module.fail_json(**u_skel.ansible_fail(diagnostics=diagnostics))
 
-    BATCH_SIZE = 100
+    batch_size = 100
     edge_results: List[Tuple[str, Dict[str, Any], str]] = []
     summary = u_stats.EntitySummary(total=len(edges))
     driver: Driver = u_driver.get_driver(module.params)
-    for idx, edge in enumerate(edges):
+    for _, edge in enumerate(edges):
         # check YAML-edge for completeness
         edge_from_file_result: Tuple[bool, Dict[str, Any], Dict[str, Any]] = u_shared.validate_entity_from_file(
             edge,
@@ -171,10 +171,10 @@ def main() -> None:
         # save cypher_query, cypher_params in edge_results
         edge_results.append(edge_result)
 
-        # chunk edges in groups of BATCH_SIZE - convert query to bulk paradigm
+        # chunk edges in groups of batch_size - convert query to bulk paradigm
     edge_bulk: List[Tuple[str, Dict[str, Any]]] = u_cypher.edge_bulk_add(
         edge_results,
-        BATCH_SIZE
+        batch_size
     )
     try:
         # execute cypher query
