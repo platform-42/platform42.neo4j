@@ -108,7 +108,6 @@ def vertex_module(
         )
 
 
-
 def main() -> None:
     module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
