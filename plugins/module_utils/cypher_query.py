@@ -186,13 +186,19 @@ def set_clause(
     relation_type: str,
     properties: Dict[str, Any]
 ) -> str:
-    return f"SET {relation_type} += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
+    set_clause: str = ""
+    if properties:
+        set_clause = f"SET {relation_type} += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
+    return set_clause
 
 
 def set_relation_predicate(
     unique_key: Optional[str]
 ) -> str:
-    return f"{{{unique_key}: ${unique_key}}}" if unique_key else ""
+    set_relation_predicate: str = ""
+    if unique_key:
+        set_relation_predicate = f"{{{unique_key}: ${unique_key}}}"
+    return set_relation_predicate
 
 
 def set_constraint_name(
@@ -201,10 +207,6 @@ def set_constraint_name(
 ) -> str:
     return f"constraint_{label.lower()}_{property_key.lower()}_unique"
 
-
-def cypher_bulk(  
-) -> None:
-    pass
 
 def cypher_graph_reset(
     check_mode: bool
