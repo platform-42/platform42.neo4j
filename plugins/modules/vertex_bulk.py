@@ -12,6 +12,7 @@
 # pylint: disable=import-error
 from typing import Dict, Any, Tuple, List
 from ansible.module_utils.basic import AnsibleModule
+from time import perf_counter
 
 import ansible_collections.platform42.neo4j.plugins.module_utils.argument_spec as u_args
 import ansible_collections.platform42.neo4j.plugins.module_utils.skeleton as u_skel
@@ -88,6 +89,7 @@ def vertex_module(
 
 
 def main() -> None:
+    st = perf_counter()
     module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_vertex_bulk(),
@@ -178,11 +180,12 @@ def main() -> None:
                     module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
     finally:
         driver.close()
+    et = perf_counter()
     nodes_changed: bool = (summary.nodes_created > 0 or summary.nodes_deleted > 0)
     module.exit_json(**u_skel.ansible_exit(
         changed=nodes_changed,
         payload_key=module_name,
-        payload=summary.as_payload()
+        payload={"resptime": (et-st) * 1000}
         )
     )
 
