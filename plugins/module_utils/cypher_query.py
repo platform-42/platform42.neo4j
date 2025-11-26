@@ -50,10 +50,8 @@ class CypherQuery(StrEnum):
         CALL {{
             WITH $batch AS batch
             UNWIND batch AS row
-            CALL {{
-                WITH row
+            WITH row
                 {primitive_query}
-            }}
             RETURN 1
         }}
         RETURN 1
