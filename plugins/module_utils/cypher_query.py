@@ -88,7 +88,6 @@ class CypherQuery(StrEnum):
         MERGE (n:`{label}` {{entity_name: $entity_name}})
         {set_clause}
         RETURN 1 AS _
-        ;
         """
     VERTEX_ADD = """
         CREATE (n:`{label}` {{entity_name: $entity_name}})
@@ -103,7 +102,6 @@ class CypherQuery(StrEnum):
         CREATE (n:`{label}` {{entity_name: $entity_name}})
         {set_clause}
         RETURN 1 AS _
-        ;
         """
     EDGE_DEL = """
         MATCH (a:`{label_from}` {{entity_name: $entity_name_from}})
