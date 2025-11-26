@@ -131,19 +131,6 @@ def payload_exit(
 
 # catastrophic failure - cypher buffers might be corrupted
 def payload_abend(
-    e: BaseException,
-    idx: Optional[int] = None
-) -> Dict[str, Any]:
-    diagnostics: Dict[str, Any] = {
-        JsonTKN.RESULT.value: "abend - failure due to system exception",
-        JsonTKN.DIAGNOSTICS.value: ansible_diagnostics(e)
-        }
-    if idx is not None:
-        diagnostics[JsonTKN.OBJECT_INDEX.value] = idx
-    return diagnostics
-
-
-def payload_bulk_abend(
     e: BaseException
 ) -> Dict[str, Any]:
     diagnostics: Dict[str, Any] = {
@@ -159,7 +146,6 @@ def payload_fail(
     cypher_params: Dict[str, Any],
     cypher_query_inline: str,
     e: BaseException,
-    idx: Optional[int] = None
 ) -> Dict[str, Any]:
     diagnostics: Dict[str, Any] = {
         JsonTKN.CYPHER_QUERY.value: flatten_query(cypher_query),
@@ -167,21 +153,20 @@ def payload_fail(
         JsonTKN.CYPHER_QUERY_INLINE.value: flatten_query(cypher_query_inline),
         JsonTKN.DIAGNOSTICS.value: ansible_diagnostics(e)
         }
-    if idx is not None:
-        diagnostics[JsonTKN.OBJECT_INDEX.value] = idx
     return diagnostics
 
 
 def payload_bulk_fail(
     cypher_query: str,
     cypher_params: Dict[str, Any],
-    e: BaseException
+    e: BaseException,
+    idx: int
 ) -> Dict[str, Any]:
     diagnostics: Dict[str, Any] = {
         JsonTKN.CYPHER_QUERY.value: flatten_query(cypher_query),
         JsonTKN.CYPHER_PARAMS.value: cypher_params,
-        JsonTKN.CYPHER_QUERY_INLINE.value: flatten_query(cypher_query_inline),
-        JsonTKN.DIAGNOSTICS.value: ansible_diagnostics(e)
+        JsonTKN.DIAGNOSTICS.value: ansible_diagnostics(e),
+        JsonTKN.OBJECT_INDEX.value: idx
         }
     return diagnostics
 

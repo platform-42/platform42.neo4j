@@ -167,12 +167,12 @@ def main() -> None:
                     payload = u_skel.payload_fail(
                         vertex_bulk_query, 
                         vertex_bulk_params[u_skel.JsonTKN.BATCH.value],
-                        "",
                         e,
-                        0)
+                        summary.processed
+                        )
                     module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
                 except Exception as e: # pylint: disable=broad-exception-caught
-                    payload = u_skel.payload_abend(e, 0)
+                    payload = u_skel.payload_abend(e)
                     module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
     finally:
         driver.close()
