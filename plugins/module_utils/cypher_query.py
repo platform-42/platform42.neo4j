@@ -52,7 +52,6 @@ class CypherQuery(StrEnum):
             UNWIND batch AS row
             WITH row
                 {primitive_query}
-            RETURN 1
         }}
         RETURN 1
         ;
