@@ -43,7 +43,6 @@ class EntitySummary:
     labels_removed: int = 0
     properties_set: int = 0
     errors: int = 0
-    diagnostics: Optional[List[Dict[str, Any]]] = None
 
     # internal private field for timing
     _start_time: float = field(init=False, repr=False)
@@ -51,20 +50,16 @@ class EntitySummary:
     def __post_init__(
         self
     ) -> None:
-        if self.diagnostics is None:
-            self.diagnostics = []
         self._start_time = perf_counter()
 
     def stop_timer(
         self
     ) -> None:
-        end_time: float = perf_counter()
-        self.elapsed_time_msec = (end_time - self._start_time) * 1000
+        self.elapsed_time_msec = (perf_counter() - self._start_time) * 1000
 
     def as_payload(
         self
     ) -> Dict[str, Any]:
-        end_time: float = perf_counter()
-        self.elapsed_time_msec = (end_time - self._start_time) * 1000
+        self.elapsed_time_msec = (perf_counter() - self._start_time) * 1000
         payload: Dict[str, Any] = {key: value for key, value in asdict(self).items() if not key.startswith("_")}
         return payload
