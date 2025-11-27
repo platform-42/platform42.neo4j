@@ -172,10 +172,8 @@ def main() -> None:
         u_shared.serialize_neo4j(cypher_response),
         u_stats.cypher_stats(result_summary)
         )
-    state: str = module.params[u_skel.JsonTKN.STATE.value]
     counters: SummaryCounters = result_summary.counters
-    relationships_changed: int = counters.relationships_created if u_skel.state_present(state) else counters.relationships_deleted
-    changed: bool = relationships_changed > 0
+    changed: bool = (counters.relationships_created > 0 or counters.relationships_deleted > 0)
     module.exit_json(**u_skel.ansible_exit(
         changed=changed,
         payload_key=module_name,

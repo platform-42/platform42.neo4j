@@ -203,9 +203,9 @@ def main() -> None:
                     module.fail_json(**u_skel.ansible_fail(diagnostics=payload))
     finally:
         driver.close()
-    nodes_changed: bool = (summary.relationships_created > 0 or summary.relationships_deleted > 0)
+    changed: bool = (summary.relationships_created > 0 or summary.relationships_deleted > 0)
     module.exit_json(**u_skel.ansible_exit(
-        changed=nodes_changed,
+        changed=changed,
         payload_key=module_name,
         payload=summary.as_payload()
         )
