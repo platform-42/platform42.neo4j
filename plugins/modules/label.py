@@ -133,10 +133,8 @@ def main() -> None:
         u_shared.serialize_neo4j(cypher_response),
         u_stats.cypher_stats(result_summary)
         )
-    state: str = module.params[u_skel.JsonTKN.STATE.value]
     counters: SummaryCounters = result_summary.counters
-    constraints_changed: int = counters.constraints_added if u_skel.state_present(state) else counters.constraints_removed
-    changed: bool = constraints_changed > 0
+    changed: bool = (counters.constraints_added > 0 or counters.constraints_removed > 0)
     module.exit_json(**u_skel.ansible_exit(
         changed=changed,
         payload_key=module_name,

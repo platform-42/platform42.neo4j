@@ -137,7 +137,7 @@ def main() -> None:
         u_stats.cypher_stats(result_summary),
         )
     module.exit_json(**u_skel.ansible_exit(
-        changed=False,
+        changed=write_access,
         payload_key=module_name,
         payload=payload)
         )
