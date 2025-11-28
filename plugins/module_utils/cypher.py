@@ -256,7 +256,6 @@ def vertex_bulk_add(
         batch_slice = vertex_results[batch_start:batch_start + batch_size]
         batch_bindings = []
 
-        # primitive_query comes from cypher_query in vertex_add
         # rewrite $param -> row.param
         for cypher_query, cypher_params, _ in batch_slice:
             rewritten_query = cypher_query
@@ -266,9 +265,6 @@ def vertex_bulk_add(
             # store in batch_bindings (bindings per row)
             batch_bindings.append(cypher_params)
 
-        # construct the bulk query using the first rewritten_query as primitive
-        # note: all queries are identical in template, params vary in batch
-        # if queries differ, a more complex handling per row is needed
         primitive_query = rewritten_query
         bulk_query = u_cyph_q.CypherQuery.BULK_TEMPLATE.format(primitive_query=primitive_query)
         batch.append((bulk_query, {u_skel.JsonTKN.BATCH.value: batch_bindings}))
@@ -419,9 +415,6 @@ def edge_bulk_add(
             # store in batch_bindings (bindings per row)
             batch_bindings.append(cypher_params)
 
-        # construct the bulk query using the first rewritten_query as primitive
-        # note: all queries are identical in template, params vary in batch
-        # if queries differ, a more complex handling per row is needed
         primitive_query = rewritten_query
         bulk_query = u_cyph_q.CypherQuery.BULK_TEMPLATE.format(primitive_query=primitive_query)
         batch.append((bulk_query, {u_skel.JsonTKN.BATCH.value: batch_bindings}))
