@@ -31,7 +31,7 @@ def load_yaml_file(
             extract = yaml.safe_load(f)
     except yaml.YAMLError as e:
         return False, None, {u_skel.JsonTKN.ERROR_MSG.value: f"Failed to parse YAML file: {e}"}
-    except Exception as e:
+    except Exception as e: # pylint: disable=broad-exception-caught
         return False, None, {u_skel.JsonTKN.ERROR_MSG.value: f"Failed to read fYAML file: {e}"}
 
     # examine structure of payload

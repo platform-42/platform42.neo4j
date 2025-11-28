@@ -24,10 +24,8 @@ def validate_cypher_inputs(
     cypher_input_list: List[str],
     module_params: Dict[str, Any]
 ) -> Tuple[bool, Dict[str, Any]]:
-
     mask = set(cypher_input_list)
     validated: Dict[str, Any] = {}
-
     VALIDATORS = { # pylint: disable=invalid-name
         u_skel.JsonTKN.TYPE.value: _validate_type,
         u_skel.JsonTKN.LABEL.value: _validate_label,
