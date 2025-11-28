@@ -51,11 +51,9 @@ def load_yaml_file(
 
     payload = extract[anchor]
 
-    # --- List validation ------------------------------------------------------
     if not isinstance(payload, list):
         return False, None, {u_skel.JsonTKN.ERROR_MSG.value: f"Top-level key '{anchor}' must contain a list"}
 
-    # --- Success --------------------------------------------------------------
     diagnostics: Dict[str, Any] = {
         u_skel.JsonTKN.VERTEX_ANCHOR.value: anchor,
         u_skel.JsonTKN.COUNT.value: len(payload)
