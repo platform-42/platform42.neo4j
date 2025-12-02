@@ -22,13 +22,13 @@ from strenum import StrEnum
 #   - set_clause_(r|n) translates properties into bindings
 #       set_clause_r -> relationships (edges)
 #       set_clause_n -> nodes (vertices)
-#       cypher, maps values to binding at query execution time (session.run)
+#       cypher maps values to binding at query execution time (session.run)
 #   - check_mode implements Ansible check_mode
 #       check_mode validates all YAML-parameters for correctness
 #       check_mode connects to Neo4j and returns version if connected (non destructive operation)
 #   - set_relation_predicate -> ability to have duplicate relationships
-#       validates if unique_key is part of a property_keys
-#       if part, the value of the binding is already in place and therefore
+#       + validates if unique_key is part of a property_keys
+#       + if part, the value of the binding is already in place and therefore
 #       ${unique_key} doesn't need any conversion whatsoever. It points already to the type-casted
 #       property-value
 #
@@ -171,14 +171,17 @@ class CypherQuery(StrEnum):
         RETURN 
             labels(n) AS labels
         """
-
+#
+#   2025-12-02 DDB:
+#       added backticks around dynamic key
+#
 def set_clause(
     relation_type: str,
     properties: Mapping[str, Any]
 ) -> str:
     clause: str = ""
     if properties:
-        clause = f"SET {relation_type} += {{{', '.join(f'{key}: ${key}' for key in properties.keys())}}}"
+        clause = f"SET {relation_type} += {{{', '.join(f'`{key}`: ${key}' for key in properties.keys())}}}"
     return clause
 
 
