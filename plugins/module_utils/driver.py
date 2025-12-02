@@ -1,6 +1,6 @@
 """
     Filename: ./module_utils/driver.py
-    Author: diederick de Buck (diederick.de.buck@gmail.com)
+    Author: diederick de Buck (diederick.de.buck@platform-42.com)
     Date: 2025-11-04
     Version: 4.3.0
     Description: 

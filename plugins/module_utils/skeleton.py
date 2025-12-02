@@ -1,6 +1,6 @@
 """
     Filename: ./module_utils/skeleton.py
-    Author: diederick de Buck (diederick.de.buck@gmail.com)
+    Author: diederick de Buck (diederick.de.buck@platform-42.com)
     Date: 2025-10-26
     Version: 4.3.0
     Description: 

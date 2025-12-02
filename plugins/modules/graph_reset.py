@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
     Filename: ./modules/graph_reset.py
-    Author: diederick de Buck (diederick.de.buck@gmail.com)
+    Author: diederick de Buck (diederick.de.buck@platform-42.com)
     Date: 2025-10-05
     Version: 4.3.0
     Description: 
@@ -29,7 +29,7 @@ module: graph_reset
 short_description: reset vertices and edges in Neo4j database
 version_added: "1.2.0"
 author:
-  - Diederick de Buck (diederick.de.buck@gmail.com)
+  - Diederick de Buck (diederick.de.buck@platform-42.com)
 description:
   - This module removes nodes (vertex) and relations (edges) in a Neo4j graph database.
   - It uses the official Neo4j Python driver and supports Aura (neo4j+s://) and self-hosted databases.

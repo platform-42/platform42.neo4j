@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
     Filename: ./modules/label.py
-    Author: diederick de Buck (diederick.de.buck@gmail.com)
+    Author: diederick de Buck (diederick.de.buck@platform-42.com)
     Date: 2025-10-27
     Version: 4.3.0
     Description: 
@@ -35,7 +35,7 @@ description:
     to modify node classifications dynamically without duplicating or losing data.
   - Useful for managing node states, categories, or roles declaratively in Neo4j.
 author:
-  - Diederick de Buck (diederick.de.buck@gmail.com)
+  - Diederick de Buck (diederick.de.buck@platform-42.com)
 '''
 
 EXAMPLES = r'''

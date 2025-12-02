@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
     Filename: ./modules/edge.py
-    Author: diederick de Buck (diederick.de.buck@gmail.com)
+    Author: diederick de Buck (diederick.de.buck@platform-42.com)
     Date: 2025-10-05
     Version: 4.3.0
     Description: 
@@ -30,7 +30,7 @@ module: edge
 short_description: Create or update a relationship (edge) between two vertices in Neo4j
 version_added: "1.0.0"
 author:
-  - Diederick de Buck (diederick.de.buck@gmail.com)
+  - Diederick de Buck (diederick.de.buck@platform-42.com)
 description:
   - This module creates a relationship (edge) between two existing vertices (nodes) in a Neo4j graph database.
   - It uses the official Neo4j Python driver and supports Aura (neo4j+s://) and self-hosted instances.

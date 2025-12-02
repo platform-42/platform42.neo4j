@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
     Filename: ./modules/query.py
-    Author: diederick de Buck (diederick.de.buck@gmail.com)
+    Author: diederick de Buck (diederick.de.buck@platform-42.com)
     Date: 2025-10-05
     Version: 4.3.0
     Description: 
@@ -30,7 +30,7 @@ module: ./modules/query
 short_description: Execute a read-only Cypher query in Neo4j and return results
 version_added: "1.4.0"
 author:
-  - Diederick de Buck (diederick.de.buck@gmail.com)
+  - Diederick de Buck (diederick.de.buck@platform-42.com)
 description:
   - This module runs a Cypher query against a Neo4j database and returns the result data.
   - It is intended for read-only operations such as MATCH, RETURN, or CALL procedures that do not modify the graph.

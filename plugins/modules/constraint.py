@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
     Filename: ./modules/constraint.py
-    Author: diederick de Buck (diederick.de.buck@gmail.com)
+    Author: diederick de Buck (diederick.de.buck@platform-42.com)
     Date: 2025-10-27
     Version: 4.3.0
     Description: 
@@ -38,7 +38,7 @@ description:
   - It uses the Neo4j C( CREATE CONSTRAINT IF NOT EXISTS ) and C( DROP CONSTRAINT IF EXISTS )
     Cypher statements under the hood.
 author:
-  - Diederick de Buck (diederick.de.buck@gmail.com)
+  - Diederick de Buck (diederick.de.buck@platform-42.com)
 '''
 
 EXAMPLES = r'''
