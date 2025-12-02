@@ -6,7 +6,7 @@
     Description: 
         Cypher queries - returns string with bindings
 """
-from typing import Dict, Any, Optional
+from typing import Any, Optional, Mapping
 from strenum import StrEnum
 
 #
@@ -174,7 +174,7 @@ class CypherQuery(StrEnum):
 
 def set_clause(
     relation_type: str,
-    properties: Dict[str, Any]
+    properties: Mapping[str, Any]
 ) -> str:
     clause: str = ""
     if properties:
@@ -223,7 +223,7 @@ def cypher_vertex_add(
     is_bulk: bool,
     singleton: bool,
     label: str,
-    properties: Dict[str, Any]
+    properties: Mapping[str, Any]
 ) -> str:
     if check_mode:
         return str(CypherQuery.SIMULATION.value)
@@ -294,7 +294,7 @@ def cypher_edge_add(
     label_from: str,
     label_to: str,
     relation_type: str,
-    properties: Dict[str, Any],
+    properties: Mapping[str, Any],
     unique_key: Optional[str] = None
 ) -> str:
     if check_mode:
@@ -323,7 +323,7 @@ def cypher_edge_add_bi(
     label_from: str,
     label_to: str,
     relation_type: str,
-    properties: Dict[str, Any],
+    properties: Mapping[str, Any],
     unique_key: Optional[str] = None
 ) -> str:
     if check_mode:
