@@ -11,33 +11,32 @@ from strenum import StrEnum
 
 #
 #   Notes:
-#   - cypher queries doesn't need values, they require bindings
+#   - cypher queries don't need values, they require bindings
 #   - added backticks for identifiers to prevent collision with reserved words in cypher
-#   - cypher parameters passed on via YAML are checked to prevent injection
+#   - cypher parameters passed via YAML are checked to prevent injection
 #   - delete of bi-directional relationship is subtle:
 #       (a)-[:TRACK]->(b)
 #       (b)-[:TRACK]->(a)
 #     is equivaluent to:
 #       (a)-[:TRACK]-(b)
 #   - set_clause_(r|n) translates properties into bindings
-#       set_clause_r -> relationships (edges)
-#       set_clause_n -> nodes (vertices)
-#       cypher maps values to binding at query execution time (session.run)
+#       set_clause_r -> relationship properties (edges)
+#       set_clause_n -> node properties (vertices)
+#       cypher maps values to its bindings at query execution time (session.run)
 #   - check_mode implements Ansible check_mode
-#       check_mode validates all YAML-parameters for correctness
+#       check_mode validates all YAML-parameters for correctness and injection
 #       check_mode connects to Neo4j and returns version if connected (non destructive operation)
 #   - set_relation_predicate -> ability to have duplicate relationships
-#       + validates if unique_key is part of a property_keys
-#       + if part, the value of the binding is already in place and therefore
-#       ${unique_key} doesn't need any conversion whatsoever. It points already to the type-casted
+#       validates if unique_key is part of a property_keys
+#       if part, the value of the binding is already in place and therefore
+#       ${unique_key} doesn't need conversion: it points directly to the type-casted
 #       property-value
 #
-#       so if unique_key contains "line", its binding will be "$line" and its value
-#       is a guaranteed typecasted property that exists in cypher_params.
-#       no duplication, just reuse of existing validated key
-#   - bulk templates cannot have ; as a terminator, since they don't terminate
+#       if unique_key contains "line", its binding will be "$line" and its value
+#       is typecasted property must exist in cypher_params.
+#   - bulk templates cannot have ; as a terminator, since they don't terminate at individual level
 #   - when BULK_TEMPLATE is used, the primitive_query is modified in a manner that bindings $<binding>
-#     are replaced by binding row.<binding> -> WITH row ...
+#     are replaced by binding row.<binding> -> because of the WITH row ... to fetch a primitive_query
 #
 
 
@@ -56,7 +55,7 @@ class CypherQuery(StrEnum):
                 {primitive_query}
         }}
         RETURN 1
-    """
+        """
     SIMULATION = """
         CALL dbms.components() YIELD versions 
         RETURN 

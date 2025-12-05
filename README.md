@@ -75,7 +75,7 @@ MERGE (a)-[r:`TRANSACTION` {transction_date: "2025-10-31T15:00:00.000" }]->(b)
 - **Vertex management (`vertex` and `vertex_bulk` module)**  
   Create or update nodes in the graph with specified labels and properties. Supports idempotent operations using Cypher `MERGE`.
 
-- **Edge management (`edge` and `vertex_bulk` module)**  
+- **Edge management (`edge` and `edge_bulk` module)**  
   Create relationships between vertices with configurable direction, type, and properties. Also uses `MERGE` for idempotent updates.
 
 - **Query execution (`query` module)**  
