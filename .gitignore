@@ -1,4 +1,19 @@
+# Python virtual environments
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# macOS noise
+.DS_Store
+
+# Python mypy
 .mypy_cache/
 plugins/modules/.mypy_cache
 plugins/module_utils/.mypy_cache
+
+# module built
 *.tar.gz
