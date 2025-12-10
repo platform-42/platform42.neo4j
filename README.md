@@ -101,6 +101,7 @@ MERGE (a)-[r:`TRANSACTION` {transction_date: "2025-10-31T15:00:00.000" }]->(b)
 # Install Python Neo4j driver
 pip3 install neo4j
 pip3 install regex
+pip3 install StrEnum
 
 # Install collection from Ansible Galaxy
 ansible-galaxy collection install git@github.com:platform-42/platform42.neo4j.git
