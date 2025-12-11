@@ -86,7 +86,7 @@ EXAMPLES = r'''
 
 def edge_module(
     check_mode: bool,
-    module_params: Dict[str, Any],
+    module_params: u_skel.ModuleParamsEdge,
     properties: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
     relation_type: str = module_params[u_skel.JsonTKN.TYPE.value]
