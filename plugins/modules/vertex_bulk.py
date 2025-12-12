@@ -76,16 +76,13 @@ def vertex_module(
         vertex_result = u_cypher.vertex_add(
             check_mode=check_mode,
             is_bulk=True,
-            singleton=singleton,
-            label=label,
-            entity_name=entity_name,
+            module_params=module_params,
             properties=properties
             )
         return vertex_result
     vertex_result = u_cypher.vertex_del(
         check_mode=check_mode,
-        label=label,
-        entity_name=entity_name
+        module_params=module_params
         )
     return vertex_result
 

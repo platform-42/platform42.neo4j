@@ -191,10 +191,13 @@ def label_add(
 #
 def vertex_del(
     check_mode: bool,
-    label: str,
-    entity_name: str
+    module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
-
+    
+    # retrieve module params
+    label: str = module_params[u_skel.JsonTKN.LABEL.value]
+    entity_name: str = module_params[u_skel.JsonTKN.ENTITY_NAME.value]
+    
     # normalise
     normalised_label: str = label.capitalize()
 
@@ -220,11 +223,14 @@ def vertex_del(
 def vertex_add(
     check_mode: bool,
     is_bulk: bool,
-    singleton: bool,
-    label: str,
-    entity_name: str,
+    module_params: Dict[str, Any],
     properties: Optional[Dict[str, Any]] = None
 ) -> Tuple[str, Dict[str, Any], str]:
+
+    # retrieve module params
+    label: str = module_params[u_skel.JsonTKN.LABEL.value]
+    entity_name: str = module_params[u_skel.JsonTKN.ENTITY_NAME.value]
+    singleton: bool = module_params[u_skel.JsonTKN.SINGLETON.value]
 
     # optionals
     if properties is None:
