@@ -69,7 +69,7 @@ def constraint_del(
     # retrieve module params
     label: str = module_params[u_skel.JsonTKN.LABEL.value]
     property_key: str = module_params[u_skel.JsonTKN.PROPERTY_KEY.value]
-    
+
     # normalise
     normalised_label: str = label.capitalize()
 
@@ -294,14 +294,17 @@ def vertex_bulk_add(
 #
 def edge_del(
     check_mode: bool,
-    relation_type: str,
-    label_from: str,
-    entity_name_from: str,
-    label_to: str,
-    entity_name_to: str,
-    bi_directional: Optional[bool] = False,
-    unique_key: Optional[str] = None
+    module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
+    
+    # retrieve module params
+    relation_type: str = module_params[u_skel.JsonTKN.TYPE.value]
+    label_from: str = module_params[u_skel.JsonTKN.FROM.value][u_skel.JsonTKN.LABEL.value]
+    entity_name_from: str = module_params[u_skel.JsonTKN.FROM.value][u_skel.JsonTKN.ENTITY_NAME.value]
+    label_to: str = module_params[u_skel.JsonTKN.TO.value][u_skel.JsonTKN.LABEL.value]
+    entity_name_to: str = module_params[u_skel.JsonTKN.TO.value][u_skel.JsonTKN.ENTITY_NAME.value]
+    bi_directional: bool = module_params[u_skel.JsonTKN.BI_DIRECTIONAL.value]
+    unique_key: str = module_params[u_skel.JsonTKN.UNIQUE_KEY.value]
 
     # normalise
     normalised_relation_type: str = relation_type.upper()
@@ -347,15 +350,19 @@ def edge_del(
 def edge_add(
     check_mode: bool,
     is_bulk: bool,
-    relation_type: str,
-    label_from: str,
-    entity_name_from: str,
-    label_to: str,
-    entity_name_to: str,
-    properties: Optional[Dict[str, Any]] = None,
-    bi_directional: Optional[bool] = False,
-    unique_key: Optional[str] = None
+    module_params: Dict[str, Any],
+    properties: Optional[Dict[str, Any]] = None
 ) -> Tuple[str, Dict[str, Any], str]:
+
+    # retrieve module params
+    relation_type: str = module_params[u_skel.JsonTKN.TYPE.value]
+    label_from: str = module_params[u_skel.JsonTKN.FROM.value][u_skel.JsonTKN.LABEL.value]
+    entity_name_from: str = module_params[u_skel.JsonTKN.FROM.value][u_skel.JsonTKN.ENTITY_NAME.value]
+    label_to: str = module_params[u_skel.JsonTKN.TO.value][u_skel.JsonTKN.LABEL.value]
+    entity_name_to: str = module_params[u_skel.JsonTKN.TO.value][u_skel.JsonTKN.ENTITY_NAME.value]
+    bi_directional: bool = module_params[u_skel.JsonTKN.BI_DIRECTIONAL.value]
+    unique_key: str = module_params[u_skel.JsonTKN.UNIQUE_KEY.value]
+
     # optionals
     if properties is None:
         properties = {}
@@ -455,6 +462,7 @@ def query(
     cypher_query: str,
     parameters: Optional[Dict[str, Any]] = None
 ) -> Tuple[str, Dict[str, Any], str]:
+    
     # optionals
     if parameters is None:
         parameters = {}

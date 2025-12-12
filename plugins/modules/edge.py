@@ -102,25 +102,13 @@ def edge_module(
         edge_result = u_cypher.edge_add(
             check_mode=check_mode,
             is_bulk=False,
-            relation_type=relation_type,
-            label_from=label_from,
-            entity_name_from=entity_name_from,
-            label_to=label_to,
-            entity_name_to=entity_name_to,
-            properties=properties,
-            bi_directional=bi_directional,
-            unique_key=unique_key
+            module_params=module_params,
+            properties=properties
         )
         return edge_result
     edge_result = u_cypher.edge_del(
         check_mode=check_mode,
-        relation_type=relation_type,
-        label_from=label_from,
-        entity_name_from=entity_name_from,
-        label_to=label_to,
-        entity_name_to=entity_name_to,
-        bi_directional=bi_directional,
-        unique_key=unique_key
+        module_params=module_params
     )
     return edge_result
 
