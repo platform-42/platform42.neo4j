@@ -85,7 +85,6 @@ def vertex_module(
 
 
 def main() -> None:
-    module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_vertex_bulk(),
         supports_check_mode=True
@@ -177,7 +176,7 @@ def main() -> None:
     changed: bool = (summary.nodes_created > 0 or summary.nodes_deleted > 0)
     module.exit_json(**u_skel.ansible_exit(
         changed=changed,
-        payload_key=module_name,
+        payload_key=u_skel.file_splitext(__file__),
         payload=summary.as_payload()
         )
     )

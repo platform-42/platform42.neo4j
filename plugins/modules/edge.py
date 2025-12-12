@@ -107,7 +107,6 @@ def edge_module(
 
 
 def main() -> None:
-    module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_edge(),
         supports_check_mode=True
@@ -160,7 +159,7 @@ def main() -> None:
     changed: bool = (counters.relationships_created > 0 or counters.relationships_deleted > 0)
     module.exit_json(**u_skel.ansible_exit(
         changed=changed,
-        payload_key=module_name,
+        payload_key=u_skel.file_splitext(__file__),
         payload=payload)
         )
 

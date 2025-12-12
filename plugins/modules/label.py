@@ -83,7 +83,6 @@ def label_module(
 
 
 def main() -> None:
-    module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_label(),
         supports_check_mode=True
@@ -133,7 +132,7 @@ def main() -> None:
     changed: bool = (counters.constraints_added > 0 or counters.constraints_removed > 0)
     module.exit_json(**u_skel.ansible_exit(
         changed=changed,
-        payload_key=module_name,
+        payload_key=u_skel.file_splitext(__file__),
         payload=payload)
         )
 

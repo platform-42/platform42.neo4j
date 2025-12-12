@@ -59,7 +59,6 @@ EXAMPLES = r'''
 
 
 def main() -> None:
-    module_name: str = u_skel.file_splitext(__file__)
     module: AnsibleModule = AnsibleModule(
         argument_spec=u_args.argument_spec_neo4j() | u_args.argument_spec_graph_reset(),
         supports_check_mode=True
@@ -90,7 +89,7 @@ def main() -> None:
         )
     module.exit_json(**u_skel.ansible_exit(
         changed=True,
-        payload_key=module_name,
+        payload_key=u_skel.file_splitext(__file__),
         payload=payload)
         )
 
