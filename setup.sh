@@ -14,7 +14,5 @@ source ${VENV_DIR}/bin/activate
 pip install --upgrade pip
 pip install ansible
 pip install pylint
-pip install neo4j
-pip install StrEnum
-pip install regex
+pip install -r requirements.txt
 
