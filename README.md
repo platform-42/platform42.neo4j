@@ -2,6 +2,10 @@
 
 Ansible collection for managing **Neo4j graph databases**: create and update vertices (nodes), edges (relationships), constraints, execute queries, and clean up the database. This collection provides a declarative, idempotent interface to Neo4j, allowing automation of graph data management in a consistent and reliable way.
 
+## release 4.4.0 notes
+- improved type annotations
+- pushed module_params down to cypher construction layer u_cypher, simplified business layer
+
 ## release 4.3.0 notes
 - implemented `platform.neo4j.edge_bulk` primitve
 - implemented support for empty `set_clause` and `set_relation_predicate`
