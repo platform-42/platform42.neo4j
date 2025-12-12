@@ -234,7 +234,7 @@ def cypher_vertex_add(
             return str(CypherQuery.VERTEX_BULK_ADD_SINGLETON.value.format(
                 label=label,
                 set_clause=set_clause(
-                    relation_type=RelationType.NODE.value, 
+                    relation_type=RelationType.NODE.value,
                     properties=properties
                     )
                 )
@@ -242,7 +242,7 @@ def cypher_vertex_add(
         return str(CypherQuery.VERTEX_ADD_SINGLETON.value.format(
             label=label,
             set_clause=set_clause(
-                relation_type=RelationType.NODE.value, 
+                relation_type=RelationType.NODE.value,
                 properties=properties
                 )
             )
@@ -251,7 +251,7 @@ def cypher_vertex_add(
         return str(CypherQuery.VERTEX_BULK_ADD.value.format(
             label=label,
             set_clause=set_clause(
-                relation_type=RelationType.NODE.value, 
+                relation_type=RelationType.NODE.value,
                 properties=properties
                 )
             )
@@ -259,7 +259,7 @@ def cypher_vertex_add(
     return str(CypherQuery.VERTEX_ADD.value.format(
         label=label,
         set_clause=set_clause(
-            relation_type=RelationType.NODE.value, 
+            relation_type=RelationType.NODE.value,
             properties=properties
             )
         )
@@ -320,7 +320,7 @@ def cypher_edge_add(
             relation_type=relation_type,
             relation_predicate=set_relation_predicate(unique_key=unique_key),
             set_clause=set_clause(
-                relation_type=RelationType.RELATION.value, 
+                relation_type=RelationType.RELATION.value,
                 properties=properties
                 )
             )
@@ -331,7 +331,7 @@ def cypher_edge_add(
         relation_type=relation_type,
         relation_predicate=set_relation_predicate(unique_key=unique_key),
         set_clause=set_clause(
-            relation_type=RelationType.RELATION.value, 
+            relation_type=RelationType.RELATION.value,
             properties=properties
             )
         )
@@ -369,11 +369,11 @@ def cypher_edge_add_bi(
         label_to=label_to,
         relation_type=relation_type,
         set_clause_r1=set_clause(
-            relation_type=RelationType.RELATION_BI_1.value, 
+            relation_type=RelationType.RELATION_BI_1.value,
             properties=properties
             ),
         set_clause_r2=set_clause(
-            relation_type=RelationType.RELATION_BI_2.value, 
+            relation_type=RelationType.RELATION_BI_2.value,
             properties=properties
             ),
         relation_predicate=set_relation_predicate(unique_key=unique_key)
@@ -390,7 +390,7 @@ def cypher_constraint_del(
         return str(CypherQuery.SIMULATION.value)
     return str(CypherQuery.CONSTRAINT_DEL.value.format(
         constraint_name=set_constraint_name(
-            label=label, 
+            label=label,
             property_key=property_key
             )
         )
@@ -408,7 +408,7 @@ def cypher_constraint_add(
         label=label,
         property_key=property_key,
         constraint_name=set_constraint_name(
-            label=label, 
+            label=label,
             property_key=property_key
             )
         )
