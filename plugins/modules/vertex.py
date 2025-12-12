@@ -92,8 +92,9 @@ def vertex_module(
     entity_name: str = module_params[u_skel.JsonTKN.ENTITY_NAME.value]
     state: str = module_params[u_skel.JsonTKN.STATE.value]
     singleton: bool = module_params[u_skel.JsonTKN.SINGLETON.value]
+    vertex_result: Tuple[str, Dict[str, Any], str]
     if u_skel.state_present(state):
-        return u_cypher.vertex_add(
+        vertex_result = u_cypher.vertex_add(
             check_mode=check_mode,
             is_bulk=False,
             singleton=singleton,
@@ -101,11 +102,13 @@ def vertex_module(
             entity_name=entity_name,
             properties=properties
             )
-    return u_cypher.vertex_del(
+        return vertex_result
+    vertex_result = u_cypher.vertex_del(
         check_mode=check_mode,
         label=label,
         entity_name=entity_name
         )
+    return vertex_result
 
 
 def main() -> None:

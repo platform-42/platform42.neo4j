@@ -97,8 +97,9 @@ def edge_module(
     bi_directional: bool = module_params[u_skel.JsonTKN.BI_DIRECTIONAL.value]
     state: str = module_params[u_skel.JsonTKN.STATE.value]
     unique_key: str = module_params[u_skel.JsonTKN.UNIQUE_KEY.value]
+    edge_result: Tuple[str, Dict[str, Any], str]
     if u_skel.state_present(state):
-        return u_cypher.edge_add(
+        edge_result = u_cypher.edge_add(
             check_mode=check_mode,
             is_bulk=False,
             relation_type=relation_type,
@@ -110,7 +111,8 @@ def edge_module(
             bi_directional=bi_directional,
             unique_key=unique_key
         )
-    return u_cypher.edge_del(
+        return edge_result
+    edge_result = u_cypher.edge_del(
         check_mode=check_mode,
         relation_type=relation_type,
         label_from=label_from,
@@ -120,6 +122,7 @@ def edge_module(
         bi_directional=bi_directional,
         unique_key=unique_key
     )
+    return edge_result
 
 
 def main() -> None:
