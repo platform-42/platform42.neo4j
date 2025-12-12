@@ -354,11 +354,11 @@ def cypher_edge_add_bi(
             label_to=label_to,
             relation_type=relation_type,
             set_clause_r1=set_clause(
-                relation_type=RelationType.RELATION_BI_1.value, 
+                relation_type=RelationType.RELATION_BI_1.value,
                 properties=properties
                 ),
             set_clause_r2=set_clause(
-                relation_type=RelationType.RELATION_BI_2.value, 
+                relation_type=RelationType.RELATION_BI_2.value,
                 properties=properties
                 ),
             relation_predicate=set_relation_predicate(unique_key=unique_key)
