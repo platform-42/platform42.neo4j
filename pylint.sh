@@ -1,3 +1,9 @@
+#!/usr/bin/env bash
+SCRIPT=$(realpath "$0")
+SCRIPTPATH=$(dirname "$SCRIPT")
+VENV_DIR=${SCRIPTPATH}/venv
+
+source ${VENV_DIR}/bin/activate
 echo "--- modules ---"
 OBJECT="plugins/modules/graph_reset.py"
 echo "linting ${OBJECT}"; pylint ${OBJECT}
