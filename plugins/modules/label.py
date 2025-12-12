@@ -67,24 +67,17 @@ def label_module(
     check_mode: bool,
     module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
-    base_label: str = module_params[u_skel.JsonTKN.BASE_LABEL.value]
-    label: str = module_params[u_skel.JsonTKN.LABEL.value]
-    entity_name: str = module_params[u_skel.JsonTKN.ENTITY_NAME.value]
     state: str = module_params[u_skel.JsonTKN.STATE.value]
     label_result: Tuple[str, Dict[str, Any], str]
     if u_skel.state_present(state):
         label_result = u_cypher.label_add(
             check_mode=check_mode,
-            base_label=base_label,
-            label=label,
-            entity_name=entity_name
+            module_params=module_params
             )
         return label_result
     label_result = u_cypher.label_del(
         check_mode=check_mode,
-        base_label=base_label,
-        label=label,
-        entity_name=entity_name
+        module_params=module_params
         )
     return label_result
 

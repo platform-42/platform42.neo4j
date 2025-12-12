@@ -117,10 +117,13 @@ def constraint_add(
 #
 def label_del(
     check_mode: bool,
-    base_label: str,
-    label: str,
-    entity_name: str
+    module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
+    
+    # retrieve module params
+    base_label: str = module_params[u_skel.JsonTKN.BASE_LABEL.value]
+    label: str = module_params[u_skel.JsonTKN.LABEL.value]
+    entity_name: str = module_params[u_skel.JsonTKN.ENTITY_NAME.value]
 
     # normalise
     normalised_base_label: str = base_label.capitalize()
@@ -148,10 +151,13 @@ def label_del(
 #
 def label_add(
     check_mode: bool,
-    base_label: str,
-    label: str,
-    entity_name: str
+    module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
+
+    # retrieve module params
+    base_label: str = module_params[u_skel.JsonTKN.BASE_LABEL.value]
+    label: str = module_params[u_skel.JsonTKN.LABEL.value]
+    entity_name: str = module_params[u_skel.JsonTKN.ENTITY_NAME.value]
 
     # normalise
     normalised_base_label: str = base_label.capitalize()
