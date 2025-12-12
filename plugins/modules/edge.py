@@ -89,14 +89,7 @@ def edge_module(
     module_params: u_skel.ModuleParamsEdge,
     properties: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
-    relation_type: str = module_params[u_skel.JsonTKN.TYPE.value]
-    label_from: str = module_params[u_skel.JsonTKN.FROM.value][u_skel.JsonTKN.LABEL.value]
-    entity_name_from: str = module_params[u_skel.JsonTKN.FROM.value][u_skel.JsonTKN.ENTITY_NAME.value]
-    label_to: str = module_params[u_skel.JsonTKN.TO.value][u_skel.JsonTKN.LABEL.value]
-    entity_name_to: str = module_params[u_skel.JsonTKN.TO.value][u_skel.JsonTKN.ENTITY_NAME.value]
-    bi_directional: bool = module_params[u_skel.JsonTKN.BI_DIRECTIONAL.value]
     state: str = module_params[u_skel.JsonTKN.STATE.value]
-    unique_key: str = module_params[u_skel.JsonTKN.UNIQUE_KEY.value]
     edge_result: Tuple[str, Dict[str, Any], str]
     if u_skel.state_present(state):
         edge_result = u_cypher.edge_add(
