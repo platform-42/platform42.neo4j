@@ -125,7 +125,7 @@ def label_del(
     check_mode: bool,
     module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
-    
+
     # retrieve module params
     base_label: str = module_params[u_skel.JsonTKN.BASE_LABEL.value]
     label: str = module_params[u_skel.JsonTKN.LABEL.value]
@@ -193,11 +193,11 @@ def vertex_del(
     check_mode: bool,
     module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
-    
+
     # retrieve module params
     label: str = module_params[u_skel.JsonTKN.LABEL.value]
     entity_name: str = module_params[u_skel.JsonTKN.ENTITY_NAME.value]
-    
+
     # normalise
     normalised_label: str = label.capitalize()
 
@@ -302,7 +302,7 @@ def edge_del(
     check_mode: bool,
     module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
-    
+
     # retrieve module params
     relation_type: str = module_params[u_skel.JsonTKN.TYPE.value]
     label_from: str = module_params[u_skel.JsonTKN.FROM.value][u_skel.JsonTKN.LABEL.value]
@@ -468,7 +468,7 @@ def query(
     cypher_query: str,
     parameters: Optional[Dict[str, Any]] = None
 ) -> Tuple[str, Dict[str, Any], str]:
-    
+
     # optionals
     if parameters is None:
         parameters = {}
