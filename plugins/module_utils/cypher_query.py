@@ -185,7 +185,7 @@ def set_clause(
 
 
 def set_relation_predicate(
-    unique_key: Optional[str]
+    unique_key: Optional[str] = None
 ) -> str:
     relation_predicate: str = ""
     if unique_key:
