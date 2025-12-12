@@ -63,10 +63,13 @@ def graph_reset(
 #
 def constraint_del(
     check_mode: bool,
-    label: str,
-    property_key: str
+    module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
 
+    # retrieve module params
+    label: str = module_params[u_skel.JsonTKN.LABEL.value]
+    property_key: str = module_params[u_skel.JsonTKN.PROPERTY_KEY.value]
+    
     # normalise
     normalised_label: str = label.capitalize()
 
@@ -90,9 +93,12 @@ def constraint_del(
 #
 def constraint_add(
     check_mode: bool,
-    label: str,
-    property_key: str
+    module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
+
+    # retrieve module params
+    label: str = module_params[u_skel.JsonTKN.LABEL.value]
+    property_key: str = module_params[u_skel.JsonTKN.PROPERTY_KEY.value]
 
     # normalise
     normalised_label: str = label.capitalize()

@@ -69,20 +69,16 @@ def constraint_module(
     module_params: Dict[str, Any]
 ) -> Tuple[str, Dict[str, Any], str]:
     state: str = module_params[u_skel.JsonTKN.STATE.value]
-    label: str = module_params[u_skel.JsonTKN.LABEL.value]
-    property_key: str = module_params[u_skel.JsonTKN.PROPERTY_KEY.value]
     constraint_result: Tuple[str, Dict[str, Any], str]
     if u_skel.state_present(state):
         constraint_result = u_cypher.constraint_add(
             check_mode=check_mode,
-            label=label,
-            property_key=property_key
+            module_params=module_params
             )
         return constraint_result
     constraint_result = u_cypher.constraint_del(
         check_mode=check_mode,
-        label=label,
-        property_key=property_key
+        module_params=module_params
         )
     return constraint_result
 
