@@ -9,7 +9,7 @@
 import os
 import re
 
-from typing import Dict, Any, TypedDict
+from typing import Dict, Any
 from strenum import StrEnum
 
 
@@ -93,22 +93,6 @@ class JsonTKN(StrEnum):
     VERTEX_ANCHOR = "vertex_anchor"
     VERTEX_FILE = "vertex_file"
     WRITE_ACCESS = "write_access"
-
-class FromSpec(TypedDict):
-    LABEL: str
-    ENTITY_NAME: str
-
-class ToSpec(TypedDict):
-    LABEL: str
-    ENTITY_NAME: str
-
-class ModuleParamsEdge(TypedDict):
-    TYPE: str
-    FROM: FromSpec
-    TO: ToSpec
-    BI_DIRECTIONAL: bool
-    STATE: str
-    UNIQUE_KEY: str
 
 
 def state_present(
