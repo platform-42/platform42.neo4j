@@ -189,7 +189,7 @@ def main() -> None:
     changed: bool = (summary.relationships_created > 0 or summary.relationships_deleted > 0)
     module.exit_json(**u_skel.ansible_exit(
         changed=changed,
-        payload_key=u_skel.file_splitext(__file__)
+        payload_key=u_skel.file_splitext(__file__),
         payload=summary.as_payload()
         )
     )
