@@ -13,13 +13,13 @@
 from typing import Dict, Any, Tuple, List
 from ansible.module_utils.basic import AnsibleModule
 
-import module_utils.argument_spec as u_args
-import module_utils.skeleton as u_skel
-import module_utils.cypher as u_cypher
-import module_utils.shared as u_shared
-import module_utils.driver as u_driver
-import module_utils.input as u_input
-import module_utils.stats as u_stats
+import ansible_collections.platform42.neo4j.plugins.module_utils.argument_spec as u_args
+import ansible_collections.platform42.neo4j.plugins.module_utils.skeleton as u_skel
+import ansible_collections.platform42.neo4j.plugins.module_utils.cypher as u_cypher
+import ansible_collections.platform42.neo4j.plugins.module_utils.shared as u_shared
+import ansible_collections.platform42.neo4j.plugins.module_utils.driver as u_driver
+import ansible_collections.platform42.neo4j.plugins.module_utils.input as u_input
+import ansible_collections.platform42.neo4j.plugins.module_utils.stats as u_stats
 
 from neo4j import Driver, ResultSummary, Result, SummaryCounters
 from neo4j.exceptions import Neo4jError
